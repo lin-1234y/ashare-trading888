@@ -3625,6 +3625,42 @@ body {
 
           <section class="panel spacing-top">
             <div class="panel-header">
+              <div>
+                <h3>现金转入/转出</h3>
+                <span>只调整账户现金，不参与股票匹配和持仓成本</span>
+              </div>
+            </div>
+            <input type="hidden" id="editing-cash-transfer-id" />
+            <div class="form-grid compact">
+              <label>
+                日期
+                <input type="date" id="cash-transfer-date" />
+              </label>
+              <label>
+                类型
+                <select id="cash-transfer-type">
+                  <option value="in">转入</option>
+                  <option value="out">转出</option>
+                </select>
+              </label>
+              <label>
+                金额
+                <input type="number" id="cash-transfer-amount" min="0" step="0.01" />
+              </label>
+              <label>
+                备注
+                <input type="text" id="cash-transfer-note" placeholder="例如 银证转入、取出现金" />
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="primary-button" id="add-cash-transfer" type="button">添加现金流水</button>
+              <button class="ghost-button" id="reset-cash-transfer" type="button">清空</button>
+            </div>
+            <div class="mobile-list spacing-top" id="cash-transfer-cards"></div>
+          </section>
+
+          <section class="panel spacing-top">
+            <div class="panel-header">
               <h3>初始持仓</h3>
               <span id="initial-position-mode">用于录入开始使用工具之前已经持有的股票</span>
             </div>
@@ -3807,6 +3843,7 @@ const state = {
   previousCloses: {},
   initialPositions: [],
   corporateActions: [],
+  cashTransfers: [],
   closeSnapshots: [],
   stockPlans: {},
   settings: { ...defaultSettings },
@@ -3970,6 +4007,12 @@ const els = {
   minCommission: document.querySelector("#min-commission"),
   stampRate: document.querySelector("#stamp-rate"),
   transferRate: document.querySelector("#transfer-rate"),
+  editingCashTransferId: optionalElement("#editing-cash-transfer-id"),
+  cashTransferDate: optionalElement("#cash-transfer-date"),
+  cashTransferType: optionalElement("#cash-transfer-type"),
+  cashTransferAmount: optionalElement("#cash-transfer-amount"),
+  cashTransferNote: optionalElement("#cash-transfer-note"),
+  cashTransferCards: optionalElement("#cash-transfer-cards"),
   initialSymbol: document.querySelector("#initial-symbol"),
   editingInitialId: optionalElement("#editing-initial-id"),
   initialPositionMode: optionalElement("#initial-position-mode"),
@@ -4236,6 +4279,7 @@ function load() {
     state.previousCloses = saved.previousCloses && typeof saved.previousCloses === "object" ? saved.previousCloses : {};
     state.initialPositions = Array.isArray(saved.initialPositions) ? saved.initialPositions : [];
     state.corporateActions = Array.isArray(saved.corporateActions) ? saved.corporateActions : [];
+    state.cashTransfers = Array.isArray(saved.cashTransfers) ? saved.cashTransfers : [];
     state.closeSnapshots = Array.isArray(saved.closeSnapshots) ? saved.closeSnapshots : [];
     state.stockPlans = saved.stockPlans && typeof saved.stockPlans === "object" ? saved.stockPlans : {};
     state.settings = { ...defaultSettings, ...(saved.settings || {}) };
@@ -4245,6 +4289,7 @@ function load() {
     state.previousCloses = {};
     state.initialPositions = [];
     state.corporateActions = [];
+    state.cashTransfers = [];
     state.closeSnapshots = [];
     state.stockPlans = {};
     state.settings = { ...defaultSettings };
@@ -4367,9 +4412,10 @@ function applyBonusActions(books) {
   }
 }
 
-function dividendTotal() {
+function dividendTotal(asOfDate = "") {
   return state.corporateActions
     .filter((action) => action.type === "dividend")
+    .filter((action) => !asOfDate || !action.date || action.date <= asOfDate)
     .reduce((sum, action) => sum + dividendNet(action), 0);
 }
 
@@ -4399,10 +4445,18 @@ function applyOriginalCostAdjustments(books) {
   }
 }
 
-function calculatePortfolio(trades = state.trades) {
+function cashTransferTotal(asOfDate = "") {
+  return state.cashTransfers.reduce((sum, item) => {
+    if (asOfDate && item.date && item.date > asOfDate) return sum;
+    const amount = Number(item.amount) || 0;
+    return sum + (item.type === "out" ? -amount : amount);
+  }, 0);
+}
+
+function calculatePortfolio(trades = state.trades, asOfDate = "") {
   const books = buildInitialBooks();
   applyBonusActions(books);
-  let cash = (Number(state.settings.initialCash) || 0) + dividendTotal();
+  let cash = (Number(state.settings.initialCash) || 0) + dividendTotal(asOfDate) + cashTransferTotal(asOfDate);
 
   for (const trade of sortedTrades(trades)) {
     const key = normalizeSymbol(trade.symbol);
@@ -4555,14 +4609,17 @@ function calculateStockDayPnl(symbol, endingQuantity, currentPrice, trades = sta
 }
 
 function uniqueTradeDates() {
-  return [...new Set(state.trades.map((trade) => trade.date))]
+  return [...new Set([
+    ...state.trades.map((trade) => trade.date),
+    ...state.corporateActions.map((action) => action.date),
+    ...state.cashTransfers.map((item) => item.date),
+  ])]
     .filter(Boolean)
     .sort((a, b) => a.localeCompare(b));
 }
 
 function calculateEquityCurve() {
   const dates = uniqueTradeDates();
-  const initialAssets = (Number(state.settings.initialCash) || 0) + initialPositionCost();
   if (!dates.length) {
     const now = calculatePortfolio([]);
     const marketValue = now.positions.reduce((sum, item) => sum + item.marketValue, 0);
@@ -4573,14 +4630,14 @@ function calculateEquityCurve() {
         cash: now.cash,
         marketValue,
         assets,
-        pnl: assets - initialAssets,
+        pnl: assets - originalAssetsTotal(),
       },
     ];
   }
 
   return dates.map((date) => {
     const trades = state.trades.filter((trade) => trade.date <= date);
-    const snapshot = calculatePortfolio(trades);
+    const snapshot = calculatePortfolio(trades, date);
     const marketValue = snapshot.positions.reduce((sum, item) => sum + item.marketValue, 0);
     const assets = snapshot.cash + marketValue;
     return {
@@ -4588,7 +4645,7 @@ function calculateEquityCurve() {
       cash: snapshot.cash,
       marketValue,
       assets,
-      pnl: assets - initialAssets,
+      pnl: assets - originalAssetsTotal(date),
     };
   });
 }
@@ -4706,6 +4763,7 @@ function allActivityDates() {
     ...state.initialPositions.map((item) => item.date),
     ...state.trades.map((trade) => trade.date),
     ...state.corporateActions.map((action) => action.date),
+    ...state.cashTransfers.map((item) => item.date),
   ].filter(validDateString);
   return dates.length ? dates : [today()];
 }
@@ -4717,10 +4775,11 @@ function periodOptions(kind) {
 
 function snapshotAssetsBefore(startDate) {
   const trades = state.trades.filter((trade) => !startDate || trade.date < startDate);
-  const snapshot = calculatePortfolio(trades);
+  const asOfDate = startDate ? addDays(startDate, -1) : "";
+  const snapshot = calculatePortfolio(trades, asOfDate);
   const marketValue = snapshot.positions.reduce((sum, position) => sum + position.marketValue, 0);
   const assets = snapshot.cash + marketValue;
-  return assets > 0 ? assets : (Number(state.settings.initialCash) || 0) + initialPositionCost();
+  return assets > 0 ? assets : originalAssetsTotal(asOfDate);
 }
 
 function rangeMatchDetails(startDate, endDate, symbol = "") {
@@ -5026,6 +5085,10 @@ function initialPositionCost() {
   return state.initialPositions.reduce((sum, item) => sum + (Number(item.cost) || 0), 0);
 }
 
+function originalAssetsTotal(asOfDate = "") {
+  return (Number(state.settings.initialCash) || 0) + initialPositionCost() + cashTransferTotal(asOfDate);
+}
+
 function calculateTradePairPnL(startDate = "", endDate = "", sourceTrades = state.trades) {
   const books = new Map();
   const stageTrades = sortedTrades(sourceTrades).filter((trade) => {
@@ -5282,8 +5345,26 @@ function buildFlowRecords() {
       order: 0,
     };
   });
+  const cashFlows = state.cashTransfers.map((item) => ({
+    id: item.id,
+    kind: "cash",
+    date: item.date || "",
+    symbol: "",
+    name: "现金",
+    type: item.type === "out" ? "现金转出" : "现金转入",
+    tone: item.type === "out" ? "sell" : "buy",
+    price: "-",
+    quantity: "-",
+    amount: money(Number(item.amount) || 0),
+    commission: "-",
+    stampTax: "-",
+    transferFee: "-",
+    fee: 0,
+    note: item.note || "",
+    order: item.createdAt || 0,
+  }));
 
-  return [...tradeFlows, ...actionFlows].sort((a, b) => b.date.localeCompare(a.date) || b.order - a.order);
+  return [...tradeFlows, ...actionFlows, ...cashFlows].sort((a, b) => b.date.localeCompare(a.date) || b.order - a.order);
 }
 
 function stockEvents(symbol) {
@@ -5468,7 +5549,12 @@ function renderRecords() {
               <button class="icon-action" data-edit="${row.id}">编辑</button>
               <button class="icon-action" data-delete="${row.id}">删除</button>
             `
-          : `<button class="icon-action" data-delete-action="${row.id}">删除</button>`;
+          : row.kind === "cash"
+            ? `
+                <button class="icon-action" data-edit-cash-transfer="${row.id}">编辑</button>
+                <button class="icon-action" data-delete-cash-transfer="${row.id}">删除</button>
+              `
+            : `<button class="icon-action" data-delete-action="${row.id}">删除</button>`;
       return `
         <tr>
           <td>${row.date || "-"}</td>
@@ -5500,7 +5586,12 @@ function renderRecords() {
               <button class="icon-action" data-edit="${row.id}">编辑</button>
               <button class="icon-action" data-delete="${row.id}">删除</button>
             `
-          : `<button class="icon-action" data-delete-action="${row.id}">删除</button>`;
+          : row.kind === "cash"
+            ? `
+                <button class="icon-action" data-edit-cash-transfer="${row.id}">编辑</button>
+                <button class="icon-action" data-delete-cash-transfer="${row.id}">删除</button>
+              `
+            : `<button class="icon-action" data-delete-action="${row.id}">删除</button>`;
       return `
         <article class="mobile-card">
           <div class="mobile-card-head">
@@ -5678,7 +5769,7 @@ function renderDashboard() {
   const { positions, realizedRows } = calculatePortfolio();
   const totalFees = state.trades.reduce((sum, trade) => sum + totalFee(trade), 0);
   const assets = totals.assets;
-  const initialAssets = (Number(state.settings.initialCash) || 0) + initialPositionCost();
+  const initialAssets = originalAssetsTotal();
   const totalReturnRate = initialAssets > 0 ? ((assets - initialAssets) / initialAssets) * 100 : 0;
   const totalPnl = assets - initialAssets;
   const periodSummary = periodPnlSummary(calculateSnapshotCalendarRows());
@@ -5927,7 +6018,7 @@ function renderRangeSummary() {
 function buildCloseSnapshot(date = today()) {
   const { positions } = calculatePortfolio();
   const totals = portfolioTotals();
-  const initialAssets = (Number(state.settings.initialCash) || 0) + initialPositionCost();
+  const initialAssets = originalAssetsTotal();
   const totalPnl = totals.assets - initialAssets;
   const totalReturnRate = initialAssets > 0 ? (totalPnl / initialAssets) * 100 : 0;
   const matchedRows = new Map(calculateTradePairPnL().map((row) => [row.symbol, row.pnl]));
@@ -5968,8 +6059,8 @@ function buildCloseSnapshotForDate(date, priceMap, previousCloseMap = {}) {
 
   try {
     const trades = state.trades.filter((trade) => trade.date <= date);
-    const { positions, cash } = calculatePortfolio(trades);
-    const initialAssets = (Number(state.settings.initialCash) || 0) + initialPositionCost();
+    const { positions, cash } = calculatePortfolio(trades, date);
+    const initialAssets = originalAssetsTotal(date);
     const matchedRows = new Map(calculateTradePairPnL("", date, trades).map((row) => [row.symbol, row.pnl]));
     const openPositions = positions
       .filter((position) => position.quantity > 0)
@@ -6009,7 +6100,7 @@ function buildCloseSnapshotForDate(date, priceMap, previousCloseMap = {}) {
 }
 
 function positionSymbolsOnDate(date) {
-  return calculatePortfolio(state.trades.filter((trade) => trade.date <= date))
+  return calculatePortfolio(state.trades.filter((trade) => trade.date <= date), date)
     .positions
     .filter((position) => position.quantity > 0)
     .map((position) => position.symbol);
@@ -6146,8 +6237,92 @@ function deleteSelectedCloseSnapshot() {
   deleteCloseSnapshot(snapshot.id);
 }
 
+function resetCashTransferForm() {
+  els.editingCashTransferId.value = "";
+  els.cashTransferDate.value = today();
+  els.cashTransferType.value = "in";
+  els.cashTransferAmount.value = "";
+  els.cashTransferNote.value = "";
+  document.querySelector("#add-cash-transfer").textContent = "添加现金流水";
+}
+
+function addCashTransfer() {
+  const id = els.editingCashTransferId.value || uid();
+  const date = els.cashTransferDate.value || today();
+  const amount = readAmountInput(els.cashTransferAmount);
+  const type = els.cashTransferType.value === "out" ? "out" : "in";
+  if (!validDateString(date) || amount <= 0) {
+    alert("请填写有效日期和金额。");
+    return;
+  }
+
+  const item = {
+    id,
+    date,
+    type,
+    amount,
+    note: els.cashTransferNote.value.trim(),
+    createdAt: state.cashTransfers.find((row) => row.id === id)?.createdAt || Date.now(),
+  };
+  const index = state.cashTransfers.findIndex((row) => row.id === id);
+  if (index >= 0) state.cashTransfers[index] = item;
+  else state.cashTransfers.push(item);
+  state.cashTransfers.sort((a, b) => b.date.localeCompare(a.date));
+  resetCashTransferForm();
+  save();
+  renderAll();
+}
+
+function editCashTransfer(id) {
+  const item = state.cashTransfers.find((row) => row.id === id);
+  if (!item) return;
+  els.editingCashTransferId.value = item.id;
+  els.cashTransferDate.value = item.date || today();
+  els.cashTransferType.value = item.type === "out" ? "out" : "in";
+  els.cashTransferAmount.value = item.amount || "";
+  els.cashTransferNote.value = item.note || "";
+  document.querySelector("#add-cash-transfer").textContent = "保存现金流水";
+  setView("settings");
+}
+
+function deleteCashTransfer(id) {
+  const item = state.cashTransfers.find((row) => row.id === id);
+  if (!item || !confirm(`确定删除 ${item.date} 的${item.type === "out" ? "转出" : "转入"}记录吗？`)) return;
+  state.cashTransfers = state.cashTransfers.filter((row) => row.id !== id);
+  save();
+  renderAll();
+}
+
+function renderCashTransfers() {
+  if (!state.cashTransfers.length) {
+    els.cashTransferCards.innerHTML = `<div class="empty-state">暂无现金转入转出记录</div>`;
+    return;
+  }
+  els.cashTransferCards.innerHTML = [...state.cashTransfers]
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .map(
+      (item) => `
+        <article class="mobile-card">
+          <div class="mobile-card-head">
+            <strong class="${item.type === "out" ? "negative" : "positive"}">${item.type === "out" ? "现金转出" : "现金转入"}</strong>
+            <span>${item.date || "-"}</span>
+          </div>
+          <dl>
+            <div><dt>金额</dt><dd class="${item.type === "out" ? "negative" : "positive"}">${money(item.amount)}</dd></div>
+            <div><dt>备注</dt><dd>${escapeHtml(item.note || "-")}</dd></div>
+          </dl>
+          <div class="row-actions">
+            <button class="icon-action" data-edit-cash-transfer="${item.id}">编辑</button>
+            <button class="icon-action danger-button" data-delete-cash-transfer="${item.id}">删除</button>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
 function manualClosePositions(date) {
-  return calculatePortfolio(state.trades.filter((trade) => trade.date <= date))
+  return calculatePortfolio(state.trades.filter((trade) => trade.date <= date), date)
     .positions
     .filter((position) => position.quantity > 0);
 }
@@ -7063,6 +7238,8 @@ function renderSettings() {
   els.stampRate.value = state.settings.stampRate;
   els.transferRate.value = state.settings.transferRate;
   els.backupStatus.textContent = backupStatusText();
+  if (!els.cashTransferDate.value) els.cashTransferDate.value = today();
+  renderCashTransfers();
   renderCorporateActions();
 
   if (!state.initialPositions.length) {
@@ -7250,7 +7427,7 @@ function saveAccountSettings() {
   save();
   const totals = portfolioTotals();
   const assets = totals.assets;
-  const initialAssets = state.settings.initialCash + initialPositionCost();
+  const initialAssets = originalAssetsTotal();
   const totalReturnRate = initialAssets > 0 ? ((assets - initialAssets) / initialAssets) * 100 : 0;
 
   els.cash.textContent = money(totals.cash);
@@ -7467,6 +7644,22 @@ function exportCsv() {
       action.type === "dividend" ? dividendNet(action) : "",
       action.note || "",
     ]),
+    ...state.cashTransfers.map((item) => [
+      item.date || "",
+      "",
+      "现金",
+      item.type === "out" ? "现金转出" : "现金转入",
+      "",
+      "",
+      Number(item.amount) || 0,
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      item.note || "",
+    ]),
   ];
   const body = rows.map((row) => row.map(csvCell).join(",")).join("\r\n");
   downloadBlob(`\ufeff${body}`, "text/csv;charset=utf-8", `ashare-trading-flow-${today()}.csv`);
@@ -7681,6 +7874,7 @@ function importData(file) {
       state.previousCloses = next.previousCloses && typeof next.previousCloses === "object" ? next.previousCloses : {};
       state.initialPositions = Array.isArray(next.initialPositions) ? next.initialPositions : [];
       state.corporateActions = Array.isArray(next.corporateActions) ? next.corporateActions : [];
+      state.cashTransfers = Array.isArray(next.cashTransfers) ? next.cashTransfers : [];
       state.closeSnapshots = Array.isArray(next.closeSnapshots) ? next.closeSnapshots : [];
       state.stockPlans = next.stockPlans && typeof next.stockPlans === "object" ? next.stockPlans : {};
       state.settings = { ...defaultSettings, ...(next.settings || {}) };
@@ -7780,6 +7974,8 @@ document.querySelector("#save-fees").addEventListener("click", () => {
 });
 document.querySelector("#add-initial-position").addEventListener("click", addInitialPosition);
 optionalElement("#reset-initial-position").addEventListener("click", resetInitialPositionForm);
+optionalElement("#add-cash-transfer").addEventListener("click", addCashTransfer);
+optionalElement("#reset-cash-transfer").addEventListener("click", resetCashTransferForm);
 optionalElement("#add-corporate-action").addEventListener("click", addCorporateAction);
 optionalElement("#reset-corporate-action").addEventListener("click", resetCorporateActionForm);
 els.actionType.addEventListener("change", updateCorporateActionNet);
@@ -7800,6 +7996,7 @@ document.querySelector("#clear-data").addEventListener("click", () => {
   state.previousCloses = {};
   state.initialPositions = [];
   state.corporateActions = [];
+  state.cashTransfers = [];
   state.closeSnapshots = [];
   state.stockPlans = {};
   state.settings = { ...defaultSettings };
@@ -7862,8 +8059,12 @@ els.recordsBody.addEventListener("click", (event) => {
   const editId = event.target.dataset.edit;
   const deleteId = event.target.dataset.delete;
   const deleteActionId = event.target.dataset.deleteAction;
+  const editCashTransferId = event.target.dataset.editCashTransfer;
+  const deleteCashTransferId = event.target.dataset.deleteCashTransfer;
   if (editId) editTrade(editId);
   if (deleteId) deleteTrade(deleteId);
+  if (editCashTransferId) editCashTransfer(editCashTransferId);
+  if (deleteCashTransferId) deleteCashTransfer(deleteCashTransferId);
   if (deleteActionId) {
     state.corporateActions = state.corporateActions.filter((action) => action.id !== deleteActionId);
     save();
@@ -7875,8 +8076,12 @@ els.recordsCards.addEventListener("click", (event) => {
   const editId = event.target.dataset.edit;
   const deleteId = event.target.dataset.delete;
   const deleteActionId = event.target.dataset.deleteAction;
+  const editCashTransferId = event.target.dataset.editCashTransfer;
+  const deleteCashTransferId = event.target.dataset.deleteCashTransfer;
   if (editId) editTrade(editId);
   if (deleteId) deleteTrade(deleteId);
+  if (editCashTransferId) editCashTransfer(editCashTransferId);
+  if (deleteCashTransferId) deleteCashTransfer(deleteCashTransferId);
   if (deleteActionId) {
     state.corporateActions = state.corporateActions.filter((action) => action.id !== deleteActionId);
     save();
@@ -7982,6 +8187,17 @@ els.corporateActionsCards.addEventListener("click", (event) => {
   if (els.editingActionId.value === id) resetCorporateActionForm();
   save();
   renderAll();
+});
+
+els.cashTransferCards.addEventListener("click", (event) => {
+  const editId = event.target.dataset.editCashTransfer;
+  if (editId) {
+    editCashTransfer(editId);
+    return;
+  }
+  const id = event.target.dataset.deleteCashTransfer;
+  if (!id) return;
+  deleteCashTransfer(id);
 });
 
 load();
