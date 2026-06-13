@@ -3009,6 +3009,8 @@ body {
                   <input type="date" id="close-snapshot-date" />
                 </label>
                 <button class="primary-button small" id="save-close-snapshot" type="button">记录今日收盘</button>
+                <button class="ghost-button small" id="delete-selected-close-snapshot" type="button">删除所选收盘</button>
+                <button class="ghost-button small" id="open-manual-close-modal" type="button">手动补收盘价</button>
                 <label>
                   查询开始
                   <input type="date" id="close-snapshot-start-date" />
@@ -3017,9 +3019,11 @@ body {
                   查询结束
                   <input type="date" id="close-snapshot-end-date" />
                 </label>
+                <button class="ghost-button small" id="auto-fill-close-snapshots" type="button">自动补历史收盘</button>
               </div>
             </div>
             <div class="range-summary" id="close-snapshot-summary"></div>
+            <div class="metric-grid three spacing-top" id="auto-close-summary"></div>
             <p class="save-status" id="close-snapshot-status"></p>
             <div class="table-wrap compact-table">
               <table>
@@ -3039,6 +3043,24 @@ body {
               </table>
             </div>
             <div class="mobile-list" id="close-snapshot-cards"></div>
+          </section>
+
+          <section class="app-modal" id="manual-close-modal" hidden>
+            <div class="modal-card">
+              <div class="modal-head">
+                <div>
+                  <h3>手动补收盘价</h3>
+                  <span>填写所选日期各股收盘价，生成当天收盘记录</span>
+                </div>
+                <button class="icon-action" type="button" data-modal-close>关闭</button>
+              </div>
+              <div class="metric-grid three" id="manual-close-summary"></div>
+              <div class="mobile-list spacing-top" id="manual-close-list"></div>
+              <div class="form-actions spacing-top">
+                <button class="primary-button" type="button" id="save-manual-close">保存所选日期收盘</button>
+                <button class="ghost-button" type="button" data-modal-close>取消</button>
+              </div>
+            </div>
           </section>
         </section>
 
@@ -3231,6 +3253,28 @@ body {
               <button type="submit" class="primary-button" id="save-trade">保存交易</button>
             </div>
           </form>
+
+          <section class="panel spacing-top">
+            <div class="panel-header">
+              <div>
+                <h3>券商成交导入</h3>
+                <span>只导入买入/卖出成交，费用、分红税、新股申购忽略，由工具按设置重新计算。</span>
+              </div>
+            </div>
+            <div class="form-grid compact">
+              <label class="wide file-button">
+                选择券商历史成交文件
+                <input type="file" id="broker-import-file" accept=".xls,.xlsx,.csv,.txt" />
+              </label>
+            </div>
+            <p class="panel-copy" id="broker-import-status">支持类似“历史成交查询.xls”的制表符文件。导入前会先预览。</p>
+            <div class="metric-grid three spacing-top" id="broker-import-summary"></div>
+            <div class="mobile-list" id="broker-import-preview"></div>
+            <div class="form-actions spacing-top">
+              <button class="primary-button" type="button" id="confirm-broker-import" disabled>确认导入预览成交</button>
+              <button class="ghost-button" type="button" id="clear-broker-import">清空预览</button>
+            </div>
+          </section>
         </section>
 
         <section class="view" id="positions">
@@ -3769,6 +3813,7 @@ const state = {
 };
 let selectedDetailSymbol = "";
 let summaryPeriodKind = "week";
+let pendingBrokerTrades = [];
 
 function optionalElement(selector) {
   return (
@@ -3809,6 +3854,12 @@ const els = {
   previewAmount: document.querySelector("#preview-amount"),
   previewFee: document.querySelector("#preview-fee"),
   previewNet: document.querySelector("#preview-net"),
+  brokerImportFile: optionalElement("#broker-import-file"),
+  brokerImportStatus: optionalElement("#broker-import-status"),
+  brokerImportSummary: optionalElement("#broker-import-summary"),
+  brokerImportPreview: optionalElement("#broker-import-preview"),
+  confirmBrokerImport: optionalElement("#confirm-broker-import"),
+  clearBrokerImport: optionalElement("#clear-broker-import"),
   recordsBody: document.querySelector("#records-body"),
   recordsCards: optionalElement("#records-cards"),
   positionsBody: document.querySelector("#positions-body"),
@@ -3838,6 +3889,13 @@ const els = {
   closeSnapshotStartDate: optionalElement("#close-snapshot-start-date"),
   closeSnapshotEndDate: optionalElement("#close-snapshot-end-date"),
   saveCloseSnapshot: optionalElement("#save-close-snapshot"),
+  deleteSelectedCloseSnapshot: optionalElement("#delete-selected-close-snapshot"),
+  openManualCloseModal: optionalElement("#open-manual-close-modal"),
+  manualCloseSummary: optionalElement("#manual-close-summary"),
+  manualCloseList: optionalElement("#manual-close-list"),
+  saveManualClose: optionalElement("#save-manual-close"),
+  autoFillCloseSnapshots: optionalElement("#auto-fill-close-snapshots"),
+  autoCloseSummary: optionalElement("#auto-close-summary"),
   closeSnapshotSummary: optionalElement("#close-snapshot-summary"),
   closeSnapshotStatus: optionalElement("#close-snapshot-status"),
   closeSnapshotBody: optionalElement("#close-snapshot-body"),
@@ -3975,6 +4033,15 @@ function number(value, digits = 2) {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   }).format(Number(value) || 0);
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function beijingNow() {
@@ -4879,6 +4946,37 @@ async function fetchQuote(symbol) {
     name: data.f58 || "",
     price,
     previousClose: data.f60 === undefined || data.f60 === "-" || data.f60 === null ? 0 : Number(data.f60) / 10 ** scale,
+  };
+}
+
+function compactDate(date) {
+  return String(date || "").replace(/-/g, "");
+}
+
+async function fetchHistoricalClose(symbol, date) {
+  const callbackName = `kline_${normalizeSymbol(symbol)}_${compactDate(date)}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+  const end = compactDate(date);
+  const begin = compactDate(addDays(date, -18));
+  const secid = marketSecid(symbol);
+  const fields1 = "f1,f2,f3,f4,f5,f6";
+  const fields2 = "f51,f52,f53,f54,f55,f56,f57,f58";
+  const url = `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${encodeURIComponent(secid)}&klt=101&fqt=0&beg=${begin}&end=${end}&fields1=${fields1}&fields2=${fields2}&cb=${callbackName}`;
+  const result = await jsonp(url, callbackName);
+  const klines = result && result.data && Array.isArray(result.data.klines) ? result.data.klines : [];
+  const rows = klines
+    .map((line) => {
+      const cells = String(line).split(",");
+      return {
+        date: cells[0],
+        close: Number(cells[2]) || 0,
+      };
+    })
+    .filter((row) => validDateString(row.date) && row.close > 0);
+  const index = rows.findIndex((row) => row.date === date);
+  if (index < 0) throw new Error("no historical close");
+  return {
+    price: rows[index].close,
+    previousClose: index > 0 ? rows[index - 1].close : rows[index].close,
   };
 }
 
@@ -5862,6 +5960,153 @@ function buildCloseSnapshot(date = today()) {
   };
 }
 
+function buildCloseSnapshotForDate(date, priceMap, previousCloseMap = {}) {
+  const savedPrices = { ...state.prices };
+  const savedPreviousCloses = { ...state.previousCloses };
+  state.prices = { ...state.prices, ...priceMap };
+  state.previousCloses = { ...state.previousCloses, ...previousCloseMap };
+
+  try {
+    const trades = state.trades.filter((trade) => trade.date <= date);
+    const { positions, cash } = calculatePortfolio(trades);
+    const initialAssets = (Number(state.settings.initialCash) || 0) + initialPositionCost();
+    const matchedRows = new Map(calculateTradePairPnL("", date, trades).map((row) => [row.symbol, row.pnl]));
+    const openPositions = positions
+      .filter((position) => position.quantity > 0)
+      .map((position) => ({
+        symbol: position.symbol,
+        name: position.name,
+        quantity: position.quantity,
+        price: Number(position.currentPrice) || 0,
+        marketValue: position.marketValue,
+        dayPnl: position.dayPnl,
+        totalPnl: position.totalPnl,
+        matchedPnl: matchedRows.get(position.symbol) || 0,
+      }));
+    const marketValue = openPositions.reduce((sum, position) => sum + position.marketValue, 0);
+    const assets = cash + marketValue;
+    const totalPnl = assets - initialAssets;
+    const dayPnl = openPositions.reduce((sum, position) => sum + (Number(position.dayPnl) || 0), 0);
+
+    return {
+      id: `close-${date}`,
+      date,
+      createdAt: new Date().toISOString(),
+      source: "auto-history",
+      assets,
+      cash,
+      marketValue,
+      totalPnl,
+      totalReturnRate: initialAssets > 0 ? (totalPnl / initialAssets) * 100 : 0,
+      dayPnl,
+      positionCount: openPositions.length,
+      positions: openPositions,
+    };
+  } finally {
+    state.prices = savedPrices;
+    state.previousCloses = savedPreviousCloses;
+  }
+}
+
+function positionSymbolsOnDate(date) {
+  return calculatePortfolio(state.trades.filter((trade) => trade.date <= date))
+    .positions
+    .filter((position) => position.quantity > 0)
+    .map((position) => position.symbol);
+}
+
+function previousCloseMapFromSnapshots(date) {
+  const map = {};
+  const previous = [...state.closeSnapshots]
+    .filter((snapshot) => snapshot.date < date)
+    .sort((a, b) => b.date.localeCompare(a.date))[0];
+  if (!previous) return map;
+  (previous.positions || []).forEach((position) => {
+    const symbol = normalizeSymbol(position.symbol);
+    const price = Number(position.price) || 0;
+    if (symbol && price > 0) map[symbol] = price;
+  });
+  return map;
+}
+
+function missingCloseSnapshotDates() {
+  const existing = new Set(state.closeSnapshots.map((snapshot) => snapshot.date));
+  return uniqueTradeDates()
+    .filter((date) => date <= today())
+    .filter((date) => !existing.has(date))
+    .filter((date) => positionSymbolsOnDate(date).length > 0);
+}
+
+function renderAutoCloseSummary(summary = {}) {
+  const missing = missingCloseSnapshotDates();
+  const cards = [
+    { label: "待补日期", value: `${summary.missing ?? missing.length} 天`, tone: missing.length ? "negative" : "" },
+    { label: "已自动补", value: `${summary.added || 0} 天`, tone: summary.added ? "positive" : "" },
+    { label: "未成功", value: `${summary.failed || 0} 天`, tone: summary.failed ? "negative" : "" },
+  ];
+  els.autoCloseSummary.innerHTML = cards
+    .map(
+      (card) => `
+        <article class="metric">
+          <span>${card.label}</span>
+          <strong class="${card.tone}">${card.value}</strong>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+async function autoFillHistoricalCloseSnapshots() {
+  const dates = missingCloseSnapshotDates();
+  if (!dates.length) {
+    els.closeSnapshotStatus.textContent = "没有需要自动补的收盘记录。";
+    renderAutoCloseSummary({ missing: 0, added: 0, failed: 0 });
+    return;
+  }
+
+  if (!confirm(`发现 ${dates.length} 个交易日缺少收盘记录。是否联网查询历史收盘价并自动补齐？`)) return;
+
+  els.autoFillCloseSnapshots.disabled = true;
+  let added = 0;
+  let failed = 0;
+  const failedNotes = [];
+
+  for (const date of dates) {
+    const symbols = positionSymbolsOnDate(date);
+    const priceMap = {};
+    const previousCloseMap = {};
+    els.closeSnapshotStatus.textContent = `正在补 ${date}，${symbols.length} 只股票...`;
+
+    for (const symbol of symbols) {
+      try {
+        const quote = await fetchHistoricalClose(symbol, date);
+        priceMap[symbol] = Number(quote.price.toFixed(3));
+        previousCloseMap[symbol] = Number(quote.previousClose.toFixed(3));
+      } catch {
+        failedNotes.push(`${date} ${symbol}`);
+      }
+    }
+
+    if (Object.keys(priceMap).length !== symbols.length) {
+      failed += 1;
+      continue;
+    }
+
+    state.closeSnapshots.push(buildCloseSnapshotForDate(date, priceMap, previousCloseMap));
+    added += 1;
+    renderAutoCloseSummary({ missing: dates.length, added, failed });
+  }
+
+  state.closeSnapshots.sort((a, b) => b.date.localeCompare(a.date));
+  save();
+  renderAll();
+  renderAutoCloseSummary({ missing: missingCloseSnapshotDates().length, added, failed });
+  els.closeSnapshotStatus.textContent = failed
+    ? `已自动补 ${added} 天，${failed} 天未成功：${failedNotes.slice(0, 4).join("、")}${failedNotes.length > 4 ? "..." : ""}`
+    : `已自动补 ${added} 天历史收盘记录。`;
+  els.autoFillCloseSnapshots.disabled = false;
+}
+
 function saveCloseSnapshot() {
   const date = els.closeSnapshotDate.value || today();
   const snapshot = buildCloseSnapshot(date);
@@ -5886,6 +6131,115 @@ function deleteCloseSnapshot(id) {
   if (!snapshot || !confirm(`确定删除 ${snapshot.date} 的收盘记录吗？`)) return;
   state.closeSnapshots = state.closeSnapshots.filter((item) => item.id !== id);
   save();
+  renderCloseSnapshots();
+  renderDashboard();
+  renderEquityCurve();
+}
+
+function deleteSelectedCloseSnapshot() {
+  const date = els.closeSnapshotDate.value || today();
+  const snapshot = state.closeSnapshots.find((item) => item.date === date);
+  if (!snapshot) {
+    els.closeSnapshotStatus.textContent = `${date} 没有收盘记录可删除。`;
+    return;
+  }
+  deleteCloseSnapshot(snapshot.id);
+}
+
+function manualClosePositions(date) {
+  return calculatePortfolio(state.trades.filter((trade) => trade.date <= date))
+    .positions
+    .filter((position) => position.quantity > 0);
+}
+
+function renderManualCloseModal() {
+  const date = els.closeSnapshotDate.value || today();
+  if (!validDateString(date)) {
+    els.closeSnapshotStatus.textContent = "请先选择要补录的日期。";
+    return false;
+  }
+
+  const positions = manualClosePositions(date);
+  const existing = state.closeSnapshots.find((snapshot) => snapshot.date === date);
+  els.manualCloseSummary.innerHTML = [
+    { label: "补录日期", value: date, tone: "" },
+    { label: "持仓股票", value: `${positions.length} 只`, tone: positions.length ? "" : "negative" },
+    { label: "已有记录", value: existing ? "有" : "无", tone: existing ? "negative" : "" },
+  ]
+    .map((card) => `<article class="metric"><span>${card.label}</span><strong class="${card.tone}">${card.value}</strong></article>`)
+    .join("");
+
+  if (!positions.length) {
+    els.manualCloseList.innerHTML = `<div class="empty-state">${date} 没有持仓股票，无需补录收盘价。</div>`;
+    return true;
+  }
+
+  const existingPrices = new Map((existing?.positions || []).map((position) => [normalizeSymbol(position.symbol), Number(position.price) || ""]));
+  els.manualCloseList.innerHTML = positions
+    .map((position) => {
+      const symbol = normalizeSymbol(position.symbol);
+      const price = existingPrices.get(symbol) || state.prices[symbol] || "";
+      return `
+        <article class="mobile-card">
+          <div class="mobile-card-head">
+            <strong class="stock-name-chip">${escapeHtml(position.name)}</strong>
+            <span>${symbol}</span>
+          </div>
+          <dl>
+            <div><dt>数量</dt><dd>${number(position.quantity, 0)}</dd></div>
+            <div><dt>当前成本</dt><dd>${money(position.averageCost || 0)}</dd></div>
+          </dl>
+          <label class="mobile-price spacing-top">
+            收盘价
+            <input type="number" min="0" step="0.001" data-manual-close-symbol="${symbol}" value="${price}" placeholder="填写当天收盘价" />
+          </label>
+        </article>
+      `;
+    })
+    .join("");
+  return true;
+}
+
+function openManualCloseModal() {
+  if (!renderManualCloseModal()) return;
+  openModal("manual-close-modal");
+}
+
+function saveManualCloseSnapshot() {
+  const date = els.closeSnapshotDate.value || today();
+  const inputs = [...document.querySelectorAll("[data-manual-close-symbol]")];
+  if (!inputs.length) {
+    els.closeSnapshotStatus.textContent = `${date} 没有可保存的持仓收盘价。`;
+    return;
+  }
+
+  const priceMap = {};
+  const missing = [];
+  inputs.forEach((input) => {
+    const symbol = normalizeSymbol(input.dataset.manualCloseSymbol);
+    const price = Number(input.value) || 0;
+    if (price > 0) priceMap[symbol] = Number(price.toFixed(3));
+    else missing.push(symbol);
+  });
+  if (missing.length) {
+    alert(`还有 ${missing.length} 只股票没有填写有效收盘价：${missing.join("、")}`);
+    return;
+  }
+
+  const existingIndex = state.closeSnapshots.findIndex((item) => item.date === date);
+  if (existingIndex >= 0 && !confirm(`${date} 已有收盘记录，是否覆盖？`)) return;
+
+  const snapshot = buildCloseSnapshotForDate(date, priceMap, previousCloseMapFromSnapshots(date));
+  snapshot.source = "manual-history";
+  if (existingIndex >= 0) {
+    state.closeSnapshots[existingIndex] = snapshot;
+  } else {
+    state.closeSnapshots.push(snapshot);
+  }
+  state.closeSnapshots.sort((a, b) => b.date.localeCompare(a.date));
+  save();
+  closeModal(document.getElementById("manual-close-modal"));
+  els.closeSnapshotStatus.textContent = `已手动补录 ${date} 收盘，总资产 ${money(snapshot.assets)}。`;
   renderCloseSnapshots();
   renderDashboard();
   renderEquityCurve();
@@ -5981,6 +6335,7 @@ function renderCloseSnapshotDateButton(row) {
 
 function renderCloseSnapshots() {
   if (!els.closeSnapshotDate.value) els.closeSnapshotDate.value = today();
+  renderAutoCloseSummary();
   const sorted = [...state.closeSnapshots].sort((a, b) => b.date.localeCompare(a.date));
   const latest = sorted[0];
   const pending = buildCloseSnapshot(els.closeSnapshotDate.value || today());
@@ -7117,6 +7472,205 @@ function exportCsv() {
   downloadBlob(`\ufeff${body}`, "text/csv;charset=utf-8", `ashare-trading-flow-${today()}.csv`);
 }
 
+function cleanBrokerCell(value) {
+  let text = String(value ?? "").trim().replace(/^\uFEFF/, "");
+  if (text.startsWith("=")) text = text.slice(1).trim();
+  if (text.startsWith('"') && text.endsWith('"')) text = text.slice(1, -1);
+  return text.replace(/""/g, '"').trim();
+}
+
+function brokerNumber(value) {
+  return Number(cleanBrokerCell(value).replace(/,/g, "")) || 0;
+}
+
+function brokerDate(value) {
+  const raw = cleanBrokerCell(value).replace(/\D/g, "");
+  if (raw.length === 8) return `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)}`;
+  return "";
+}
+
+function brokerTradeKey(trade) {
+  return [
+    trade.date,
+    normalizeSymbol(trade.symbol),
+    trade.side,
+    Number(trade.price).toFixed(4),
+    Number(trade.quantity).toFixed(0),
+    trade.note || "",
+  ].join("|");
+}
+
+function brokerCreatedAt(date, time, offset = 0) {
+  const safeTime = /^\d{2}:\d{2}:\d{2}$/.test(time) ? time : "09:30:00";
+  const stamp = Date.parse(`${date}T${safeTime}`);
+  return Number.isFinite(stamp) ? stamp + offset : Date.now() + offset;
+}
+
+function decodeBrokerFile(buffer) {
+  const encodings = ["gb18030", "utf-8", "utf-16le"];
+  for (const encoding of encodings) {
+    try {
+      const text = new TextDecoder(encoding).decode(buffer);
+      if (text.includes("交易日期") && text.includes("证券代码")) return text;
+    } catch {
+      // Try the next encoding. Some browsers may not support every label.
+    }
+  }
+  return new TextDecoder().decode(buffer);
+}
+
+function parseBrokerTrades(text) {
+  const lines = String(text || "")
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const headerIndex = lines.findIndex((line) => line.includes("交易日期") && line.includes("证券代码"));
+  if (headerIndex < 0) return { trades: [], skipped: lines.length, reason: "没有找到交易日期/证券代码表头" };
+
+  const headers = lines[headerIndex].split("\t").map(cleanBrokerCell);
+  const col = (name) => headers.findIndex((header) => header === name);
+  const indexes = {
+    date: col("交易日期"),
+    time: col("成交时间"),
+    symbol: col("证券代码"),
+    name: col("证券名称"),
+    side: col("买卖标志"),
+    price: col("成交价格"),
+    quantity: col("成交数量"),
+    dealNo: col("成交编号"),
+  };
+  if ([indexes.date, indexes.time, indexes.symbol, indexes.name, indexes.side, indexes.price, indexes.quantity].some((index) => index < 0)) {
+    return { trades: [], skipped: lines.length - headerIndex - 1, reason: "表头缺少日期、代码、名称、方向、价格或数量" };
+  }
+
+  const trades = [];
+  let skipped = 0;
+  for (let i = headerIndex + 1; i < lines.length; i += 1) {
+    const cells = lines[i].split("\t").map(cleanBrokerCell);
+    const sideText = cells[indexes.side] || "";
+    if (sideText !== "买入" && sideText !== "卖出") {
+      skipped += 1;
+      continue;
+    }
+
+    const date = brokerDate(cells[indexes.date]);
+    const time = cleanBrokerCell(cells[indexes.time]);
+    const symbol = normalizeSymbol(cells[indexes.symbol]);
+    const name = cleanBrokerCell(cells[indexes.name]);
+    const price = brokerNumber(cells[indexes.price]);
+    const quantity = Math.abs(brokerNumber(cells[indexes.quantity]));
+    const dealNo = indexes.dealNo >= 0 ? cleanBrokerCell(cells[indexes.dealNo]) : "";
+    if (!date || !symbol || !name || price <= 0 || quantity <= 0) {
+      skipped += 1;
+      continue;
+    }
+
+    trades.push({
+      id: uid(),
+      date,
+      symbol,
+      name,
+      side: sideText === "买入" ? "buy" : "sell",
+      price,
+      quantity,
+      note: `券商导入${time ? ` ${time}` : ""}${dealNo ? ` 编号${dealNo}` : ""}`,
+      createdAt: brokerCreatedAt(date, time, trades.length),
+    });
+  }
+  return { trades, skipped, reason: "" };
+}
+
+function renderBrokerImportPreview(summary = {}) {
+  const rows = pendingBrokerTrades;
+  els.confirmBrokerImport.disabled = rows.length === 0;
+  els.brokerImportSummary.innerHTML = [
+    { label: "可导入", value: `${rows.length} 笔`, tone: rows.length ? "positive" : "" },
+    { label: "重复跳过", value: `${summary.duplicates || 0} 笔`, tone: "" },
+    { label: "非买卖忽略", value: `${summary.skipped || 0} 笔`, tone: "" },
+  ]
+    .map((item) => `<article class="metric"><span>${item.label}</span><strong class="${item.tone}">${item.value}</strong></article>`)
+    .join("");
+
+  if (!rows.length) {
+    els.brokerImportPreview.innerHTML = `<div class="empty-state">${summary.reason || "还没有可导入的买卖成交"}</div>`;
+    return;
+  }
+
+  const previewRows = rows.slice(0, 20);
+  els.brokerImportPreview.innerHTML = previewRows
+    .map(
+      (trade) => `
+        <article class="mobile-card">
+          <div class="card-title">
+            <strong>${escapeHtml(trade.name)}</strong>
+            <span>${escapeHtml(trade.symbol)}</span>
+          </div>
+          <dl>
+            <div><dt>日期</dt><dd>${trade.date}</dd></div>
+            <div><dt>方向</dt><dd class="${trade.side === "buy" ? "positive" : "negative"}">${trade.side === "buy" ? "买入" : "卖出"}</dd></div>
+            <div><dt>价格</dt><dd>${number(trade.price, 3)}</dd></div>
+            <div><dt>数量</dt><dd>${number(trade.quantity, 0)}</dd></div>
+            <div><dt>金额</dt><dd>${money(tradeAmount(trade))}</dd></div>
+            <div><dt>费用</dt><dd>${money(totalFee(trade))}</dd></div>
+          </dl>
+        </article>
+      `,
+    )
+    .join("");
+  if (rows.length > previewRows.length) {
+    els.brokerImportPreview.innerHTML += `<p class="history-note">预览前 ${previewRows.length} 笔，确认后会导入全部 ${rows.length} 笔。</p>`;
+  }
+}
+
+function clearBrokerImportPreview() {
+  pendingBrokerTrades = [];
+  els.brokerImportFile.value = "";
+  els.brokerImportStatus.textContent = "支持类似“历史成交查询.xls”的制表符文件。导入前会先预览。";
+  renderBrokerImportPreview();
+}
+
+function handleBrokerImportFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const parsed = parseBrokerTrades(decodeBrokerFile(reader.result));
+    const existingKeys = new Set(state.trades.map(brokerTradeKey));
+    const seenKeys = new Set();
+    let duplicates = 0;
+    pendingBrokerTrades = parsed.trades.filter((trade) => {
+      const key = brokerTradeKey(trade);
+      if (existingKeys.has(key) || seenKeys.has(key)) {
+        duplicates += 1;
+        return false;
+      }
+      seenKeys.add(key);
+      return true;
+    });
+    els.brokerImportStatus.textContent = parsed.reason
+      ? `识别失败：${parsed.reason}`
+      : `已读取 ${file.name}，费用将按当前设置重新计算。`;
+    renderBrokerImportPreview({ skipped: parsed.skipped, duplicates, reason: parsed.reason });
+  };
+  reader.onerror = () => {
+    pendingBrokerTrades = [];
+    els.brokerImportStatus.textContent = "文件读取失败，请重新选择。";
+    renderBrokerImportPreview({ reason: "文件读取失败" });
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function confirmBrokerImport() {
+  if (!pendingBrokerTrades.length) return;
+  if (!confirm(`确认导入 ${pendingBrokerTrades.length} 笔买卖成交吗？费用会按当前设置自动计算。`)) return;
+  state.trades.push(...pendingBrokerTrades);
+  save();
+  clearBrokerImportPreview();
+  renderAll();
+  const missing = missingCloseSnapshotDates().length;
+  if (missing) els.closeSnapshotStatus.textContent = `导入后发现 ${missing} 个交易日缺少收盘记录，可点“自动补历史收盘”。`;
+  setView("records");
+}
+
 function importData(file) {
   const reader = new FileReader();
   reader.onload = () => {
@@ -7203,6 +7757,12 @@ els.form.addEventListener("submit", (event) => {
 });
 
 document.querySelector("#reset-form").addEventListener("click", resetForm);
+els.brokerImportFile.addEventListener("change", (event) => {
+  const file = event.target.files && event.target.files[0];
+  if (file) handleBrokerImportFile(file);
+});
+els.confirmBrokerImport.addEventListener("click", confirmBrokerImport);
+els.clearBrokerImport.addEventListener("click", clearBrokerImportPreview);
 document.querySelector("#sample-data").addEventListener("click", fillSampleData);
 document.querySelector("#export-data").addEventListener("click", exportData);
 document.querySelector("#export-csv").addEventListener("click", exportCsv);
@@ -7262,6 +7822,10 @@ els.closeSnapshotDate.addEventListener("change", renderCloseSnapshots);
 els.closeSnapshotStartDate.addEventListener("change", renderCloseSnapshots);
 els.closeSnapshotEndDate.addEventListener("change", renderCloseSnapshots);
 els.saveCloseSnapshot.addEventListener("click", saveCloseSnapshot);
+els.deleteSelectedCloseSnapshot.addEventListener("click", deleteSelectedCloseSnapshot);
+els.openManualCloseModal.addEventListener("click", openManualCloseModal);
+els.saveManualClose.addEventListener("click", saveManualCloseSnapshot);
+els.autoFillCloseSnapshots.addEventListener("click", autoFillHistoricalCloseSnapshots);
 els.closeSnapshotBody.addEventListener("click", (event) => {
   const id = event.target.dataset.deleteClose;
   if (id) deleteCloseSnapshot(id);
