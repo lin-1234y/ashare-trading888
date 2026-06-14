@@ -3262,12 +3262,19 @@ body {
               </div>
             </div>
             <div class="form-grid compact">
+              <label>
+                导入模式
+                <select id="broker-import-mode">
+                  <option value="broker1">券商1：交易日期 / 买入卖出</option>
+                  <option value="broker2">券商2：成交日期 / 证券买入卖出</option>
+                </select>
+              </label>
               <label class="wide file-button">
                 选择券商历史成交文件
                 <input type="file" id="broker-import-file" accept=".xls,.xlsx,.csv,.txt" />
               </label>
             </div>
-            <p class="panel-copy" id="broker-import-status">支持类似“历史成交查询.xls”的制表符文件。导入前会先预览。</p>
+            <p class="panel-copy" id="broker-import-status">券商1保持原格式；券商2支持“成交日期、证券买入/证券卖出”，GC001 等逆回购会忽略。导入前会先预览。</p>
             <div class="metric-grid three spacing-top" id="broker-import-summary"></div>
             <div class="mobile-list" id="broker-import-preview"></div>
             <div class="form-actions spacing-top">
@@ -3891,6 +3898,7 @@ const els = {
   previewAmount: document.querySelector("#preview-amount"),
   previewFee: document.querySelector("#preview-fee"),
   previewNet: document.querySelector("#preview-net"),
+  brokerImportMode: optionalElement("#broker-import-mode"),
   brokerImportFile: optionalElement("#broker-import-file"),
   brokerImportStatus: optionalElement("#broker-import-status"),
   brokerImportSummary: optionalElement("#broker-import-summary"),
@@ -7699,12 +7707,34 @@ function brokerCreatedAt(date, time, offset = 0) {
   return Number.isFinite(stamp) ? stamp + offset : Date.now() + offset;
 }
 
-function decodeBrokerFile(buffer) {
+function isReverseRepoTrade(symbol, name) {
+  const code = normalizeSymbol(symbol);
+  const text = cleanBrokerCell(name).toUpperCase();
+  if (text.includes("逆回购")) return true;
+  if (/^GC\d{3}$/.test(text) || /^R-\d{3}$/.test(text)) return true;
+  if (/^204\d{3}$/.test(code) || /^1318\d{2}$/.test(code)) return true;
+  return false;
+}
+
+function isBrokerStockOrEtf(symbol) {
+  const code = normalizeSymbol(symbol);
+  return /^(000|001|002|003|300|301|600|601|603|605|688|689|159|510|511|512|513|515|516|517|518|520|560|561|562|563|588)\d{3}$/.test(code);
+}
+
+function shouldIgnoreBrokerTrade(symbol, name, sideText) {
+  const text = `${cleanBrokerCell(name)} ${cleanBrokerCell(sideText)}`.toUpperCase();
+  if (isReverseRepoTrade(symbol, name)) return true;
+  if (text.includes("申购") || text.includes("配号") || text.includes("中签") || text.includes("缴款")) return true;
+  return !isBrokerStockOrEtf(symbol);
+}
+
+function decodeBrokerFile(buffer, mode = "broker1") {
   const encodings = ["gb18030", "utf-8", "utf-16le"];
+  const dateHeader = mode === "broker2" ? "成交日期" : "交易日期";
   for (const encoding of encodings) {
     try {
       const text = new TextDecoder(encoding).decode(buffer);
-      if (text.includes("交易日期") && text.includes("证券代码")) return text;
+      if (text.includes(dateHeader) && text.includes("证券代码")) return text;
     } catch {
       // Try the next encoding. Some browsers may not support every label.
     }
@@ -7712,18 +7742,19 @@ function decodeBrokerFile(buffer) {
   return new TextDecoder().decode(buffer);
 }
 
-function parseBrokerTrades(text) {
+function parseBrokerTrades(text, mode = "broker1") {
   const lines = String(text || "")
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean);
-  const headerIndex = lines.findIndex((line) => line.includes("交易日期") && line.includes("证券代码"));
-  if (headerIndex < 0) return { trades: [], skipped: lines.length, reason: "没有找到交易日期/证券代码表头" };
+  const dateHeader = mode === "broker2" ? "成交日期" : "交易日期";
+  const headerIndex = lines.findIndex((line) => line.includes(dateHeader) && line.includes("证券代码"));
+  if (headerIndex < 0) return { trades: [], skipped: lines.length, reason: `没有找到${dateHeader}/证券代码表头` };
 
   const headers = lines[headerIndex].split("\t").map(cleanBrokerCell);
   const col = (name) => headers.findIndex((header) => header === name);
   const indexes = {
-    date: col("交易日期"),
+    date: col(dateHeader),
     time: col("成交时间"),
     symbol: col("证券代码"),
     name: col("证券名称"),
@@ -7741,7 +7772,9 @@ function parseBrokerTrades(text) {
   for (let i = headerIndex + 1; i < lines.length; i += 1) {
     const cells = lines[i].split("\t").map(cleanBrokerCell);
     const sideText = cells[indexes.side] || "";
-    if (sideText !== "买入" && sideText !== "卖出") {
+    const isBuy = mode === "broker2" ? sideText.includes("买入") : sideText === "买入";
+    const isSell = mode === "broker2" ? sideText.includes("卖出") : sideText === "卖出";
+    if (!isBuy && !isSell) {
       skipped += 1;
       continue;
     }
@@ -7753,7 +7786,7 @@ function parseBrokerTrades(text) {
     const price = brokerNumber(cells[indexes.price]);
     const quantity = Math.abs(brokerNumber(cells[indexes.quantity]));
     const dealNo = indexes.dealNo >= 0 ? cleanBrokerCell(cells[indexes.dealNo]) : "";
-    if (!date || !symbol || !name || price <= 0 || quantity <= 0) {
+    if (!date || !symbol || !name || price <= 0 || quantity <= 0 || shouldIgnoreBrokerTrade(symbol, name, sideText)) {
       skipped += 1;
       continue;
     }
@@ -7763,7 +7796,7 @@ function parseBrokerTrades(text) {
       date,
       symbol,
       name,
-      side: sideText === "买入" ? "buy" : "sell",
+      side: isBuy ? "buy" : "sell",
       price,
       quantity,
       note: `券商导入${time ? ` ${time}` : ""}${dealNo ? ` 编号${dealNo}` : ""}`,
@@ -7779,7 +7812,7 @@ function renderBrokerImportPreview(summary = {}) {
   els.brokerImportSummary.innerHTML = [
     { label: "可导入", value: `${rows.length} 笔`, tone: rows.length ? "positive" : "" },
     { label: "重复跳过", value: `${summary.duplicates || 0} 笔`, tone: "" },
-    { label: "非买卖忽略", value: `${summary.skipped || 0} 笔`, tone: "" },
+    { label: "忽略项目", value: `${summary.skipped || 0} 笔`, tone: "" },
   ]
     .map((item) => `<article class="metric"><span>${item.label}</span><strong class="${item.tone}">${item.value}</strong></article>`)
     .join("");
@@ -7818,7 +7851,7 @@ function renderBrokerImportPreview(summary = {}) {
 function clearBrokerImportPreview() {
   pendingBrokerTrades = [];
   els.brokerImportFile.value = "";
-  els.brokerImportStatus.textContent = "支持类似“历史成交查询.xls”的制表符文件。导入前会先预览。";
+  els.brokerImportStatus.textContent = "券商1保持原格式；券商2支持“成交日期、证券买入/证券卖出”，GC001 等逆回购会忽略。导入前会先预览。";
   renderBrokerImportPreview();
 }
 
@@ -7826,7 +7859,8 @@ function handleBrokerImportFile(file) {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = () => {
-    const parsed = parseBrokerTrades(decodeBrokerFile(reader.result));
+    const mode = els.brokerImportMode.value || "broker1";
+    const parsed = parseBrokerTrades(decodeBrokerFile(reader.result, mode), mode);
     const existingKeys = new Set(state.trades.map(brokerTradeKey));
     const seenKeys = new Set();
     let duplicates = 0;
