@@ -7724,7 +7724,22 @@ function isBrokerStockOrEtf(symbol) {
 function shouldIgnoreBrokerTrade(symbol, name, sideText) {
   const text = `${cleanBrokerCell(name)} ${cleanBrokerCell(sideText)}`.toUpperCase();
   if (isReverseRepoTrade(symbol, name)) return true;
-  if (text.includes("申购") || text.includes("配号") || text.includes("中签") || text.includes("缴款")) return true;
+  if (
+    text.includes("申购") ||
+    text.includes("配号") ||
+    text.includes("中签") ||
+    text.includes("缴款") ||
+    text.includes("分红") ||
+    text.includes("红利") ||
+    text.includes("股息") ||
+    text.includes("派息") ||
+    text.includes("送股") ||
+    text.includes("转增") ||
+    text.includes("配股") ||
+    text.includes("股权登记") ||
+    text.includes("除权") ||
+    text.includes("除息")
+  ) return true;
   return !isBrokerStockOrEtf(symbol);
 }
 
