@@ -1,4 +1,4 @@
-const CACHE_NAME = "ashare-trading999-offline-v1";
+const CACHE_NAME = "ashare-trading888-offline-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
