@@ -324,6 +324,15 @@ button {
   color: var(--gold) !important;
 }
 
+.metric-note {
+  display: block;
+  margin-top: 6px;
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .metric-action {
   min-height: 28px;
   margin-top: 10px;
@@ -3065,10 +3074,12 @@ body {
             <article class="metric">
               <span>手续总费</span>
               <strong id="metric-total-fees">¥0.00</strong>
+              <span class="metric-note" id="metric-total-turnover">总成交 ¥0.00</span>
             </article>
             <article class="metric">
-              <span>总成交金额</span>
-              <strong id="metric-total-turnover">¥0.00</strong>
+              <span>资金出入</span>
+              <strong id="metric-cash-flow">¥0.00</strong>
+              <button class="icon-action metric-action" type="button" data-modal-open="cash-flow-modal">明细</button>
             </article>
             <article class="metric">
               <span>累计净分红</span>
@@ -3345,6 +3356,20 @@ body {
               </table>
             </div>
             <div class="mobile-list" id="dividend-detail-cards"></div>
+          </div>
+        </section>
+
+        <section class="app-modal" id="cash-flow-modal" hidden>
+          <div class="modal-card">
+            <div class="modal-head">
+              <div>
+                <h3>资金出入明细</h3>
+                <span>只统计现金转入和现金转出，不含买卖成交</span>
+              </div>
+              <button class="icon-action" type="button" data-modal-close>关闭</button>
+            </div>
+            <div class="range-summary" id="cash-flow-summary"></div>
+            <div class="mobile-list" id="cash-flow-list"></div>
           </div>
         </section>
 
@@ -4541,6 +4566,9 @@ const els = {
   matchedRealized: optionalElement("#metric-matched-realized"),
   totalFees: optionalElement("#metric-total-fees"),
   totalTurnover: optionalElement("#metric-total-turnover"),
+  cashFlow: optionalElement("#metric-cash-flow"),
+  cashFlowSummary: optionalElement("#cash-flow-summary"),
+  cashFlowList: optionalElement("#cash-flow-list"),
   dividends: optionalElement("#metric-dividends"),
   dividendModalTitle: optionalElement("#dividend-modal-title"),
   dividendModalSubtitle: optionalElement("#dividend-modal-subtitle"),
@@ -5669,13 +5697,32 @@ function rangePnlFromSummaryAnalysis(startDate, endDate, analysis) {
   return endPnl - previousPnl;
 }
 
+function rangePnlFromCloseSnapshots(startDate, endDate) {
+  const rows = currentSnapshotCalendarRows()
+    .filter((row) => dateInRange(row.date, startDate, endDate))
+    .sort((a, b) => a.date.localeCompare(b.date));
+  if (!rows.length) return null;
+
+  const firstRow = rows[0];
+  const lastRow = rows[rows.length - 1];
+  const previousRow = currentSnapshotCalendarRows()
+    .filter((row) => validDateString(row.date) && row.date < firstRow.date)
+    .sort((a, b) => b.date.localeCompare(a.date))[0];
+  const startAssets = previousRow ? Number(previousRow.assets) || 0 : originalAssetsTotal(firstRow.date);
+  const endAssets = Number(lastRow.assets) || 0;
+  const netCashFlow = cashTransferBetween(previousRow?.date || firstRow.date, lastRow.date);
+
+  return endAssets - startAssets - netCashFlow;
+}
+
 function calculateRangeSummary(startDate = "", endDate = "", analysis = null) {
   const range = dateRangeBounds(startDate, endDate);
   const pairRows = analysis?.pairRows || currentTradePairRows();
   const rows = analysis ? null : calculatePnlCalendarRows().filter((row) => dateInRange(row.date, range.startDate, range.endDate));
+  const snapshotPnl = analysis ? null : rangePnlFromCloseSnapshots(range.startDate, range.endDate);
   const periodPnl = analysis
     ? rangePnlFromSummaryAnalysis(range.startDate, range.endDate, analysis)
-    : rows.reduce((sum, row) => sum + row.periodPnl, 0);
+    : snapshotPnl ?? rows.reduce((sum, row) => sum + row.periodPnl, 0);
   const trades = state.trades.filter((trade) => dateInRange(trade.date, range.startDate, range.endDate));
   const dividends = state.corporateActions
     .filter((action) => action.type === "dividend" && dateInRange(action.date, range.startDate, range.endDate))
@@ -7224,6 +7271,7 @@ function renderDashboard() {
   const snapshotRows = currentSnapshotCalendarRows();
   const totalFees = state.trades.reduce((sum, trade) => sum + totalFee(trade), 0);
   const totalTurnover = state.trades.reduce((sum, trade) => sum + Math.abs(Number(trade.price) || 0) * (Number(trade.quantity) || 0), 0);
+  const netCashFlow = cashTransferTotal();
   const assets = totals.assets;
   const initialAssets = originalAssetsTotal();
   const totalReturnRate = initialAssets > 0 ? ((assets - initialAssets) / initialAssets) * 100 : 0;
@@ -7247,7 +7295,11 @@ function renderDashboard() {
   els.yearPnl.textContent = money(periodSummary.year);
   if (els.realized) els.realized.textContent = money(assetRealizedPnl);
   els.totalFees.textContent = money(totalFees);
-  if (els.totalTurnover) els.totalTurnover.textContent = money(totalTurnover);
+  if (els.totalTurnover) els.totalTurnover.textContent = `总成交 ${money(totalTurnover)}`;
+  if (els.cashFlow) {
+    els.cashFlow.textContent = money(netCashFlow);
+    els.cashFlow.className = classByValue(netCashFlow);
+  }
   els.dividends.textContent = money(dividendTotal());
   els.totalReturn.className = classByValue(totalReturnRate);
   els.cash.className = classByValue(totals.cash);
@@ -8114,6 +8166,42 @@ function renderCashTransfers() {
       `,
     )
     .join("");
+}
+
+function renderCashFlowDetails() {
+  if (!els.cashFlowSummary || !els.cashFlowList) return;
+  const rows = [...state.cashTransfers].sort((a, b) => (b.date || "").localeCompare(a.date || "") || (Number(b.createdAt) || 0) - (Number(a.createdAt) || 0));
+  const totalIn = rows.filter((item) => item.type !== "out").reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+  const totalOut = rows.filter((item) => item.type === "out").reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+  const net = totalIn - totalOut;
+
+  els.cashFlowSummary.innerHTML = [
+    { label: "净资金出入", value: money(net), tone: classByValue(net) },
+    { label: "累计转入", value: money(totalIn), tone: "positive" },
+    { label: "累计转出", value: money(totalOut), tone: "negative" },
+    { label: "流水笔数", value: `${rows.length} 笔`, tone: "" },
+  ].map((card) => `<article class="metric"><span>${card.label}</span><strong class="${card.tone}">${card.value}</strong></article>`).join("");
+
+  if (!rows.length) {
+    els.cashFlowList.innerHTML = `<div class="empty-state">暂无资金转入转出记录</div>`;
+    return;
+  }
+  els.cashFlowList.innerHTML = rows.map((item) => {
+    const amount = Number(item.amount) || 0;
+    const signed = item.type === "out" ? -amount : amount;
+    return `
+      <article class="mobile-card">
+        <div class="mobile-card-head">
+          <strong class="${signed < 0 ? "negative" : "positive"}">${item.type === "out" ? "现金转出" : "现金转入"}</strong>
+          <span>${item.date || "-"}</span>
+        </div>
+        <dl>
+          <div><dt>金额</dt><dd class="${classByValue(signed)}">${money(signed)}</dd></div>
+          <div><dt>备注</dt><dd>${escapeHtml(item.note || "无备注")}</dd></div>
+        </dl>
+      </article>
+    `;
+  }).join("");
 }
 
 function manualClosePositions(date) {
@@ -11378,6 +11466,7 @@ function openModal(id) {
     "match-range-modal": renderMatchRangeQuery,
     "pair-modal": renderTradePairPnL,
     "dividend-modal": () => renderDividendDetails(dividendModalSymbolFilter),
+    "cash-flow-modal": renderCashFlowDetails,
     "report-year-modal": renderReportYear,
   };
   const render = lazyRenderers[id];
