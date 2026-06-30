@@ -4065,10 +4065,16 @@ body {
                 <input type="date" id="record-end-date" />
               </label>
             </div>
-            <label class="spacing-top">
-              筛选
-              <input type="search" id="record-filter" placeholder="代码 / 名称 / 类型 / 备注" autocomplete="off" />
-            </label>
+            <div class="form-grid compact spacing-top">
+              <label>
+                持仓股票
+                <select id="record-open-symbol"></select>
+              </label>
+              <label>
+                清仓股票
+                <select id="record-closed-symbol"></select>
+              </label>
+            </div>
             <div class="form-actions spacing-top">
               <button class="primary-button" type="button" id="query-records">查询</button>
               <button class="ghost-button" type="button" id="reset-record-query">清除条件</button>
@@ -4491,7 +4497,8 @@ const els = {
   closedQueryStatus: optionalElement("#closed-query-status"),
   closedRankList: optionalElement("#closed-rank-list"),
   quoteStatus: optionalElement("#quote-status"),
-  recordFilter: document.querySelector("#record-filter"),
+  recordOpenSymbol: optionalElement("#record-open-symbol"),
+  recordClosedSymbol: optionalElement("#record-closed-symbol"),
   queryRecords: optionalElement("#query-records"),
   resetRecordQuery: optionalElement("#reset-record-query"),
   recordQueryStatus: optionalElement("#record-query-status"),
@@ -7016,8 +7023,40 @@ function openStockDetail(symbol) {
   setView("stock-detail");
 }
 
+function recordSymbolOptions() {
+  const names = stockNameMap();
+  const positions = currentPortfolioSnapshot().positions;
+  const openSymbols = positions
+    .filter((position) => (Number(position.quantity) || 0) > 0)
+    .map((position) => normalizeSymbol(position.symbol))
+    .filter(Boolean)
+    .sort((a, b) => (names.get(a) || a).localeCompare(names.get(b) || b, "zh-CN"));
+  const closedSymbols = closedPositionRows(positions)
+    .map((row) => normalizeSymbol(row.symbol))
+    .filter(Boolean)
+    .sort((a, b) => (names.get(a) || a).localeCompare(names.get(b) || b, "zh-CN"));
+  return { names, openSymbols, closedSymbols };
+}
+
+function renderRecordSymbolFilters() {
+  if (!els.recordOpenSymbol || !els.recordClosedSymbol) return;
+  const selectedOpen = normalizeSymbol(els.recordOpenSymbol.value);
+  const selectedClosed = normalizeSymbol(els.recordClosedSymbol.value);
+  const { names, openSymbols, closedSymbols } = recordSymbolOptions();
+  const optionHtml = (symbols, placeholder) => [
+    `<option value="">${placeholder}</option>`,
+    ...symbols.map((symbol) => `<option value="${symbol}">${escapeHtml(names.get(symbol) || symbol)} ${symbol}</option>`),
+  ].join("");
+
+  els.recordOpenSymbol.innerHTML = optionHtml(openSymbols, "选择持仓股票");
+  els.recordClosedSymbol.innerHTML = optionHtml(closedSymbols, "选择清仓股票");
+  if (openSymbols.includes(selectedOpen)) els.recordOpenSymbol.value = selectedOpen;
+  if (closedSymbols.includes(selectedClosed)) els.recordClosedSymbol.value = selectedClosed;
+}
+
 function renderRecords() {
-  const keyword = els.recordFilter.value.trim().toLowerCase();
+  renderRecordSymbolFilters();
+  const selectedSymbol = normalizeSymbol(els.recordOpenSymbol?.value || els.recordClosedSymbol?.value || "");
   const start = els.recordStartDate.value;
   const end = els.recordEndDate.value;
   if (start && end && start > end) {
@@ -7030,15 +7069,17 @@ function renderRecords() {
   const records = buildFlowRecords().filter((row) => {
     if (start && (!row.date || row.date < start)) return false;
     if (end && (!row.date || row.date > end)) return false;
-    return `${row.symbol} ${row.name} ${row.type} ${row.note}`.toLowerCase().includes(keyword);
+    if (selectedSymbol && normalizeSymbol(row.symbol) !== selectedSymbol) return false;
+    return true;
   });
   const visibleRecords = records.slice(0, RECORD_RENDER_LIMIT);
   const limitNote = records.length > visibleRecords.length
     ? `命中 ${records.length} 条，为保持流畅只显示最近 ${visibleRecords.length} 条。`
     : "";
   const rangeText = start || end ? `${start || "最早"} 至 ${end || "最新"}` : "全部日期";
-  const keywordText = keyword ? `，筛选“${els.recordFilter.value.trim()}”` : "";
-  els.recordQueryStatus.textContent = `${rangeText}${keywordText}：找到 ${records.length} 条，显示 ${visibleRecords.length} 条。`;
+  const selectedName = selectedSymbol ? (stockNameMap().get(selectedSymbol) || selectedSymbol) : "";
+  const symbolText = selectedSymbol ? `，${selectedName} ${selectedSymbol}` : "";
+  els.recordQueryStatus.textContent = `${rangeText}${symbolText}：找到 ${records.length} 条，显示 ${visibleRecords.length} 条。`;
 
   if (!records.length) {
     els.recordsBody.innerHTML = `<tr><td colspan="12" class="empty-state">还没有流水记录</td></tr>`;
@@ -7124,7 +7165,8 @@ function renderRecords() {
 function resetRecordQuery() {
   els.recordStartDate.value = "";
   els.recordEndDate.value = "";
-  els.recordFilter.value = "";
+  if (els.recordOpenSymbol) els.recordOpenSymbol.value = "";
+  if (els.recordClosedSymbol) els.recordClosedSymbol.value = "";
   renderRecords();
 }
 
@@ -8053,7 +8095,10 @@ function saveCloseSnapshot() {
   const date = els.closeSnapshotDate.value || today();
   const snapshot = buildCloseSnapshot(date);
   const existingIndex = state.closeSnapshots.findIndex((item) => item.date === date);
-  if (existingIndex >= 0 && !confirm(`${date} 已有收盘记录，是否覆盖？`)) return;
+  const confirmText = existingIndex >= 0
+    ? `${date} 已有收盘记录，是否覆盖？\n总资产：${money(snapshot.assets)}`
+    : `确认记录 ${date} 收盘？\n总资产：${money(snapshot.assets)}`;
+  if (!confirm(confirmText)) return;
 
   if (existingIndex >= 0) {
     state.closeSnapshots[existingIndex] = snapshot;
@@ -8538,13 +8583,24 @@ function renderAssetLineChart(rows) {
     return;
   }
 
-  els.assetChartStart.min = allRows[0].date;
-  els.assetChartStart.max = allRows[allRows.length - 1].date;
+  const initialRow = {
+    date: addDays(allRows[0].date, -1),
+    cash: Number(state.settings.initialCash) || 0,
+    marketValue: initialPositionCost(),
+    assets: originalAssetsTotal(allRows[0].date),
+    pnl: 0,
+    periodPnl: 0,
+    initialAssetPoint: true,
+  };
+  const curveRows = [initialRow, ...allRows];
+
+  els.assetChartStart.min = curveRows[0].date;
+  els.assetChartStart.max = curveRows[curveRows.length - 1].date;
   els.assetChartEnd.min = allRows[0].date;
   els.assetChartEnd.max = allRows[allRows.length - 1].date;
 
   const range = dateRangeBounds(els.assetChartStart.value, els.assetChartEnd.value);
-  let chartRows = allRows.filter((row) => dateInRange(row.date, range.startDate, range.endDate));
+  let chartRows = curveRows.filter((row) => dateInRange(row.date, range.startDate, range.endDate));
   const maxWindow = chartRows.length;
   els.assetChartWindow.max = String(maxWindow);
   let requestedWindow = Number(els.assetChartWindow.value) || 0;
@@ -8599,6 +8655,29 @@ function renderAssetLineChart(rows) {
   const drawdownLine = drawdown.amount > 0 && peakPoint && troughPoint
     ? `<line class="equity-drawdown" x1="${peakPoint.x}" y1="${peakPoint.y}" x2="${troughPoint.x}" y2="${troughPoint.y}" />`
     : "";
+  const navByDate = historyAssetNavByDate(allRows);
+  const navRows = chartRows
+    .map((row) => ({ ...row, nav: row.initialAssetPoint ? 1 : navByDate.get(row.date) }))
+    .filter((row) => Number.isFinite(row.nav));
+  const navValues = navRows.map((row) => row.nav);
+  const navMin = navValues.length ? Math.min(...navValues) : 1;
+  const navMax = navValues.length ? Math.max(...navValues) : 1;
+  const navSpan = Math.max(navMax - navMin, 0.0001);
+  const yForNav = (value) => top + ((navMax - value) / navSpan) * chartHeight;
+  const navPoints = navRows.map((row, index) => {
+    const x = navRows.length === 1 ? left + chartWidth / 2 : left + (index / (navRows.length - 1)) * chartWidth;
+    const y = yForNav(row.nav);
+    return { x, y, row };
+  });
+  const navLine = navPoints.map((point) => `${point.x},${point.y}`).join(" ");
+  const navArea = navPoints.length ? `${left},${height - bottom} ${navLine} ${width - right},${height - bottom}` : "";
+  const navFirst = navPoints[0];
+  const navLast = navPoints.at(-1);
+  const navMiddle = navPoints[Math.floor((navPoints.length - 1) / 2)];
+  const navAxisValues = [navMax, navMin + navSpan / 2, navMin];
+  const navDateLabels = [navFirst, navMiddle, navLast]
+    .filter(Boolean)
+    .filter((point, index, list) => list.findIndex((item) => item.row.date === point.row.date) === index);
 
   els.assetLineChart.innerHTML = `
     <div class="equity-chart-card">
@@ -8643,6 +8722,49 @@ function renderAssetLineChart(rows) {
         </div>
       </div>
     </div>
+    ${navPoints.length ? `
+      <div class="equity-chart-card spacing-top">
+        <div class="equity-chart-head">
+          <div>
+            <span>净值曲线</span>
+            <strong>${number(navLast.row.nav, 4)}</strong>
+          </div>
+          <div>
+            <span>初始净值</span>
+            <strong>1.0000</strong>
+          </div>
+        </div>
+        <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="净值曲线">
+          ${navAxisValues.map((value) => {
+            const y = yForNav(value);
+            return `
+              <line class="equity-grid" x1="${left}" y1="${y}" x2="${width - right}" y2="${y}" />
+              <text class="equity-axis-label" x="8" y="${y + 4}">${number(value, 4)}</text>
+            `;
+          }).join("")}
+          <line class="equity-grid" x1="${left}" y1="${top}" x2="${left}" y2="${height - bottom}" />
+          <polygon class="equity-area" points="${navArea}" />
+          <polyline class="equity-line" points="${navLine}" />
+          ${navPoints.map((point) => `<circle class="equity-dot" cx="${point.x}" cy="${point.y}" r="${point === navLast ? 4 : 3}"></circle>`).join("")}
+          <text class="equity-label" x="${Math.min(navLast.x + 8, width - 96)}" y="${Math.max(navLast.y - 8, 18)}">${number(navLast.row.nav, 4)}</text>
+          ${navDateLabels.map((point) => `<text class="equity-date-label" x="${point.x}" y="${height - 14}" text-anchor="middle">${formatShortDate(point.row.date)}</text>`).join("")}
+        </svg>
+        <div class="equity-chart-foot">
+          <div>
+            <span>日期范围</span>
+            <strong>${navFirst.row.date} 至 ${navLast.row.date}</strong>
+          </div>
+          <div>
+            <span>期初净值</span>
+            <strong>${number(navFirst.row.nav, 4)}</strong>
+          </div>
+          <div>
+            <span>期末净值</span>
+            <strong class="${classByValue(navLast.row.nav - navFirst.row.nav)}">${number(navLast.row.nav, 4)}</strong>
+          </div>
+        </div>
+      </div>
+    ` : ""}
   `;
 }
 
@@ -11621,11 +11743,13 @@ els.undoLastImport.addEventListener("click", undoLastImport);
 
 els.queryRecords.addEventListener("click", renderRecords);
 els.resetRecordQuery.addEventListener("click", resetRecordQuery);
-els.recordFilter.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    renderRecords();
-  }
+els.recordOpenSymbol.addEventListener("change", () => {
+  if (els.recordOpenSymbol.value && els.recordClosedSymbol) els.recordClosedSymbol.value = "";
+  renderRecords();
+});
+els.recordClosedSymbol.addEventListener("change", () => {
+  if (els.recordClosedSymbol.value && els.recordOpenSymbol) els.recordOpenSymbol.value = "";
+  renderRecords();
 });
 els.assetChartStart.addEventListener("change", renderEquityCurve);
 els.assetChartEnd.addEventListener("change", renderEquityCurve);
