@@ -968,6 +968,19 @@ body.modal-open {
   line-height: 1.2;
 }
 
+.match-side-card .match-price,
+.match-result-card .match-quantity {
+  color: #ff4fd8;
+  font-size: 17px;
+  font-weight: 950;
+}
+
+.match-result-card .match-amount {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .match-result-card .match-result-row {
   display: flex;
   justify-content: space-between;
@@ -975,6 +988,11 @@ body.modal-open {
   margin-top: 4px;
   font-size: 12px;
   font-weight: 800;
+}
+
+.match-result-card .match-result-row:first-of-type strong {
+  font-size: 17px;
+  font-weight: 950;
 }
 
 .inline-detail,
@@ -1423,6 +1441,32 @@ td {
   margin: 0;
   color: var(--muted);
   line-height: 1.5;
+}
+
+#records-cards .flow-card.trade-buy {
+  border-color: rgba(255, 84, 118, 0.42);
+  background: linear-gradient(180deg, rgba(126, 42, 58, 0.26), rgba(50, 18, 28, 0.2)), linear-gradient(180deg, #151e2c, #0d1320);
+}
+
+#records-cards .flow-card.trade-sell {
+  border-color: rgba(49, 216, 139, 0.42);
+  background: linear-gradient(180deg, rgba(35, 116, 76, 0.24), rgba(12, 54, 40, 0.18)), linear-gradient(180deg, #151e2c, #0d1320);
+}
+
+#records-cards .flow-card .flow-price,
+#records-cards .flow-card .flow-quantity {
+  font-size: 18px;
+  font-weight: 950;
+}
+
+#records-cards .flow-card.trade-buy .flow-price,
+#records-cards .flow-card.trade-buy .flow-quantity {
+  color: var(--sell);
+}
+
+#records-cards .flow-card.trade-sell .flow-price,
+#records-cards .flow-card.trade-sell .flow-quantity {
+  color: #ff4fd8;
 }
 
 .mobile-price {
@@ -2595,6 +2639,32 @@ body {
 #corporate-actions-cards .mobile-card dl {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px 9px;
+}
+
+#records-cards .mobile-card.flow-card.trade-buy {
+  border-color: rgba(255, 84, 118, 0.55) !important;
+  background: linear-gradient(180deg, rgba(128, 34, 52, 0.38), rgba(56, 16, 28, 0.28)), linear-gradient(180deg, #151e2c 0%, #0d1320 100%) !important;
+}
+
+#records-cards .mobile-card.flow-card.trade-sell {
+  border-color: rgba(49, 216, 139, 0.55) !important;
+  background: linear-gradient(180deg, rgba(28, 112, 72, 0.34), rgba(10, 58, 40, 0.26)), linear-gradient(180deg, #151e2c 0%, #0d1320 100%) !important;
+}
+
+#records-cards .mobile-card.flow-card .flow-price,
+#records-cards .mobile-card.flow-card .flow-quantity {
+  font-size: 19px !important;
+  font-weight: 950 !important;
+}
+
+#records-cards .mobile-card.flow-card.trade-buy .flow-price,
+#records-cards .mobile-card.flow-card.trade-buy .flow-quantity {
+  color: #ff4d68 !important;
+}
+
+#records-cards .mobile-card.flow-card.trade-sell .flow-price,
+#records-cards .mobile-card.flow-card.trade-sell .flow-quantity {
+  color: #ff4fd8 !important;
 }
 
 .position-compact-grid {
@@ -7138,8 +7208,9 @@ function renderRecords() {
                 <button class="icon-action" data-delete-cash-transfer="${row.id}">删除</button>
               `
             : `<button class="icon-action" data-delete-action="${row.id}">删除</button>`;
+      const tradeClass = row.kind === "trade" ? `flow-card trade-${row.tone}` : "flow-card";
       return `
-        <article class="mobile-card">
+        <article class="mobile-card ${tradeClass}">
           <div class="mobile-card-head">
             <strong class="stock-name-chip">${row.name}</strong>
             <span class="tag ${row.tone}">${row.type}</span>
@@ -7147,8 +7218,8 @@ function renderRecords() {
           <dl>
             <div><dt>日期</dt><dd>${row.date || "-"}</dd></div>
             <div><dt>代码</dt><dd>${row.symbol}</dd></div>
-            <div><dt>价格</dt><dd>${row.price}</dd></div>
-            <div><dt>数量</dt><dd>${row.quantity}</dd></div>
+            <div><dt>价格</dt><dd class="flow-price">${row.price}</dd></div>
+            <div><dt>数量</dt><dd class="flow-quantity">${row.quantity}</dd></div>
             <div><dt>金额</dt><dd>${row.amount}</dd></div>
             <div><dt>费用</dt><dd>${row.fee ? money(row.fee) : "-"}</dd></div>
           </dl>
