@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
@@ -574,10 +574,53 @@ body.modal-open {
   stroke-linejoin: round;
 }
 
+.equity-compare-line {
+  fill: none;
+  stroke: #40c8ff;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 6 5;
+}
+
 .equity-dot {
   fill: #ffffff;
   stroke: var(--primary);
   stroke-width: 3;
+}
+
+.equity-compare-dot {
+  fill: #07111f;
+  stroke: #40c8ff;
+  stroke-width: 2;
+}
+
+.equity-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.equity-chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.equity-chart-legend i {
+  width: 18px;
+  height: 3px;
+  border-radius: 99px;
+  background: var(--primary);
+}
+
+.equity-chart-legend .compare i {
+  background: #40c8ff;
+  background-image: repeating-linear-gradient(90deg, #40c8ff 0 5px, transparent 5px 9px);
 }
 
 .equity-label {
@@ -1243,6 +1286,11 @@ select:focus {
 
 .mobile-list {
   display: none;
+}
+
+.import-preview-list {
+  display: grid;
+  gap: 10px;
 }
 
 table {
@@ -3046,6 +3094,343 @@ body {
   color: #f7ecd1 !important;
 }
 
+.stock-v2-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: end;
+  padding: 14px;
+  border: 1px solid rgba(255, 211, 106, 0.28);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(255, 211, 106, 0.12), rgba(0, 153, 255, 0.12));
+}
+
+.stock-v2-title {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.stock-v2-title strong {
+  font-size: 1.45rem;
+  color: var(--cream);
+}
+
+.stock-v2-price {
+  text-align: right;
+  color: var(--muted);
+}
+
+.stock-v2-price strong {
+  display: block;
+  font-size: 1.25rem;
+  color: var(--gold);
+}
+
+.stock-v2-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.stock-v2-tab {
+  min-height: 42px;
+  border: 1px solid rgba(255, 211, 106, 0.25);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cream);
+  font-weight: 800;
+}
+
+.stock-v2-tab.active {
+  border-color: var(--gold);
+  background: rgba(255, 211, 106, 0.16);
+  color: var(--gold);
+}
+
+#stock-v2-metrics {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.stock-v2-panel {
+  margin-top: 14px;
+}
+
+.stock-v2-progress,
+.stock-v2-trade,
+.stock-v2-lot-card {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid rgba(255, 211, 106, 0.22);
+  border-radius: 8px;
+  background: rgba(8, 13, 24, 0.72);
+}
+
+.stock-v2-progress-track {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.stock-v2-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--positive), var(--gold));
+}
+
+.stock-v2-trade-head,
+.stock-v2-section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.stock-v2-section-head {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.stock-v2-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.stock-v2-chip {
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 0.82rem;
+}
+
+.stock-v2-chip strong {
+  display: block;
+  margin-top: 3px;
+}
+
+.stock-v2-lot-grid,
+.stock-v2-placeholder-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.stock-v2-trade-list {
+  display: grid;
+  gap: 10px;
+}
+
+.stock-v2-date-group {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid rgba(255, 211, 106, 0.22);
+  border-radius: 8px;
+  background: rgba(8, 13, 24, 0.68);
+}
+
+.stock-v2-date-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stock-v2-date-group > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.stock-v2-date-group > summary::-webkit-details-marker {
+  display: none;
+}
+
+.stock-v2-date-head strong {
+  color: var(--cream);
+  font-size: 1.05rem;
+}
+
+.stock-v2-date-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.stock-v2-trade-summary {
+  margin-top: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  overflow: hidden;
+}
+
+.stock-v2-trade-summary > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 11px;
+}
+
+.stock-v2-trade-summary > summary::-webkit-details-marker {
+  display: none;
+}
+
+.stock-v2-summary-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.stock-v2-trigger.buy {
+  color: #78b7ff;
+}
+
+.stock-v2-trigger.sell {
+  color: #ffb15f;
+}
+
+.stock-v2-trigger.pending {
+  color: #c084fc;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.warning {
+  color: var(--warning);
+}
+
+.stock-v2-detail-body {
+  padding: 0 11px 11px;
+}
+
+.stock-v2-match-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: 8px;
+  margin-top: 8px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 0.88rem;
+}
+
+.stock-v2-mini-toggle {
+  margin-top: 8px;
+}
+
+.stock-v2-mini-toggle summary {
+  cursor: pointer;
+  color: var(--gold);
+  font-weight: 800;
+}
+
+.stock-v2-load-more {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.stock-kline-chart {
+  min-height: 360px;
+  padding: 12px;
+  border: 1px solid rgba(255, 211, 106, 0.22);
+  border-radius: 8px;
+  background: rgba(5, 10, 18, 0.74);
+}
+
+.stock-kline-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.stock-kline-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.stock-kline-legend span {
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.stock-kline-point {
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  paint-order: stroke;
+  stroke: rgba(5, 10, 18, 0.8);
+  stroke-width: 2px;
+}
+
+.stock-kline-point.highlight {
+  font-size: 13px;
+  filter: drop-shadow(0 0 6px rgba(255, 211, 106, 0.9));
+}
+
+.stock-kline-highlight-hit {
+  cursor: pointer;
+}
+
+.stock-kline-highlight-ring {
+  fill: rgba(255, 211, 106, 0.16);
+  stroke: #ffd36a;
+  stroke-width: 2.4px;
+  filter: drop-shadow(0 0 7px rgba(255, 211, 106, 0.95));
+}
+
+.stock-kline-highlight-bg {
+  fill: rgba(255, 211, 106, 0.22);
+  stroke: rgba(255, 211, 106, 0.92);
+  stroke-width: 1.2px;
+}
+
+.stock-kline-detail {
+  margin-top: 12px;
+}
+
+.stock-kline-range {
+  margin-top: 10px;
+}
+
+@media (max-width: 640px) {
+  .stock-v2-hero,
+  .stock-v2-lot-grid,
+  .stock-v2-placeholder-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stock-v2-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .stock-v2-chip-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #stock-v2-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 </style>
   </head>
   <body>
@@ -3409,6 +3794,16 @@ body {
               </div>
               <button class="icon-action" type="button" data-modal-close>关闭</button>
             </div>
+            <div class="date-filter">
+              <label>
+                年度
+                <input type="number" id="dividend-detail-year" min="2000" max="2099" step="1" placeholder="全部" />
+              </label>
+              <button class="ghost-button small" id="dividend-detail-prev-year" type="button">上年</button>
+              <button class="ghost-button small" id="dividend-detail-current-year" type="button">今年</button>
+              <button class="ghost-button small" id="dividend-detail-next-year" type="button">下年</button>
+              <button class="ghost-button small" id="dividend-detail-all-years" type="button">全部</button>
+            </div>
             <div class="range-summary" id="dividend-summary"></div>
             <div class="table-wrap">
               <table>
@@ -3420,6 +3815,7 @@ body {
                     <th>税前分红</th>
                     <th>股息率</th>
                     <th>备注</th>
+                    <th>操作</th>
                   </tr>
                 </thead>
                 <tbody id="dividend-detail-body"></tbody>
@@ -3768,6 +4164,15 @@ body {
                 <select id="broker-import-mode">
                   <option value="broker1">券商1：交易日期 / 买入卖出</option>
                   <option value="broker2">券商2：成交日期 / 证券买入卖出</option>
+                  <option value="auto">自动识别：更多券商模板</option>
+                  <option value="generic">通用模板：手动导出的成交明细</option>
+                  <option value="huatai">华泰/涨乐财富通</option>
+                  <option value="guotai">国泰海通/国泰君安</option>
+                  <option value="eastmoney">东方财富证券</option>
+                  <option value="galaxy">中国银河证券</option>
+                  <option value="cms">招商证券</option>
+                  <option value="citic">中信证券</option>
+                  <option value="gf">广发证券</option>
                 </select>
               </label>
               <label class="wide file-button">
@@ -3776,8 +4181,10 @@ body {
               </label>
             </div>
             <p class="panel-copy" id="broker-import-status">券商1保持原格式；券商2建议导入 CSV/TXT，支持“成交日期/交易日期、证券买入/证券卖出”，GC001 等逆回购会忽略。xls/xlsx 请先另存为 CSV。导入前会先预览。</p>
+            <div class="mobile-list spacing-top" id="broker-import-mapping"></div>
             <div class="metric-grid three spacing-top" id="broker-import-summary"></div>
             <div class="mobile-list" id="broker-import-preview"></div>
+            <div class="mobile-list" id="broker-import-duplicates"></div>
             <div class="form-actions spacing-top">
               <button class="primary-button" type="button" id="confirm-broker-import" disabled>确认导入预览成交</button>
               <button class="ghost-button" type="button" id="clear-broker-import">清空预览</button>
@@ -3924,6 +4331,7 @@ body {
               <div class="panel-actions">
                 <button class="ghost-button small" data-jump="positions" type="button">返回持仓</button>
                 <button class="ghost-button small" data-jump="reports" type="button">返回复盘</button>
+                <button class="ghost-button small" type="button" data-open-kline-symbol="">个股K线</button>
               </div>
             </div>
             <div class="metric-grid six" id="detail-metrics"></div>
@@ -4117,6 +4525,31 @@ body {
           </section>
         </section>
 
+        <section class="view" id="stock-detail-v2">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h3 id="stock-v2-title">个股详情 V2</h3>
+                <span id="stock-v2-subtitle">复用现有成交、匹配、未匹配和持仓统计</span>
+              </div>
+              <div class="panel-actions">
+                <button class="ghost-button small" id="stock-v2-back" type="button">返回持仓</button>
+                <button class="ghost-button small" id="stock-v2-old-detail" type="button">旧版详情</button>
+              </div>
+            </div>
+            <div class="stock-v2-hero" id="stock-v2-hero"></div>
+            <div class="metric-grid six spacing-top" id="stock-v2-metrics"></div>
+            <div class="stock-v2-tabs" id="stock-v2-tabs">
+              <button class="stock-v2-tab active" type="button" data-stock-v2-tab="matches">匹配</button>
+              <button class="stock-v2-tab" type="button" data-stock-v2-tab="lots">Lot</button>
+              <button class="stock-v2-tab" type="button" data-stock-v2-tab="charts">图表</button>
+              <button class="stock-v2-tab" type="button" data-stock-v2-tab="trades">交易</button>
+              <button class="stock-v2-tab" type="button" data-stock-v2-tab="overview">概览</button>
+            </div>
+            <div class="stock-v2-panel" id="stock-v2-content"></div>
+          </section>
+        </section>
+
         <section class="view" id="records">
           <section class="panel">
             <div class="panel-header">
@@ -4173,6 +4606,61 @@ body {
             </div>
             <div class="mobile-list" id="records-cards"></div>
           </section>
+        </section>
+
+        <section class="app-modal" id="stock-kline-modal" hidden>
+          <div class="modal-card">
+            <div class="modal-head">
+              <div>
+                <h3 id="stock-kline-title">个股K线图</h3>
+                <span id="stock-kline-subtitle">K线、买卖点、成本线、止盈/止损与分红送股标记</span>
+              </div>
+              <button class="icon-action" type="button" data-modal-close>关闭</button>
+            </div>
+            <div class="form-grid compact">
+              <label>
+                股票
+                <select id="stock-kline-symbol"></select>
+              </label>
+              <label>
+                价格来源
+                <select id="stock-kline-source">
+                  <option value="auto">自动：腾讯/东方/新浪</option>
+                  <option value="tencent">腾讯</option>
+                  <option value="eastmoney">东方财富</option>
+                  <option value="sina">新浪财经</option>
+                </select>
+              </label>
+              <label>
+                开始日期
+                <input type="date" id="stock-kline-start" />
+              </label>
+              <label>
+                结束日期
+                <input type="date" id="stock-kline-end" />
+              </label>
+            </div>
+            <div class="form-actions spacing-top">
+              <button class="primary-button" type="button" id="load-stock-kline">加载K线</button>
+              <button class="ghost-button" type="button" id="stock-kline-last-120">近120</button>
+              <button class="ghost-button" type="button" id="stock-kline-all">全部区间</button>
+            </div>
+            <label class="stock-kline-range">
+              <span id="stock-kline-window-label">显示全部K线</span>
+              <input type="range" id="stock-kline-window" min="0" max="0" step="1" value="0" />
+            </label>
+            <p class="status-text" id="stock-kline-status"></p>
+            <div class="stock-kline-legend">
+              <span>红K上涨</span>
+              <span>绿K下跌</span>
+              <span>▲ 买入</span>
+              <span>▼ 卖出</span>
+              <span>成本/止盈/止损线</span>
+              <span>◆ 分红/送股</span>
+            </div>
+            <div class="stock-kline-chart" id="stock-kline-chart"></div>
+            <div class="stock-kline-detail" id="stock-kline-detail"></div>
+          </div>
         </section>
 
         <section class="view" id="settings">
@@ -4382,7 +4870,45 @@ body {
             <div class="form-actions">
               <button class="primary-button" id="add-corporate-action" type="button">添加公司行为</button>
               <button class="ghost-button" id="reset-corporate-action" type="button">清空</button>
+              <button class="ghost-button" id="open-year-dividend-detail" type="button">查询</button>
             </div>
+            <section class="spacing-top">
+              <div class="panel-header">
+                <div>
+                  <h3>自动补公司行为</h3>
+                  <span>从公开数据源拉取现金分红、送股/转增和除权除息日，按登记日前持股数量换算后预览导入。</span>
+                </div>
+              </div>
+              <div class="form-grid compact">
+                <label>
+                  查询方式
+                  <select id="corporate-action-import-scope">
+                    <option value="all">全持仓/历史股票</option>
+                    <option value="single">单只股票</option>
+                  </select>
+                </label>
+                <label>
+                  单股代码
+                  <input type="text" id="corporate-action-import-symbol" maxlength="12" placeholder="例如 600519" />
+                </label>
+                <label>
+                  开始日期
+                  <input type="date" id="corporate-action-import-start" />
+                </label>
+                <label>
+                  结束日期
+                  <input type="date" id="corporate-action-import-end" />
+                </label>
+              </div>
+              <div class="form-actions spacing-top">
+                <button class="primary-button" id="fetch-corporate-actions" type="button">查询公司行为</button>
+                <button class="ghost-button" id="confirm-corporate-action-import" type="button" disabled>确认导入预览记录</button>
+                <button class="ghost-button" id="clear-corporate-action-import" type="button">清空预览</button>
+              </div>
+              <p class="panel-copy" id="corporate-action-import-status">默认扫描所有出现过的股票；导入前会跳过已存在记录，疑似冲突不会自动导入。</p>
+              <div class="metric-grid three spacing-top" id="corporate-action-import-summary"></div>
+              <div class="import-preview-list spacing-top" id="corporate-action-import-preview"></div>
+            </section>
             <div class="table-wrap spacing-top">
               <table>
                 <thead>
@@ -4434,6 +4960,20 @@ body {
               </div>
             </section>
 
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>版本快照</h3>
+                  <span>导入、清空、倒推写入前自动保存，最近保留 5 个。</span>
+                </div>
+              </div>
+              <p class="panel-copy" id="version-snapshot-status">正在读取版本快照...</p>
+              <div class="stack-actions">
+                <button class="ghost-button" id="create-version-snapshot" type="button">立即保存快照</button>
+              </div>
+              <div class="mobile-list spacing-top" id="version-snapshot-list"></div>
+            </section>
+
             <section class="panel danger-zone">
               <div class="panel-header">
                 <h3>清空数据</h3>
@@ -4450,9 +4990,19 @@ const STORAGE_KEY = "ashare-trading-journal";
 const BACKUP_META_KEY = "ashare-trading-journal-backup-meta";
 const IMPORT_UNDO_DATA_KEY = "ashare-trading-import-undo-data";
 const IMPORT_UNDO_META_KEY = "ashare-trading-import-undo-meta";
+const INDEXED_DB_NAME = "ashare-trading-db";
+const INDEXED_DB_VERSION = 1;
+const INDEXED_DB_STATE_STORE = "appState";
+const INDEXED_DB_SNAPSHOT_STORE = "snapshots";
+const INDEXED_DB_META_STORE = "meta";
+const INDEXED_DB_CURRENT_KEY = "current";
+const INDEXED_DB_SUMMARY_KEY = "ashare-trading-indexeddb-summary";
+const MAX_VERSION_SNAPSHOTS = 5;
 const RECORD_RENDER_LIMIT = 100;
 let summaryAnalysisCache = null;
 let coreCalculationCache = null;
+let appDbPromise = null;
+let indexedDbAvailable = false;
 
 const defaultSettings = {
   initialCash: 0,
@@ -4481,8 +5031,17 @@ const state = {
   historicalRebuild: { snapshotDate: "", cash: 0, holdings: [] },
 };
 let selectedDetailSymbol = "";
+let selectedStockV2Tab = "matches";
+let stockV2DateLimit = 10;
+let stockV2LotLimit = 10;
 let summaryPeriodKind = "week";
+const stockKlineCache = new Map();
+const shIndexCompareCache = new Map();
+let assetChartCompareRequestId = 0;
+let currentStockKlineData = null;
 let pendingBrokerTrades = [];
+let pendingBrokerImportSummary = null;
+let pendingCorporateActionImports = [];
 let pendingHistoricalRebuild = null;
 let stopAutoCloseFillRequested = false;
 
@@ -4528,8 +5087,10 @@ const els = {
   brokerImportMode: optionalElement("#broker-import-mode"),
   brokerImportFile: optionalElement("#broker-import-file"),
   brokerImportStatus: optionalElement("#broker-import-status"),
+  brokerImportMapping: optionalElement("#broker-import-mapping"),
   brokerImportSummary: optionalElement("#broker-import-summary"),
   brokerImportPreview: optionalElement("#broker-import-preview"),
+  brokerImportDuplicates: optionalElement("#broker-import-duplicates"),
   confirmBrokerImport: optionalElement("#confirm-broker-import"),
   clearBrokerImport: optionalElement("#clear-broker-import"),
   rebuildSnapshotDate: optionalElement("#rebuild-snapshot-date"),
@@ -4650,6 +5211,11 @@ const els = {
   dividendModalTitle: optionalElement("#dividend-modal-title"),
   dividendModalSubtitle: optionalElement("#dividend-modal-subtitle"),
   dividendSummary: optionalElement("#dividend-summary"),
+  dividendDetailYear: optionalElement("#dividend-detail-year"),
+  dividendDetailPrevYear: optionalElement("#dividend-detail-prev-year"),
+  dividendDetailCurrentYear: optionalElement("#dividend-detail-current-year"),
+  dividendDetailNextYear: optionalElement("#dividend-detail-next-year"),
+  dividendDetailAllYears: optionalElement("#dividend-detail-all-years"),
   dividendDetailBody: optionalElement("#dividend-detail-body"),
   dividendDetailCards: optionalElement("#dividend-detail-cards"),
   tradePairPnlBody: document.querySelector("#trade-pair-pnl-body"),
@@ -4733,6 +5299,29 @@ const els = {
   detailTimelineStartDate: optionalElement("#detail-timeline-start-date"),
   detailTimelineEndDate: optionalElement("#detail-timeline-end-date"),
   detailTimeline: optionalElement("#detail-timeline"),
+  stockV2Title: optionalElement("#stock-v2-title"),
+  stockV2Subtitle: optionalElement("#stock-v2-subtitle"),
+  stockV2Hero: optionalElement("#stock-v2-hero"),
+  stockV2Metrics: optionalElement("#stock-v2-metrics"),
+  stockV2Tabs: optionalElement("#stock-v2-tabs"),
+  stockV2Content: optionalElement("#stock-v2-content"),
+  stockV2Back: optionalElement("#stock-v2-back"),
+  stockV2OldDetail: optionalElement("#stock-v2-old-detail"),
+  stockKlineModal: optionalElement("#stock-kline-modal"),
+  stockKlineTitle: optionalElement("#stock-kline-title"),
+  stockKlineSubtitle: optionalElement("#stock-kline-subtitle"),
+  stockKlineSymbol: optionalElement("#stock-kline-symbol"),
+  stockKlineSource: optionalElement("#stock-kline-source"),
+  stockKlineStart: optionalElement("#stock-kline-start"),
+  stockKlineEnd: optionalElement("#stock-kline-end"),
+  loadStockKline: optionalElement("#load-stock-kline"),
+  stockKlineLast120: optionalElement("#stock-kline-last-120"),
+  stockKlineAll: optionalElement("#stock-kline-all"),
+  stockKlineWindow: optionalElement("#stock-kline-window"),
+  stockKlineWindowLabel: optionalElement("#stock-kline-window-label"),
+  stockKlineStatus: optionalElement("#stock-kline-status"),
+  stockKlineChart: optionalElement("#stock-kline-chart"),
+  stockKlineDetail: optionalElement("#stock-kline-detail"),
   initialCash: document.querySelector("#initial-cash"),
   accountSaveStatus: optionalElement("#account-save-status"),
   commissionRate: document.querySelector("#commission-rate"),
@@ -4766,6 +5355,17 @@ const els = {
   actionNet: optionalElement("#action-net"),
   actionYield: optionalElement("#action-yield"),
   actionNote: optionalElement("#action-note"),
+  openYearDividendDetail: optionalElement("#open-year-dividend-detail"),
+  corporateActionImportScope: optionalElement("#corporate-action-import-scope"),
+  corporateActionImportSymbol: optionalElement("#corporate-action-import-symbol"),
+  corporateActionImportStart: optionalElement("#corporate-action-import-start"),
+  corporateActionImportEnd: optionalElement("#corporate-action-import-end"),
+  fetchCorporateActions: optionalElement("#fetch-corporate-actions"),
+  confirmCorporateActionImport: optionalElement("#confirm-corporate-action-import"),
+  clearCorporateActionImport: optionalElement("#clear-corporate-action-import"),
+  corporateActionImportStatus: optionalElement("#corporate-action-import-status"),
+  corporateActionImportSummary: optionalElement("#corporate-action-import-summary"),
+  corporateActionImportPreview: optionalElement("#corporate-action-import-preview"),
   corporateActionsBody: optionalElement("#corporate-actions-body"),
   corporateActionsCards: optionalElement("#corporate-actions-cards"),
   backupStatus: optionalElement("#backup-status"),
@@ -4778,6 +5378,9 @@ const els = {
   hideBackupText: optionalElement("#hide-backup-text"),
   importGuardStatus: optionalElement("#import-guard-status"),
   undoLastImport: optionalElement("#undo-last-import"),
+  versionSnapshotStatus: optionalElement("#version-snapshot-status"),
+  versionSnapshotList: optionalElement("#version-snapshot-list"),
+  createVersionSnapshot: optionalElement("#create-version-snapshot"),
 };
 
 const titles = {
@@ -4789,6 +5392,7 @@ const titles = {
   "performance-summary": "投资总结",
   reports: "复盘报表",
   "stock-detail": "个股详情",
+  "stock-detail-v2": "个股详情 V2",
   settings: "设置",
 };
 
@@ -5024,43 +5628,58 @@ function inferHistoricalRebuildAppliedStartDate(saved) {
   const dates = [...new Set(saved.initialPositions.map((item) => item?.date).filter(validDateString))].sort((a, b) => a.localeCompare(b));
   return dates.length ? dates[0] : "";
 }
+
+function resetStateToDefault() {
+  state.trades = [];
+  state.prices = {};
+  state.previousCloses = {};
+  state.initialPositions = [];
+  state.corporateActions = [];
+  state.cashTransfers = [];
+  state.closeSnapshots = [];
+  state.stockPlans = {};
+  state.settings = { ...defaultSettings };
+  state.historicalRebuild = { snapshotDate: "", cash: 0, holdings: [] };
+}
+
+function applyLoadedState(saved) {
+  if (!saved || typeof saved !== "object") {
+    resetStateToDefault();
+    return false;
+  }
+  state.trades = Array.isArray(saved.trades) ? saved.trades : [];
+  state.prices = saved.prices && typeof saved.prices === "object" ? saved.prices : {};
+  state.previousCloses = saved.previousCloses && typeof saved.previousCloses === "object" ? saved.previousCloses : {};
+  state.initialPositions = Array.isArray(saved.initialPositions) ? saved.initialPositions : [];
+  state.corporateActions = Array.isArray(saved.corporateActions) ? saved.corporateActions : [];
+  state.cashTransfers = Array.isArray(saved.cashTransfers) ? saved.cashTransfers : [];
+  state.closeSnapshots = Array.isArray(saved.closeSnapshots) ? saved.closeSnapshots : [];
+  state.stockPlans = saved.stockPlans && typeof saved.stockPlans === "object" ? saved.stockPlans : {};
+  state.settings = { ...defaultSettings, ...(saved.settings || {}) };
+  state.historicalRebuild = saved.historicalRebuild && typeof saved.historicalRebuild === "object"
+    ? {
+        snapshotDate: saved.historicalRebuild.snapshotDate || "",
+        cash: Number(saved.historicalRebuild.cash) || 0,
+        holdings: Array.isArray(saved.historicalRebuild.holdings) ? saved.historicalRebuild.holdings : [],
+        appliedStartDate: validDateString(saved.historicalRebuild.appliedStartDate) ? saved.historicalRebuild.appliedStartDate : inferHistoricalRebuildAppliedStartDate(saved),
+        currentSnapshot: normalizeHistoricalCurrentSnapshot(saved.historicalRebuild.currentSnapshot || saved.historicalRebuild),
+      }
+    : { snapshotDate: "", cash: 0, holdings: [] };
+  return true;
+}
+
 function load() {
   const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) { loadBackupMeta(); return; }
-
+  if (!raw) { loadBackupMeta(); return false; }
   try {
-    const saved = JSON.parse(raw);
-    state.trades = Array.isArray(saved.trades) ? saved.trades : [];
-    state.prices = saved.prices && typeof saved.prices === "object" ? saved.prices : {};
-    state.previousCloses = saved.previousCloses && typeof saved.previousCloses === "object" ? saved.previousCloses : {};
-    state.initialPositions = Array.isArray(saved.initialPositions) ? saved.initialPositions : [];
-    state.corporateActions = Array.isArray(saved.corporateActions) ? saved.corporateActions : [];
-    state.cashTransfers = Array.isArray(saved.cashTransfers) ? saved.cashTransfers : [];
-    state.closeSnapshots = Array.isArray(saved.closeSnapshots) ? saved.closeSnapshots : [];
-    state.stockPlans = saved.stockPlans && typeof saved.stockPlans === "object" ? saved.stockPlans : {};
-    state.settings = { ...defaultSettings, ...(saved.settings || {}) };
-    state.historicalRebuild = saved.historicalRebuild && typeof saved.historicalRebuild === "object"
-      ? {
-          snapshotDate: saved.historicalRebuild.snapshotDate || "",
-          cash: Number(saved.historicalRebuild.cash) || 0,
-          holdings: Array.isArray(saved.historicalRebuild.holdings) ? saved.historicalRebuild.holdings : [],
-          appliedStartDate: validDateString(saved.historicalRebuild.appliedStartDate) ? saved.historicalRebuild.appliedStartDate : inferHistoricalRebuildAppliedStartDate(saved),
-          currentSnapshot: normalizeHistoricalCurrentSnapshot(saved.historicalRebuild.currentSnapshot || saved.historicalRebuild),
-        }
-      : { snapshotDate: "", cash: 0, holdings: [] };
+    const loaded = applyLoadedState(JSON.parse(raw));
+    loadBackupMeta();
+    return loaded;
   } catch {
-    state.trades = [];
-    state.prices = {};
-    state.previousCloses = {};
-    state.initialPositions = [];
-    state.corporateActions = [];
-    state.cashTransfers = [];
-    state.closeSnapshots = [];
-    state.stockPlans = {};
-    state.settings = { ...defaultSettings };
-    state.historicalRebuild = { snapshotDate: "", cash: 0, holdings: [] };
+    resetStateToDefault();
+    loadBackupMeta();
+    return false;
   }
-  loadBackupMeta();
 }
 
 function loadBackupMeta() {
@@ -5071,11 +5690,146 @@ function loadBackupMeta() {
     // Backup metadata is only for reminders; ignore it if corrupted.
   }
 }
+
+function cloneStateForStorage(source = state) {
+  return JSON.parse(JSON.stringify(source));
+}
+
+function openAppDb() {
+  if (!("indexedDB" in window)) return Promise.reject(new Error("IndexedDB 不可用"));
+  if (appDbPromise) return appDbPromise;
+  appDbPromise = new Promise((resolve, reject) => {
+    const request = indexedDB.open(INDEXED_DB_NAME, INDEXED_DB_VERSION);
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if (!db.objectStoreNames.contains(INDEXED_DB_STATE_STORE)) db.createObjectStore(INDEXED_DB_STATE_STORE, { keyPath: "key" });
+      if (!db.objectStoreNames.contains(INDEXED_DB_SNAPSHOT_STORE)) db.createObjectStore(INDEXED_DB_SNAPSHOT_STORE, { keyPath: "id" });
+      if (!db.objectStoreNames.contains(INDEXED_DB_META_STORE)) db.createObjectStore(INDEXED_DB_META_STORE, { keyPath: "key" });
+    };
+    request.onsuccess = () => {
+      indexedDbAvailable = true;
+      resolve(request.result);
+    };
+    request.onerror = () => {
+      indexedDbAvailable = false;
+      reject(request.error || new Error("IndexedDB 打开失败"));
+    };
+  });
+  return appDbPromise;
+}
+
+function idbTransactionDone(transaction) {
+  return new Promise((resolve, reject) => {
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error || new Error("IndexedDB 事务失败"));
+    transaction.onabort = () => reject(transaction.error || new Error("IndexedDB 事务中止"));
+  });
+}
+
+function idbGet(storeName, key) {
+  return openAppDb().then((db) => new Promise((resolve, reject) => {
+    const transaction = db.transaction(storeName, "readonly");
+    const request = transaction.objectStore(storeName).get(key);
+    request.onsuccess = () => resolve(request.result || null);
+    request.onerror = () => reject(request.error || new Error("IndexedDB 读取失败"));
+  }));
+}
+
+async function idbPut(storeName, value) {
+  const db = await openAppDb();
+  const transaction = db.transaction(storeName, "readwrite");
+  transaction.objectStore(storeName).put(value);
+  await idbTransactionDone(transaction);
+}
+
+async function idbDelete(storeName, key) {
+  const db = await openAppDb();
+  const transaction = db.transaction(storeName, "readwrite");
+  transaction.objectStore(storeName).delete(key);
+  await idbTransactionDone(transaction);
+}
+
+async function idbGetAll(storeName) {
+  const db = await openAppDb();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(storeName, "readonly");
+    const request = transaction.objectStore(storeName).getAll();
+    request.onsuccess = () => resolve(Array.isArray(request.result) ? request.result : []);
+    request.onerror = () => reject(request.error || new Error("IndexedDB 读取列表失败"));
+  });
+}
+
+function localStorageSummaryPayload(savedAt = new Date().toISOString()) {
+  return {
+    savedAt,
+    indexedDbAvailable,
+    summary: summarizeBackupData(state),
+  };
+}
+
+function persistLocalStorageCompatibility(content = "") {
+  const savedAt = new Date().toISOString();
+  try {
+    if (content) {
+      localStorage.setItem(STORAGE_KEY, content);
+    } else {
+      localStorage.setItem(STORAGE_KEY, createBackupJson());
+    }
+  } catch {
+    try {
+      localStorage.setItem(INDEXED_DB_SUMMARY_KEY, JSON.stringify(localStorageSummaryPayload(savedAt)));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ indexedDbOnly: true, savedAt, summary: summarizeBackupData(state) }));
+    } catch {
+      // If localStorage is full, IndexedDB remains the source of truth.
+    }
+  }
+}
+
+async function saveToIndexedDB(sourceState = state) {
+  const savedAt = new Date().toISOString();
+  const payload = cloneStateForStorage(sourceState);
+  const summary = summarizeBackupData(payload);
+  await idbPut(INDEXED_DB_STATE_STORE, { key: INDEXED_DB_CURRENT_KEY, savedAt, version: 1, state: payload });
+  await idbPut(INDEXED_DB_META_STORE, { key: "lastSave", savedAt, version: 1, summary });
+  try {
+    localStorage.setItem(INDEXED_DB_SUMMARY_KEY, JSON.stringify({ savedAt, indexedDbAvailable: true, summary }));
+  } catch {
+    // Summary is optional.
+  }
+}
+
+async function loadFromIndexedDB() {
+  const row = await idbGet(INDEXED_DB_STATE_STORE, INDEXED_DB_CURRENT_KEY);
+  return row && row.state ? row.state : null;
+}
+
+async function loadAppState() {
+  try {
+    const saved = await loadFromIndexedDB();
+    if (saved) {
+      applyLoadedState(saved);
+      loadBackupMeta();
+      return "indexeddb";
+    }
+  } catch (error) {
+    console.warn("IndexedDB load failed, fallback to localStorage", error);
+  }
+  const loaded = load();
+  if (loaded) {
+    saveToIndexedDB(state).catch((error) => console.warn("IndexedDB migration failed", error));
+    return "localStorage";
+  }
+  loadBackupMeta();
+  return "empty";
+}
+
 function save() {
   summaryAnalysisCache = null;
   coreCalculationCache = null;
   invalidateRenderCache();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  const content = createBackupJson();
+  persistLocalStorageCompatibility(content);
+  saveToIndexedDB(state).catch((error) => console.warn("IndexedDB save failed", error));
 }
 
 function tradeAmount(trade) {
@@ -6450,6 +7204,305 @@ async function fetchCloseBySource(symbol, date, source = "auto") {
   throw new Error(errors.join("；") || "no exact close");
 }
 
+function normalizeKlineRows(rows, source) {
+  return rows
+    .map((row) => ({
+      date: row.date,
+      open: Number(row.open) || Number(row.close) || 0,
+      close: Number(row.close) || 0,
+      high: Number(row.high) || Number(row.close) || 0,
+      low: Number(row.low) || Number(row.close) || 0,
+      volume: Number(row.volume) || 0,
+      source,
+    }))
+    .filter((row) => validDateString(row.date) && row.close > 0)
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+async function fetchEastmoneyShanghaiIndexRange(startDate, endDate) {
+  const callbackName = `em_sh_index_${Date.now()}_${Math.random().toString(16).slice(2)}`.replace(/\W/g, "_");
+  const fields1 = "f1,f2,f3,f4,f5,f6";
+  const fields2 = "f51,f52,f53,f54,f55,f56,f57,f58";
+  const url = `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.000001&klt=101&fqt=0&beg=${compactDate(startDate)}&end=${compactDate(endDate)}&fields1=${fields1}&fields2=${fields2}&cb=${callbackName}`;
+  const result = await jsonp(url, callbackName);
+  const klines = result?.data && Array.isArray(result.data.klines) ? result.data.klines : [];
+  const rows = klines.map((line) => {
+    const cells = String(line).split(",");
+    return {
+      date: cells[0],
+      open: cells[1],
+      close: cells[2],
+      high: cells[3],
+      low: cells[4],
+      volume: cells[5],
+    };
+  });
+  const normalized = normalizeKlineRows(rows, "东方财富");
+  if (!normalized.length) throw new Error("东方财富上证指数为空");
+  return normalized;
+}
+
+async function fetchTencentShanghaiIndexRange(startDate, endDate) {
+  const code = "sh000001";
+  const varName = `tencent_sh_index_${Date.now()}_${Math.random().toString(16).slice(2)}`.replace(/\W/g, "_");
+  const url = `https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=${varName}&param=${code},day,${startDate},${endDate},320,bfq`;
+  const result = await jsonpVar(url, varName);
+  const stock = result?.data?.[code];
+  const rows = (stock?.day || stock?.qfqday || stock?.hfqday || []).map((row) => ({
+    date: row[0],
+    open: row[1],
+    close: row[2],
+    high: row[3],
+    low: row[4],
+    volume: row[5],
+  }));
+  const normalized = normalizeKlineRows(rows, "腾讯");
+  if (!normalized.length) throw new Error("腾讯上证指数为空");
+  return normalized;
+}
+
+async function fetchSinaShanghaiIndexRange(startDate, endDate) {
+  const callbackName = `sina_sh_index_${Date.now()}_${Math.random().toString(16).slice(2)}`.replace(/\W/g, "_");
+  const daySpan = Math.max(120, Math.ceil((new Date(`${endDate}T00:00:00`) - new Date(`${startDate}T00:00:00`)) / 86400000) + 20);
+  const url = `https://quotes.sina.cn/cn/api/jsonp_v2.php/${callbackName}/CN_MarketData.getKLineData?symbol=sh000001&scale=240&ma=no&datalen=${Math.min(520, daySpan)}`;
+  const result = await jsonp(url, callbackName);
+  const rows = (Array.isArray(result) ? result : []).map((row) => ({
+    date: row.day || row.date || "",
+    open: row.open,
+    close: row.close,
+    high: row.high,
+    low: row.low,
+    volume: row.volume,
+  }));
+  const normalized = normalizeKlineRows(rows, "新浪").filter((row) => dateInRange(row.date, startDate, endDate));
+  if (!normalized.length) throw new Error("新浪上证指数为空");
+  return normalized;
+}
+
+async function fetchShanghaiIndexRange(startDate, endDate) {
+  const key = `${startDate}|${endDate}`;
+  const cached = shIndexCompareCache.get(key);
+  if (cached?.status === "ready") return cached;
+  if (cached?.status === "loading") return null;
+  shIndexCompareCache.set(key, { status: "loading", rows: [], source: "" });
+  const loaders = [
+    ["腾讯", () => fetchTencentShanghaiIndexRange(startDate, endDate)],
+    ["东方财富", () => fetchEastmoneyShanghaiIndexRange(startDate, endDate)],
+    ["新浪", () => fetchSinaShanghaiIndexRange(startDate, endDate)],
+  ];
+  const errors = [];
+  for (const [name, loader] of loaders) {
+    try {
+      const rows = await withRetry(loader, 1, 300);
+      const result = { status: "ready", rows, source: name };
+      shIndexCompareCache.set(key, result);
+      return result;
+    } catch (error) {
+      errors.push(`${name}:${error.message || error}`);
+    }
+  }
+  shIndexCompareCache.set(key, { status: "error", rows: [], source: "", message: errors.join("；") });
+  return null;
+}
+
+function getShanghaiIndexCache(startDate, endDate) {
+  const cached = shIndexCompareCache.get(`${startDate}|${endDate}`);
+  return cached?.status === "ready" ? cached : null;
+}
+
+function ensureShanghaiIndexCompare(startDate, endDate) {
+  const key = `${startDate}|${endDate}`;
+  const cached = shIndexCompareCache.get(key);
+  if (cached?.status === "ready" || cached?.status === "loading" || cached?.status === "error") return;
+  const requestId = ++assetChartCompareRequestId;
+  fetchShanghaiIndexRange(startDate, endDate).then((result) => {
+    const modal = document.getElementById("asset-chart-modal");
+    if (result && requestId === assetChartCompareRequestId && modal && !modal.hidden) {
+      renderEquityCurve();
+    }
+  }).catch((error) => {
+    shIndexCompareCache.set(key, { status: "error", rows: [], source: "", message: error.message || String(error) });
+  });
+}
+
+function buildCompareSeries(baseRows, indexRows, valueGetter, targetDateGetter = (row) => row.date) {
+  if (!baseRows.length || !indexRows.length) return [];
+  const sortedIndex = indexRows
+    .filter((row) => validDateString(row.date) && Number(row.close) > 0)
+    .sort((a, b) => a.date.localeCompare(b.date));
+  let cursor = 0;
+  let lastClose = 0;
+  let baseClose = 0;
+  return baseRows.map((row) => {
+    const date = targetDateGetter(row);
+    while (cursor < sortedIndex.length && sortedIndex[cursor].date <= date) {
+      lastClose = Number(sortedIndex[cursor].close) || lastClose;
+      cursor += 1;
+    }
+    if (!lastClose) return null;
+    if (!baseClose) baseClose = lastClose;
+    const baseValue = Number(valueGetter(row)) || 0;
+    if (!baseClose || !baseValue) return null;
+    return {
+      date,
+      value: baseValue * (lastClose / baseClose),
+      close: lastClose,
+    };
+  }).filter(Boolean);
+}
+
+async function fetchEastmoneyKlineRange(symbol, startDate, endDate) {
+  const callbackName = `em_k_range_${normalizeSymbol(symbol)}_${Date.now()}_${Math.random().toString(16).slice(2)}`.replace(/\W/g, "_");
+  const secid = marketSecid(symbol);
+  const fields1 = "f1,f2,f3,f4,f5,f6";
+  const fields2 = "f51,f52,f53,f54,f55,f56,f57,f58";
+  const url = `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${encodeURIComponent(secid)}&klt=101&fqt=0&beg=${compactDate(startDate)}&end=${compactDate(endDate)}&fields1=${fields1}&fields2=${fields2}&cb=${callbackName}`;
+  const result = await jsonp(url, callbackName);
+  const klines = result?.data && Array.isArray(result.data.klines) ? result.data.klines : [];
+  const rows = klines.map((line) => {
+    const cells = String(line).split(",");
+    return {
+      date: cells[0],
+      open: cells[1],
+      close: cells[2],
+      high: cells[3],
+      low: cells[4],
+      volume: cells[5],
+    };
+  });
+  const normalized = normalizeKlineRows(rows, "东方财富");
+  if (!normalized.length) throw new Error("东方财富K线为空");
+  return normalized;
+}
+
+async function fetchTencentKlineRange(symbol, startDate, endDate) {
+  const code = tencentMarketSymbol(symbol);
+  const varName = `tencent_k_range_${normalizeSymbol(symbol)}_${Date.now()}_${Math.random().toString(16).slice(2)}`.replace(/\W/g, "_");
+  const url = `https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=${varName}&param=${code},day,${startDate},${endDate},320,bfq`;
+  const result = await jsonpVar(url, varName);
+  const stock = result?.data?.[code];
+  const rows = (stock?.day || stock?.qfqday || stock?.hfqday || []).map((row) => ({
+    date: row[0],
+    open: row[1],
+    close: row[2],
+    high: row[3],
+    low: row[4],
+    volume: row[5],
+  }));
+  const normalized = normalizeKlineRows(rows, "腾讯");
+  if (!normalized.length) throw new Error("腾讯K线为空");
+  return normalized;
+}
+
+async function fetchSinaKlineRange(symbol, startDate, endDate) {
+  const code = tencentMarketSymbol(symbol);
+  const callbackName = `sina_k_range_${normalizeSymbol(symbol)}_${Date.now()}_${Math.random().toString(16).slice(2)}`.replace(/\W/g, "_");
+  const daySpan = Math.max(120, Math.ceil((new Date(`${endDate}T00:00:00`) - new Date(`${startDate}T00:00:00`)) / 86400000) + 20);
+  const url = `https://quotes.sina.cn/cn/api/jsonp_v2.php/${callbackName}/CN_MarketData.getKLineData?symbol=${code}&scale=240&ma=no&datalen=${Math.min(520, daySpan)}`;
+  const result = await jsonp(url, callbackName);
+  const rows = (Array.isArray(result) ? result : []).map((row) => ({
+    date: row.day || row.date || "",
+    open: row.open,
+    close: row.close,
+    high: row.high,
+    low: row.low,
+    volume: row.volume,
+  }));
+  const normalized = normalizeKlineRows(rows, "新浪").filter((row) => dateInRange(row.date, startDate, endDate));
+  if (!normalized.length) throw new Error("新浪K线为空");
+  return normalized;
+}
+
+async function fetchStockKlineRange(symbol, startDate, endDate, source = "auto") {
+  const key = `${normalizeSymbol(symbol)}|${startDate}|${endDate}|${source}`;
+  if (stockKlineCache.has(key)) return stockKlineCache.get(key);
+  const loaders = source === "tencent"
+    ? [["腾讯", () => fetchTencentKlineRange(symbol, startDate, endDate)]]
+    : source === "eastmoney"
+      ? [["东方财富", () => fetchEastmoneyKlineRange(symbol, startDate, endDate)]]
+      : source === "sina"
+        ? [["新浪", () => fetchSinaKlineRange(symbol, startDate, endDate)]]
+        : [
+            ["腾讯", () => fetchTencentKlineRange(symbol, startDate, endDate)],
+            ["东方财富", () => fetchEastmoneyKlineRange(symbol, startDate, endDate)],
+            ["新浪", () => fetchSinaKlineRange(symbol, startDate, endDate)],
+          ];
+  const errors = [];
+  for (const [name, loader] of loaders) {
+    try {
+      const rows = await withRetry(loader, 1, 300);
+      const result = { rows, source: name, degraded: false, message: "" };
+      stockKlineCache.set(key, result);
+      return result;
+    } catch (error) {
+      errors.push(`${name}:${error.message || error}`);
+    }
+  }
+  throw new Error(errors.join("；") || "K线获取失败");
+}
+
+async function buildStockKlineData(stockCode, startDate, endDate, source = "auto") {
+  const symbol = normalizeSymbol(stockCode);
+  const names = stockNameMap();
+  const position = currentPortfolioSnapshot().positions.find((item) => normalizeSymbol(item.symbol) === symbol) || {};
+  const plan = currentStockPlan(symbol);
+  const pair = currentTradePairRows().find((row) => normalizeSymbol(row.symbol) === symbol) || emptyPairRow(symbol, position.name || names.get(symbol) || symbol);
+  const klineResult = await fetchStockKlineRange(symbol, startDate, endDate, source);
+  const rows = klineResult.rows.filter((row) => dateInRange(row.date, startDate, endDate));
+  const trades = state.trades
+    .filter((trade) => normalizeSymbol(trade.symbol) === symbol && dateInRange(trade.date, startDate, endDate))
+    .map((trade) => ({
+      date: trade.date,
+      side: trade.side,
+      price: Number(trade.price) || 0,
+      quantity: Number(trade.quantity) || 0,
+      amount: tradeAmount(trade),
+    }));
+  const matchDetails = (pair.matchDetails || []).map((match, index) => ({
+    ...match,
+    id: `match-${index}`,
+    completionDate: matchCompletionDate(match),
+  }));
+  const unmatchedLots = (pair.unmatchedDetails || []).map((lot, index) => {
+    const signedQuantity = Number(lot.quantity) || 0;
+    return {
+      ...lot,
+      id: `unmatched-${index}`,
+      side: signedQuantity < 0 ? "sell" : "buy",
+      signedQuantity,
+      quantity: Math.abs(signedQuantity),
+      price: Number(lot.price) || 0,
+      date: lot.date || "",
+    };
+  });
+  const actions = state.corporateActions
+    .filter((action) => normalizeSymbol(action.symbol) === symbol && dateInRange(action.date, startDate, endDate))
+    .map((action) => ({
+      date: action.date,
+      type: action.type,
+      value: Number(action.value) || 0,
+      amount: action.type === "dividend" ? dividendNet(action) : 0,
+      note: action.note || "",
+    }));
+  return {
+    stockCode: symbol,
+    stockName: position.name || names.get(symbol) || symbol,
+    source: klineResult.source,
+    degraded: klineResult.degraded,
+    message: klineResult.message,
+    klineRows: rows,
+    buyPoints: trades.filter((trade) => trade.side === "buy"),
+    sellPoints: trades.filter((trade) => trade.side === "sell"),
+    unmatchedSide: pair.unmatchedQuantity < 0 ? "sell" : pair.unmatchedQuantity > 0 ? "buy" : "",
+    matchDetails,
+    unmatchedLots,
+    costLine: Number(position.averageCost) || 0,
+    takeProfitLine: Number(plan.takeProfit) || 0,
+    stopLossLine: Number(plan.stopLoss) || 0,
+    actionMarkers: actions,
+  };
+}
+
 async function fillStockInfo(symbolInput, nameInput) {
   const symbol = normalizeSymbol(symbolInput.value);
   if (!/^\d{5,6}$/.test(symbol)) return;
@@ -6980,11 +8033,20 @@ function stockDividendTotal(symbol) {
     .reduce((sum, action) => sum + dividendNet(action), 0);
 }
 
-function dividendDetailRows(symbol = "") {
+function isAutoImportedCorporateAction(action) {
+  if (!action) return false;
+  if (action.source === "auto" || action.importSource === "auto") return true;
+  const note = String(action.note || "");
+  return /来源[:：]|登记日[:：]|除权除息日[:：]/.test(note);
+}
+
+function dividendDetailRows(symbol = "", year = "") {
   const key = normalizeSymbol(symbol);
+  const yearText = String(year || "").trim();
   return state.corporateActions
     .filter((action) => action.type === "dividend")
     .filter((action) => !key || normalizeSymbol(action.symbol) === key)
+    .filter((action) => !yearText || String(action.date || "").startsWith(`${yearText}-`))
     .map((action) => {
       const gross = Number(action.value) || 0;
       const yieldRate = Number(action.dividendYield) || dividendYieldRate(action);
@@ -7004,16 +8066,24 @@ function dividendDetailRows(symbol = "") {
     .sort((a, b) => (b.date || "").localeCompare(a.date || "") || b.gross - a.gross || a.symbol.localeCompare(b.symbol));
 }
 
-function renderDividendDetails(symbol = "") {
+function renderDividendDetails(symbol = "", year = "") {
   if (!els.dividendSummary || !els.dividendDetailBody || !els.dividendDetailCards) return;
   const key = normalizeSymbol(symbol);
-  const rows = dividendDetailRows(key);
+  const yearText = String(year || "").trim();
+  if (els.dividendDetailYear && els.dividendDetailYear.value !== yearText) {
+    els.dividendDetailYear.value = yearText;
+  }
+  const rows = dividendDetailRows(key, yearText);
   const total = rows.reduce((sum, row) => sum + row.gross, 0);
   const totalMarketValue = rows.reduce((sum, row) => sum + (Number(row.marketValue) || 0), 0);
   const totalYieldRate = totalMarketValue > 0 ? (total / totalMarketValue) * 100 : 0;
   const stockCount = new Set(rows.map((row) => row.symbol)).size;
-  if (els.dividendModalTitle) els.dividendModalTitle.textContent = key ? `${rows[0]?.name || key} 分红明细` : "分红明细";
-  if (els.dividendModalSubtitle) els.dividendModalSubtitle.textContent = key ? "当前个股逐笔分红、股息率与备注" : "逐笔记录个股税前分红金额与分红日期";
+  if (els.dividendModalTitle) els.dividendModalTitle.textContent = key
+    ? `${rows[0]?.name || key} ${yearText ? `${yearText} 年` : ""}分红明细`
+    : `${yearText ? `${yearText} 年` : ""}分红明细`;
+  if (els.dividendModalSubtitle) els.dividendModalSubtitle.textContent = key
+    ? "当前个股逐笔分红、股息率与备注"
+    : (yearText ? "按年度汇总显示现金分红记录" : "逐笔记录个股税前分红金额与分红日期");
 
   els.dividendSummary.innerHTML = [
     { label: "税前分红", value: money(total), tone: classByValue(total) },
@@ -7025,7 +8095,7 @@ function renderDividendDetails(symbol = "") {
     .join("");
 
   if (!rows.length) {
-    els.dividendDetailBody.innerHTML = `<tr><td colspan="6" class="empty-state">暂无现金分红记录</td></tr>`;
+    els.dividendDetailBody.innerHTML = `<tr><td colspan="7" class="empty-state">暂无现金分红记录</td></tr>`;
     els.dividendDetailCards.innerHTML = `<div class="empty-state">暂无现金分红记录</div>`;
     return;
   }
@@ -7040,6 +8110,10 @@ function renderDividendDetails(symbol = "") {
           <td>${money(row.gross)}</td>
           <td>${row.yieldRate > 0 ? `${number(row.yieldRate, 2)}%` : "-"}</td>
           <td>${row.note || "-"}</td>
+          <td>
+            <button class="icon-action" type="button" data-edit-dividend-action="${row.id}">编辑</button>
+            <button class="icon-action" type="button" data-delete-dividend-action="${row.id}">删除</button>
+          </td>
         </tr>
       `,
     )
@@ -7059,6 +8133,10 @@ function renderDividendDetails(symbol = "") {
             <div><dt>股息率</dt><dd>${row.yieldRate > 0 ? `${number(row.yieldRate, 2)}%` : "-"}</dd></div>
             <div><dt>备注</dt><dd>${row.note || "-"}</dd></div>
           </dl>
+          <div class="row-actions">
+            <button class="icon-action" type="button" data-edit-dividend-action="${row.id}">编辑</button>
+            <button class="icon-action" type="button" data-delete-dividend-action="${row.id}">删除</button>
+          </div>
         </article>
       `,
     )
@@ -7091,6 +8169,15 @@ function openStockDetail(symbol) {
   selectedDetailSymbol = normalizeSymbol(symbol);
   invalidateView("stock-detail");
   setView("stock-detail");
+}
+
+function openStockDetailV2(symbol) {
+  selectedDetailSymbol = normalizeSymbol(symbol);
+  selectedStockV2Tab = "matches";
+  stockV2DateLimit = 10;
+  stockV2LotLimit = 10;
+  invalidateView("stock-detail-v2");
+  setView("stock-detail-v2");
 }
 
 function recordSymbolOptions() {
@@ -7355,7 +8442,7 @@ function renderPositions() {
           <td class="${twr.valid ? classByValue(twr.rate) : ""}">${twr.valid ? `${number(twr.rate, 2)}%` : "-"}</td>
           <td class="${classByValue(matchedRealized)}">${money(matchedRealized)}</td>
           <td class="${classByValue(position.totalPnl)}">${money(position.totalPnl)}</td>
-          <td><button class="icon-action" data-detail-symbol="${position.symbol}">详情</button></td>
+          <td><button class="icon-action" data-detail-symbol="${position.symbol}">详情</button><button class="icon-action" data-detail-v2-symbol="${position.symbol}">V2</button><button class="icon-action" data-open-kline-symbol="${position.symbol}">K线</button></td>
         </tr>`;
     }).join("");
     els.positionsCards.innerHTML = sorted.map((position) => {
@@ -7363,7 +8450,7 @@ function renderPositions() {
       const twr = stockCompoundReportReturn(position.symbol);
       return `
         <article class="mobile-card position-card">
-          <div class="position-card-head"><div><strong class="stock-name-chip">${position.name}</strong><span>${position.symbol}</span></div><button class="icon-action" data-detail-symbol="${position.symbol}">详情</button></div>
+          <div class="position-card-head"><div><strong class="stock-name-chip">${position.name}</strong><span>${position.symbol}</span></div><div class="row-actions"><button class="icon-action" data-detail-symbol="${position.symbol}">详情</button><button class="icon-action" data-detail-v2-symbol="${position.symbol}">V2</button><button class="icon-action" data-open-kline-symbol="${position.symbol}">K线</button></div></div>
           <div class="position-compact-grid">
             <div><dt>数量</dt><dd>${number(position.quantity, 0)}</dd></div>
             <div><dt>市值</dt><dd>${money(position.marketValue)}</dd></div>
@@ -8033,6 +9120,7 @@ function renderAutoCloseSummary(summary = {}) {
 
 let closeSnapshotRenderTimer = null;
 let dividendModalSymbolFilter = "";
+let dividendModalYearFilter = "";
 function scheduleRenderCloseSnapshots() {
   window.clearTimeout(closeSnapshotRenderTimer);
   closeSnapshotRenderTimer = window.setTimeout(renderCloseSnapshots, 180);
@@ -8688,6 +9776,12 @@ function renderAssetLineChart(rows) {
     els.assetLineChart.innerHTML = `<div class="empty-state">当前区间没有资产记录。</div>`;
     return;
   }
+  const compareStartDate = chartRows[0].date;
+  const compareEndDate = chartRows[chartRows.length - 1].date;
+  ensureShanghaiIndexCompare(compareStartDate, compareEndDate);
+  const shCompare = getShanghaiIndexCache(compareStartDate, compareEndDate);
+  const shIndexRows = shCompare?.rows || [];
+  const assetCompareRows = buildCompareSeries(chartRows, shIndexRows, () => chartRows[0].assets);
   const width = 560;
   const height = 260;
   const left = 72;
@@ -8696,7 +9790,10 @@ function renderAssetLineChart(rows) {
   const bottom = 46;
   const chartWidth = width - left - right;
   const chartHeight = height - top - bottom;
-  const values = chartRows.map((row) => row.assets);
+  const values = [
+    ...chartRows.map((row) => row.assets),
+    ...assetCompareRows.map((row) => row.value),
+  ];
   const min = Math.min(...values);
   const max = Math.max(...values);
   const span = Math.max(max - min, 1);
@@ -8708,11 +9805,22 @@ function renderAssetLineChart(rows) {
   };
   const formatShortDate = (date) => String(date || "").slice(5).replace("-", "/");
   const yForValue = (value) => top + ((max - value) / span) * chartHeight;
+  const xForIndex = (index, total) => total === 1 ? left + chartWidth / 2 : left + (index / (total - 1)) * chartWidth;
   const points = chartRows.map((row, index) => {
-    const x = chartRows.length === 1 ? left + chartWidth / 2 : left + (index / (chartRows.length - 1)) * chartWidth;
+    const x = xForIndex(index, chartRows.length);
     const y = yForValue(row.assets);
     return { x, y, row };
   });
+  const chartIndexByDate = new Map(chartRows.map((row, index) => [row.date, index]));
+  const assetComparePoints = assetCompareRows
+    .map((row) => {
+      const index = chartIndexByDate.get(row.date);
+      if (index === undefined) return null;
+      return { x: xForIndex(index, chartRows.length), y: yForValue(row.value), row };
+    })
+    .filter(Boolean);
+  const assetCompareLine = assetComparePoints.map((point) => `${point.x},${point.y}`).join(" ");
+  const assetCompareLast = assetComparePoints.at(-1);
   const line = points.map((point) => `${point.x},${point.y}`).join(" ");
   const area = `${left},${height - bottom} ${line} ${width - right},${height - bottom}`;
   const last = points[points.length - 1];
@@ -8730,16 +9838,31 @@ function renderAssetLineChart(rows) {
   const navRows = chartRows
     .map((row) => ({ ...row, nav: row.initialAssetPoint ? 1 : navByDate.get(row.date) }))
     .filter((row) => Number.isFinite(row.nav));
+  const navCompareRows = buildCompareSeries(navRows, shIndexRows, () => navRows[0]?.nav || 1);
   const navValues = navRows.map((row) => row.nav);
-  const navMin = navValues.length ? Math.min(...navValues) : 1;
-  const navMax = navValues.length ? Math.max(...navValues) : 1;
+  const navScaleValues = [
+    ...navValues,
+    ...navCompareRows.map((row) => row.value),
+  ];
+  const navMin = navScaleValues.length ? Math.min(...navScaleValues) : 1;
+  const navMax = navScaleValues.length ? Math.max(...navScaleValues) : 1;
   const navSpan = Math.max(navMax - navMin, 0.0001);
   const yForNav = (value) => top + ((navMax - value) / navSpan) * chartHeight;
   const navPoints = navRows.map((row, index) => {
-    const x = navRows.length === 1 ? left + chartWidth / 2 : left + (index / (navRows.length - 1)) * chartWidth;
+    const x = xForIndex(index, navRows.length);
     const y = yForNav(row.nav);
     return { x, y, row };
   });
+  const navIndexByDate = new Map(navRows.map((row, index) => [row.date, index]));
+  const navComparePoints = navCompareRows
+    .map((row) => {
+      const index = navIndexByDate.get(row.date);
+      if (index === undefined) return null;
+      return { x: xForIndex(index, navRows.length), y: yForNav(row.value), row };
+    })
+    .filter(Boolean);
+  const navCompareLine = navComparePoints.map((point) => `${point.x},${point.y}`).join(" ");
+  const navCompareLast = navComparePoints.at(-1);
   const navLine = navPoints.map((point) => `${point.x},${point.y}`).join(" ");
   const navArea = navPoints.length ? `${left},${height - bottom} ${navLine} ${width - right},${height - bottom}` : "";
   const navFirst = navPoints[0];
@@ -8772,12 +9895,19 @@ function renderAssetLineChart(rows) {
         }).join("")}
         <line class="equity-grid" x1="${left}" y1="${top}" x2="${left}" y2="${height - bottom}" />
         <polygon class="equity-area" points="${area}" />
+        ${assetCompareLine ? `<polyline class="equity-compare-line" points="${assetCompareLine}" />` : ""}
         ${drawdownLine}
         <polyline class="equity-line" points="${line}" />
         ${points.map((point) => `<circle class="equity-dot" cx="${point.x}" cy="${point.y}" r="${point === last ? 4 : 3}"></circle>`).join("")}
+        ${assetComparePoints.map((point) => `<circle class="equity-compare-dot" cx="${point.x}" cy="${point.y}" r="${point === assetCompareLast ? 3.5 : 2.5}"></circle>`).join("")}
         <text class="equity-label" x="${Math.min(last.x + 8, width - 146)}" y="${Math.max(last.y - 8, 18)}">${money(last.row.assets)}</text>
+        ${assetCompareLast ? `<text class="equity-axis-label" x="${Math.min(assetCompareLast.x + 8, width - 92)}" y="${Math.max(assetCompareLast.y + 14, 20)}">上证</text>` : ""}
         ${dateLabels.map((point) => `<text class="equity-date-label" x="${point.x}" y="${height - 14}" text-anchor="middle">${formatShortDate(point.row.date)}</text>`).join("")}
       </svg>
+      <div class="equity-chart-legend">
+        <span><i></i>账户资产</span>
+        ${assetCompareLine ? `<span class="compare"><i></i>上证指数（归一到起点资产 · ${escapeHtml(shCompare.source)}）</span>` : `<span class="compare">上证指数加载中或暂未取到</span>`}
+      </div>
       <div class="equity-chart-foot">
         <div>
           <span>日期范围</span>
@@ -8815,11 +9945,18 @@ function renderAssetLineChart(rows) {
           }).join("")}
           <line class="equity-grid" x1="${left}" y1="${top}" x2="${left}" y2="${height - bottom}" />
           <polygon class="equity-area" points="${navArea}" />
+          ${navCompareLine ? `<polyline class="equity-compare-line" points="${navCompareLine}" />` : ""}
           <polyline class="equity-line" points="${navLine}" />
           ${navPoints.map((point) => `<circle class="equity-dot" cx="${point.x}" cy="${point.y}" r="${point === navLast ? 4 : 3}"></circle>`).join("")}
+          ${navComparePoints.map((point) => `<circle class="equity-compare-dot" cx="${point.x}" cy="${point.y}" r="${point === navCompareLast ? 3.5 : 2.5}"></circle>`).join("")}
           <text class="equity-label" x="${Math.min(navLast.x + 8, width - 96)}" y="${Math.max(navLast.y - 8, 18)}">${number(navLast.row.nav, 4)}</text>
+          ${navCompareLast ? `<text class="equity-axis-label" x="${Math.min(navCompareLast.x + 8, width - 92)}" y="${Math.max(navCompareLast.y + 14, 20)}">上证</text>` : ""}
           ${navDateLabels.map((point) => `<text class="equity-date-label" x="${point.x}" y="${height - 14}" text-anchor="middle">${formatShortDate(point.row.date)}</text>`).join("")}
         </svg>
+        <div class="equity-chart-legend">
+          <span><i></i>账户净值</span>
+          ${navCompareLine ? `<span class="compare"><i></i>上证指数净值（归一到期初净值 · ${escapeHtml(shCompare.source)}）</span>` : `<span class="compare">上证指数加载中或暂未取到</span>`}
+        </div>
         <div class="equity-chart-foot">
           <div>
             <span>日期范围</span>
@@ -9094,6 +10231,752 @@ function renderStockTimeline() {
       </details>
     `
     : `<div class="empty-state">这只股票暂无记录</div>`;
+}
+
+function stockV2TradeKey(trade) {
+  return `${trade.side || ""}|${trade.date || ""}|${Number(trade.price) || 0}`;
+}
+
+function stockV2MatchCompletionSide(match) {
+  const buyDate = match.buyDate || "";
+  const sellDate = match.sellDate || "";
+  return buyDate >= sellDate ? "buy" : "sell";
+}
+
+function stockV2MatchTradeKey(match) {
+  const side = stockV2MatchCompletionSide(match);
+  return side === "buy"
+    ? `buy|${match.buyDate || ""}|${Number(match.buyPrice) || 0}`
+    : `sell|${match.sellDate || ""}|${Number(match.sellPrice) || 0}`;
+}
+
+function stockV2LotTradeKey(lot) {
+  return `${lot.side === "sell" ? "sell" : "buy"}|${lot.date || ""}|${Number(lot.price) || 0}`;
+}
+
+function buildStockDetailData(stockCode) {
+  const stockCodeKey = normalizeSymbol(stockCode);
+  const names = stockNameMap();
+  const fallbackName = names.get(stockCodeKey) || stockCodeKey || "未选择";
+  const currentHolding = currentPortfolioSnapshot().positions.find((position) => normalizeSymbol(position.symbol) === stockCodeKey) || {
+    symbol: stockCodeKey,
+    name: fallbackName,
+    quantity: 0,
+    currentPrice: state.prices[stockCodeKey] ?? "",
+    marketValue: 0,
+    totalPnl: 0,
+  };
+  const pair = currentTradePairRows().find((row) => normalizeSymbol(row.symbol) === stockCodeKey) || emptyPairRow(stockCodeKey, currentHolding.name || fallbackName);
+  const rawTrades = sortedTrades(state.trades.filter((trade) => normalizeSymbol(trade.symbol) === stockCodeKey)).sort((a, b) => {
+    const byDate = (b.date || "").localeCompare(a.date || "");
+    if (byDate) return byDate;
+    return String(b.createdAt || "").localeCompare(String(a.createdAt || ""));
+  });
+  const completedMatches = (pair.matchDetails || []).map((match, index) => ({
+    ...match,
+    id: `match-${index}`,
+    completionDate: matchCompletionDate(match),
+    direction: (match.buyDate || "") <= (match.sellDate || "") ? "买后卖" : "先卖后买",
+    matchedRatio: 1,
+  }));
+  const partialMatches = [];
+  const currentPrice = Number(currentHolding.currentPrice) || 0;
+  const unmatchedLots = (pair.unmatchedDetails || []).map((lot, index) => {
+    const signedQuantity = Number(lot.quantity) || 0;
+    const remainingQuantity = Math.abs(signedQuantity);
+    const side = signedQuantity < 0 ? "sell" : "buy";
+    const price = Number(lot.price) || 0;
+    const floatingPnl = currentPrice > 0 && price > 0
+      ? (side === "buy" ? currentPrice - price : price - currentPrice) * remainingQuantity
+      : 0;
+    return {
+      id: `unmatched-${index}`,
+      date: lot.date || "",
+      side,
+      originalQuantity: remainingQuantity,
+      remainingQuantity,
+      signedQuantity,
+      price,
+      cost: remainingQuantity * price,
+      matchedRatio: 0,
+      floatingPnl,
+      realizedPnl: 0,
+      priority: Number(lot.priority) || 0,
+    };
+  });
+  const completedLots = completedMatches.map((match, index) => ({
+    id: `completed-${index}`,
+    date: match.completionDate || match.sellDate || match.buyDate || "",
+    side: match.direction,
+    originalQuantity: Number(match.quantity) || 0,
+    remainingQuantity: 0,
+    price: Number(match.buyPrice) || 0,
+    cost: Number(match.buyCost) || 0,
+    matchedRatio: 1,
+    floatingPnl: 0,
+    realizedPnl: Number(match.pnl) || 0,
+    match,
+  }));
+  const groupMap = new Map();
+  rawTrades.forEach((trade, index) => {
+    const key = stockV2TradeKey(trade);
+    if (!groupMap.has(key)) {
+      groupMap.set(key, {
+        id: `trade-${index}`,
+        key,
+        trade,
+        direction: trade.side === "sell" ? "卖出触发" : "买入触发",
+        completedMatches: [],
+        partialMatches: [],
+        unmatchedLots: [],
+      });
+    }
+  });
+  completedMatches.forEach((match) => {
+    const key = stockV2MatchTradeKey(match);
+    const group = groupMap.get(key);
+    if (group) group.completedMatches.push(match);
+  });
+  unmatchedLots.forEach((lot) => {
+    const key = stockV2LotTradeKey(lot);
+    const group = groupMap.get(key);
+    if (group) group.unmatchedLots.push(lot);
+  });
+  const decorateGroup = (group) => {
+    const unmatchedBuyLots = group.unmatchedLots.filter((lot) => lot.side === "buy");
+    const pendingSellLots = group.unmatchedLots.filter((lot) => lot.side === "sell");
+    const profit = group.completedMatches.reduce((sum, match) => sum + (Number(match.pnl) || 0), 0);
+    return {
+      ...group,
+      unmatchedBuyLots,
+      pendingSellLots,
+      unmatchedBuyQty: unmatchedBuyLots.reduce((sum, lot) => sum + (Number(lot.remainingQuantity) || 0), 0),
+      pendingBuybackQty: pendingSellLots.reduce((sum, lot) => sum + (Number(lot.remainingQuantity) || 0), 0),
+      profit,
+      completedCount: group.completedMatches.length,
+    };
+  };
+  const tradeGroups = [...groupMap.values()]
+    .filter((group) => group.completedMatches.length || group.partialMatches.length || group.unmatchedLots.length)
+    .map(decorateGroup)
+    .sort((a, b) => (b.trade.date || "").localeCompare(a.trade.date || ""));
+  const unmatchedBuyLots = unmatchedLots.filter((lot) => lot.side === "buy");
+  const pendingSellLots = unmatchedLots.filter((lot) => lot.side === "sell");
+  const unmatchedBuyQty = unmatchedBuyLots.reduce((sum, lot) => sum + (Number(lot.remainingQuantity) || 0), 0);
+  const pendingBuybackQty = pendingSellLots.reduce((sum, lot) => sum + (Number(lot.remainingQuantity) || 0), 0);
+  const legacyUnmatchedQty = Number(pair.unmatchedQuantity) || 0;
+  const unmatchedDirection = pendingBuybackQty > 0 ? "sell" : (unmatchedBuyQty > 0 ? "buy" : "none");
+  const unmatchedQty = unmatchedDirection === "sell" ? pendingBuybackQty : unmatchedDirection === "buy" ? unmatchedBuyQty : 0;
+  const totalMatchedQty = completedMatches.reduce((sum, match) => sum + (Number(match.quantity) || 0), 0);
+  const dateGroupMap = new Map();
+  tradeGroups.forEach((group) => {
+    const date = group.trade.date || "无日期";
+    if (!dateGroupMap.has(date)) {
+      dateGroupMap.set(date, {
+        date,
+        completedCount: 0,
+        unmatchedBuyQty: 0,
+        pendingBuybackQty: 0,
+        profit: 0,
+        trades: [],
+      });
+    }
+    const dateGroup = dateGroupMap.get(date);
+    dateGroup.completedCount += group.completedCount || 0;
+    dateGroup.unmatchedBuyQty += group.unmatchedBuyQty || 0;
+    dateGroup.pendingBuybackQty += group.pendingBuybackQty || 0;
+    dateGroup.profit += group.profit || 0;
+    dateGroup.trades.push(group);
+  });
+  const dateGroups = [...dateGroupMap.values()].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+
+  return {
+    stockCode: stockCodeKey,
+    stockName: currentHolding.name || pair.name || fallbackName,
+    currentPrice,
+    currentHolding,
+    unmatchedDirection,
+    unmatchedQty,
+    legacyUnmatchedQty,
+    unmatchedBuyQty,
+    pendingBuybackQty,
+    totalMatchedQty,
+    totalMatchProfit: Number(pair.pnl) || 0,
+    dateGroups,
+    completedMatches,
+    partialMatches,
+    unmatchedLots,
+    unmatchedBuyLots,
+    pendingSellLots,
+    completedLots,
+    rawTrades,
+    tradeGroups,
+  };
+}
+
+function renderStockV2MatchLine(match) {
+  return `
+    <div class="stock-v2-match-line">
+      <div>
+        <strong>${escapeHtml(match.direction || "")} · ${escapeHtml(match.completionDate || "-")}</strong>
+        <div class="muted">${number(match.quantity, 0)}股 · 买${number(match.buyPrice, 2)} / 卖${number(match.sellPrice, 2)}</div>
+      </div>
+      <strong class="${classByValue(match.pnl)}">${money(match.pnl)}</strong>
+    </div>
+  `;
+}
+
+function renderStockV2LotLine(lot) {
+  const isSell = lot.side === "sell";
+  return `
+    <div class="stock-v2-match-line">
+      <div>
+        <strong>${isSell ? "待买回卖出" : "未匹配买入"} · ${escapeHtml(lot.date || "-")}</strong>
+        <div class="muted">${number(lot.remainingQuantity, 0)}股 @ ${number(lot.price, 2)}</div>
+      </div>
+      <strong class="${isSell ? "warning" : "positive"}">${isSell ? "待买回" : "未卖出"}</strong>
+    </div>
+  `;
+}
+
+function renderStockV2TradeGroup(group) {
+  const trade = group.trade || {};
+  const isBuy = trade.side !== "sell";
+  const triggerClass = group.pendingBuybackQty > 0 ? "pending" : (isBuy ? "buy" : "sell");
+  const summaryTone = group.profit ? classByValue(group.profit) : "";
+  const details = [];
+  if (group.completedMatches.length) {
+    const firstMatches = group.completedMatches.slice(0, 2).map(renderStockV2MatchLine).join("");
+    const restMatches = group.completedMatches.slice(2).map(renderStockV2MatchLine).join("");
+    details.push(`
+      <div class="stock-v2-section-head"><strong>已完成匹配</strong><span>${group.completedMatches.length} 笔</span></div>
+      ${firstMatches}
+      ${restMatches ? `<details class="stock-v2-mini-toggle"><summary>查看全部 ${group.completedMatches.length} 笔</summary>${restMatches}</details>` : ""}
+    `);
+  }
+  if (group.partialMatches.length) {
+    details.push(`
+      <div class="stock-v2-section-head"><strong>部分匹配</strong><span>${group.partialMatches.length} 笔</span></div>
+      ${group.partialMatches.map(renderStockV2MatchLine).join("")}
+    `);
+  }
+  if (group.unmatchedLots.length) {
+    details.push(`
+      <div class="stock-v2-section-head"><strong>未完成 Lot</strong><span>${group.unmatchedLots.length} 笔</span></div>
+      ${group.unmatchedLots.map(renderStockV2LotLine).join("")}
+    `);
+  }
+  return `
+    <details class="stock-v2-trade-summary">
+      <summary>
+        <div class="stock-v2-summary-grid">
+          <div>
+            <strong class="stock-v2-trigger ${triggerClass}">${escapeHtml(group.direction)}</strong>
+            <div class="muted">${escapeHtml(trade.date || "-")} · ${number(trade.quantity, 0)}股 @${number(trade.price, 2)}</div>
+          </div>
+          <div class="text-right">
+            <strong class="${summaryTone}">${money(group.profit || 0)}</strong>
+            <div class="muted">完成 ${group.completedCount || 0} 笔</div>
+          </div>
+        </div>
+      </summary>
+      <div class="stock-v2-detail-body">${details.length ? details.join("") : `<div class="empty-state">暂无明细</div>`}</div>
+    </details>
+  `;
+}
+
+function stockV2UnmatchedLabel(data) {
+  if (!data || data.unmatchedDirection === "none") return "无";
+  return data.unmatchedDirection === "sell"
+    ? `待买回 ${number(data.unmatchedQty || 0, 0)} 股`
+    : `未匹配买入 ${number(data.unmatchedQty || 0, 0)} 股`;
+}
+
+function renderStockV2Matches(data) {
+  const openQty = data.unmatchedQty || 0;
+  const totalQty = (data.totalMatchedQty || 0) + openQty;
+  const progress = totalQty > 0 ? Math.min(100, Math.max(0, ((data.totalMatchedQty || 0) / totalQty) * 100)) : 0;
+  const visibleGroups = data.dateGroups.slice(0, stockV2DateLimit);
+  const groups = visibleGroups.length
+    ? visibleGroups.map((dateGroup, index) => {
+      const unmatchedText = dateGroup.pendingBuybackQty > 0
+        ? `待买回 ${number(dateGroup.pendingBuybackQty, 0)} 股`
+        : dateGroup.unmatchedBuyQty > 0
+          ? `未匹配买入 ${number(dateGroup.unmatchedBuyQty, 0)} 股`
+          : "";
+      return `
+      <details class="stock-v2-date-group" ${index === 0 ? "open" : ""}>
+        <summary>
+          <div class="stock-v2-date-head">
+            <div>
+              <strong>${escapeHtml(dateGroup.date)}</strong>
+              <div class="stock-v2-date-stats">
+                <span>完成 ${dateGroup.completedCount} 笔</span>
+                ${unmatchedText ? `<span>${unmatchedText}</span>` : ""}
+              </div>
+            </div>
+            <strong class="${classByValue(dateGroup.profit)}">${money(dateGroup.profit)}</strong>
+          </div>
+        </summary>
+        ${dateGroup.trades.map(renderStockV2TradeGroup).join("")}
+      </details>
+    `;
+    }).join("")
+    : `<div class="empty-state">这只股票暂无匹配或未匹配结果。</div>`;
+  return `
+    <div class="stock-v2-progress">
+      <div class="stock-v2-trade-head">
+        <div><strong>匹配进度</strong><div class="muted">已匹配 ${number(data.totalMatchedQty || 0, 0)} 股；当前未匹配：${stockV2UnmatchedLabel(data)}</div></div>
+        <strong>${number(progress, 1)}%</strong>
+      </div>
+      <div class="stock-v2-progress-track"><div class="stock-v2-progress-fill" style="width:${progress}%"></div></div>
+    </div>
+    ${groups}
+    ${data.dateGroups.length > visibleGroups.length ? `<button class="ghost-button stock-v2-load-more" type="button" data-stock-v2-more="dates">加载更多</button>` : ""}
+  `;
+}
+
+function renderStockV2Lots(data) {
+  const byRecentDate = (a, b) => {
+    const byDate = String(b.date || "").localeCompare(String(a.date || ""));
+    if (byDate) return byDate;
+    return (Number(b.priority) || 0) - (Number(a.priority) || 0);
+  };
+  const sourceLots = data.unmatchedDirection === "sell"
+    ? [...data.pendingSellLots].sort(byRecentDate)
+    : data.unmatchedDirection === "buy"
+      ? [...data.unmatchedBuyLots].sort(byRecentDate)
+      : [];
+  const visibleLots = sourceLots.slice(0, stockV2LotLimit);
+  const renderBuyLotCard = (lot) => `
+    <article class="stock-v2-lot-card">
+      <div class="stock-v2-trade-head"><strong>未匹配买入</strong><span>${escapeHtml(lot.date || "-")}</span></div>
+      <dl class="position-compact-grid">
+        <div><dt>数量</dt><dd>${number(lot.remainingQuantity, 0)}</dd></div>
+        <div><dt>成本</dt><dd>${money(lot.cost)}</dd></div>
+        <div><dt>当前价</dt><dd>${data.currentPrice > 0 ? money(data.currentPrice) : "-"}</dd></div>
+        <div><dt>浮盈亏</dt><dd class="${classByValue(lot.floatingPnl)}">${money(lot.floatingPnl)}</dd></div>
+      </dl>
+    </article>
+  `;
+  const renderSellLotCard = (lot) => `
+    <article class="stock-v2-lot-card">
+      <div class="stock-v2-trade-head"><strong>待买回卖出</strong><span>${escapeHtml(lot.date || "-")}</span></div>
+      <dl class="position-compact-grid">
+        <div><dt>卖出数量</dt><dd>${number(lot.originalQuantity, 0)}</dd></div>
+        <div><dt>卖出价</dt><dd>${money(lot.price)}</dd></div>
+        <div><dt>剩余待买回</dt><dd>${number(lot.remainingQuantity, 0)}</dd></div>
+        <div><dt>浮动</dt><dd class="${classByValue(lot.floatingPnl)}">${money(lot.floatingPnl)}</dd></div>
+      </dl>
+    </article>
+  `;
+  if (!sourceLots.length) return `<div class="empty-state">暂无未匹配 Lot</div>`;
+  const totalQty = sourceLots.reduce((sum, lot) => sum + (Number(lot.remainingQuantity) || 0), 0);
+  const totalFloat = sourceLots.reduce((sum, lot) => sum + (Number(lot.floatingPnl) || 0), 0);
+  const totalAmount = sourceLots.reduce((sum, lot) => sum + ((Number(lot.remainingQuantity) || 0) * (Number(lot.price) || 0)), 0);
+  const averagePrice = totalQty > 0 ? totalAmount / totalQty : 0;
+  const isSell = data.unmatchedDirection === "sell";
+  return `
+    <div class="metric-grid four">
+      <article class="metric"><span>${isSell ? "待买回总量" : "未匹配总量"}</span><strong>${number(totalQty, 0)} 股</strong></article>
+      <article class="metric"><span>浮动合计</span><strong class="${classByValue(totalFloat)}">${money(totalFloat)}</strong></article>
+      <article class="metric"><span>${isSell ? "平均卖出价" : "平均成本"}</span><strong>${money(averagePrice)}</strong></article>
+      <article class="metric"><span>笔数</span><strong>${number(sourceLots.length, 0)}</strong></article>
+    </div>
+    <div class="stock-v2-lot-grid spacing-top">
+      <section><h3>${isSell ? "待买回卖出 Lot" : "未匹配买入 Lot"}</h3>${visibleLots.map(isSell ? renderSellLotCard : renderBuyLotCard).join("")}</section>
+    </div>
+    ${sourceLots.length > visibleLots.length ? `<button class="ghost-button stock-v2-load-more" type="button" data-stock-v2-more="lots">加载更多</button>` : ""}
+  `;
+}
+
+function renderStockV2Charts(data) {
+  return `
+    <div class="stock-v2-placeholder-grid">
+      <article class="stock-v2-lot-card"><h3>仓位变化</h3><p class="muted">占位：当前持仓 ${number(data.currentHolding.quantity || 0, 0)} 股。</p></article>
+      <article class="stock-v2-lot-card"><h3>成本变化</h3><p class="muted">占位：当前均价 ${money(data.currentHolding.averageCost || 0)}。</p><button class="ghost-button small spacing-top" type="button" data-open-kline-symbol="${data.stockCode}">打开个股K线</button></article>
+      <article class="stock-v2-lot-card"><h3>匹配收益</h3><p class="muted">占位：累计匹配收益 ${money(data.totalMatchProfit || 0)}。</p></article>
+    </div>
+  `;
+}
+
+function renderStockV2Trades(data) {
+  return data.rawTrades.length
+    ? `<div class="stock-v2-trade-list">${data.rawTrades.map((trade) => `
+      <article class="mobile-card ${trade.side === "buy" ? "flow-card buy" : "flow-card sell"}">
+        <div class="mobile-card-head"><strong>${escapeHtml(trade.date || "-")}</strong><span class="tag ${trade.side === "sell" ? "sell" : "buy"}">${trade.side === "sell" ? "卖出" : "买入"}</span></div>
+        <dl>
+          <div><dt>数量</dt><dd>${number(trade.quantity, 0)}</dd></div>
+          <div><dt>价格</dt><dd>${number(trade.price, 3)}</dd></div>
+          <div><dt>金额</dt><dd>${money(tradeAmount(trade))}</dd></div>
+          <div><dt>费用</dt><dd>${money(totalFee(trade))}</dd></div>
+        </dl>
+      </article>
+    `).join("")}</div>`
+    : `<div class="empty-state">暂无该股票交易记录</div>`;
+}
+
+function renderStockV2Overview(data) {
+  const recentDates = data.dateGroups.slice(0, 2).map((group) => group.date).filter(Boolean);
+  const recentText = recentDates.length ? `最近匹配主要集中在 ${recentDates.join("、")}。` : "最近暂无匹配日期。";
+  return `
+    <article class="mobile-card">
+      <p>${escapeHtml(data.stockName)}当前持仓 ${number(data.currentHolding.quantity || 0, 0)} 股，当前未匹配为${stockV2UnmatchedLabel(data)}，累计匹配收益 ${money(data.totalMatchProfit || 0)}。${recentText}</p>
+    </article>
+    <div class="metric-grid six">
+      <article class="metric"><span>原始交易数</span><strong>${number(data.rawTrades.length, 0)}</strong></article>
+      <article class="metric"><span>日期组</span><strong>${number(data.dateGroups.length, 0)}</strong></article>
+      <article class="metric"><span>完成匹配</span><strong>${number(data.completedMatches.length, 0)}</strong></article>
+      <article class="metric"><span>已匹配股数</span><strong>${number(data.totalMatchedQty || 0, 0)}</strong></article>
+      <article class="metric"><span>未匹配买入</span><strong>${number(data.unmatchedBuyQty || 0, 0)}</strong></article>
+      <article class="metric"><span>待买回卖出</span><strong>${number(data.pendingBuybackQty || 0, 0)}</strong></article>
+    </div>
+  `;
+}
+
+function stockKlineTradeKey(side, date, price) {
+  return `${side}|${date || ""}|${Number(price || 0).toFixed(3)}`;
+}
+
+function stockKlinePointMeta(data, point, side, options = {}) {
+  const date = point.date || "";
+  const price = Number(point.price) || 0;
+  let matched = (data.matchDetails || []).filter((match) => {
+    const matchDate = side === "buy" ? match.buyDate : match.sellDate;
+    const matchPrice = side === "buy" ? match.buyPrice : match.sellPrice;
+    return matchDate === date && Math.abs((Number(matchPrice) || 0) - price) < 0.0005;
+  });
+  let unmatched = (data.unmatchedLots || []).filter((lot) => lot.side === side && lot.date === date && Math.abs((Number(lot.price) || 0) - price) < 0.0005);
+  if (options.fallbackByDate && !matched.length && data.unmatchedSide && data.unmatchedSide !== side) {
+    matched = (data.matchDetails || []).filter((match) => {
+      const matchDate = side === "buy" ? match.buyDate : match.sellDate;
+      return matchDate === date;
+    });
+  }
+  if (options.fallbackByDate && !unmatched.length && data.unmatchedSide === side) {
+    unmatched = (data.unmatchedLots || []).filter((lot) => lot.side === side && lot.date === date);
+  }
+  return { matched, unmatched };
+}
+
+function stockKlineVisibleData(data) {
+  const rows = data.klineRows || [];
+  const maxWindow = rows.length;
+  if (els.stockKlineWindow) {
+    els.stockKlineWindow.max = String(maxWindow);
+    let requestedWindow = Number(els.stockKlineWindow.value) || 0;
+    if (requestedWindow > maxWindow) {
+      requestedWindow = maxWindow;
+      els.stockKlineWindow.value = String(maxWindow);
+    }
+    if (els.stockKlineWindowLabel) {
+      els.stockKlineWindowLabel.textContent = requestedWindow > 0 && maxWindow > requestedWindow
+        ? `显示最近 ${requestedWindow} 条K线`
+        : `显示全部 ${maxWindow} 条K线`;
+    }
+    if (requestedWindow > 0 && rows.length > requestedWindow) {
+      const visibleRows = rows.slice(-requestedWindow);
+      const first = visibleRows[0].date;
+      const last = visibleRows[visibleRows.length - 1].date;
+      return {
+        ...data,
+        klineRows: visibleRows,
+        buyPoints: (data.buyPoints || []).filter((point) => dateInRange(point.date, first, last)),
+        sellPoints: (data.sellPoints || []).filter((point) => dateInRange(point.date, first, last)),
+        actionMarkers: (data.actionMarkers || []).filter((item) => dateInRange(item.date, first, last)),
+      };
+    }
+  }
+  return data;
+}
+
+function renderStockKlineChart(data) {
+  const rows = data.klineRows || [];
+  if (!rows.length) return `<div class="empty-state">没有取到K线数据，可换价格来源或缩短日期范围。</div>`;
+  const width = 760;
+  const height = 420;
+  const pad = { left: 54, right: 20, top: 24, bottom: 42 };
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+  const extraPrices = [
+    data.costLine,
+    data.takeProfitLine,
+    data.stopLossLine,
+    ...data.buyPoints.map((point) => point.price),
+    ...data.sellPoints.map((point) => point.price),
+  ].filter((value) => Number(value) > 0);
+  const prices = rows.flatMap((row) => [row.open, row.close, row.high, row.low]).concat(extraPrices).filter((value) => Number(value) > 0);
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  const span = Math.max(0.01, max - min);
+  const yMin = Math.max(0, min - span * 0.08);
+  const yMax = max + span * 0.08;
+  const xFor = (index) => pad.left + (rows.length <= 1 ? plotW / 2 : (index / (rows.length - 1)) * plotW);
+  const yFor = (value) => pad.top + ((yMax - value) / (yMax - yMin)) * plotH;
+  const rowIndex = new Map(rows.map((row, index) => [row.date, index]));
+  const candleW = Math.max(3, Math.min(12, plotW / Math.max(1, rows.length) * 0.58));
+  const grid = [0, 0.25, 0.5, 0.75, 1].map((ratio) => {
+    const y = pad.top + ratio * plotH;
+    const price = yMax - ratio * (yMax - yMin);
+    return `<line x1="${pad.left}" y1="${y}" x2="${width - pad.right}" y2="${y}" stroke="rgba(255,255,255,.16)" /><text x="8" y="${y + 4}" fill="#b8c0cf" font-size="11">${number(price, 2)}</text>`;
+  }).join("");
+  const candles = rows.map((row, index) => {
+    const x = xFor(index);
+    const up = row.close >= row.open;
+    const color = up ? "#ff4d62" : "#35d07f";
+    const top = yFor(Math.max(row.open, row.close));
+    const bottom = yFor(Math.min(row.open, row.close));
+    const bodyH = Math.max(1, bottom - top);
+    return `<line x1="${x}" y1="${yFor(row.high)}" x2="${x}" y2="${yFor(row.low)}" stroke="${color}" stroke-width="1.2" /><rect x="${x - candleW / 2}" y="${top}" width="${candleW}" height="${bodyH}" fill="${color}" opacity=".78" />`;
+  }).join("");
+  const lineFor = (value, label, color) => {
+    if (!(Number(value) > 0)) return "";
+    const y = yFor(Number(value));
+    return `<line x1="${pad.left}" y1="${y}" x2="${width - pad.right}" y2="${y}" stroke="${color}" stroke-width="1.4" stroke-dasharray="5 4" /><text x="${width - pad.right - 86}" y="${y - 5}" fill="${color}" font-size="12">${label} ${number(value, 2)}</text>`;
+  };
+  const tradePoint = (point, side) => {
+    const index = rowIndex.get(point.date);
+    if (index === undefined || !(point.price > 0)) return "";
+    const x = xFor(index);
+    const y = yFor(point.price);
+    const meta = stockKlinePointMeta(data, point, side);
+    const highlighted = meta.unmatched.length > 0 && data.unmatchedSide === side;
+    const attrs = `data-kline-point-side="${side}" data-kline-point-date="${escapeHtml(point.date || "")}" data-kline-point-price="${Number(point.price) || 0}" role="button" tabindex="0"`;
+    const className = `stock-kline-point${highlighted ? " highlight" : ""}`;
+    const label = side === "buy" ? "▲买" : "▼卖";
+    const fill = side === "buy" ? "#ff4d62" : "#35d07f";
+    const textX = x - 7;
+    const textY = side === "buy" ? y + 18 : y - 8;
+    if (highlighted) {
+      return `
+        <g class="stock-kline-highlight-hit" ${attrs}>
+          <circle class="stock-kline-highlight-ring" cx="${x}" cy="${y}" r="13" />
+          <rect class="stock-kline-highlight-bg" x="${textX - 3}" y="${textY - 14}" width="30" height="18" rx="4" />
+          <text class="${className}" x="${textX}" y="${textY}" fill="${fill}">${label}</text>
+        </g>
+      `;
+    }
+    if (side === "buy") {
+      return `<text class="${className}" ${attrs} x="${textX}" y="${textY}" fill="${fill}">${label}</text>`;
+    }
+    return `<text class="${className}" ${attrs} x="${textX}" y="${textY}" fill="${fill}">${label}</text>`;
+  };
+  const actionMarker = (action) => {
+    const index = rowIndex.get(action.date);
+    if (index === undefined) return "";
+    const x = xFor(index);
+    const y = pad.top + 12;
+    const label = action.type === "dividend" ? "分" : "送";
+    return `<text class="stock-kline-point" x="${x - 5}" y="${y}" fill="#ffd36a">◆${label}</text>`;
+  };
+  const labels = rows.length
+    ? `<text x="${pad.left}" y="${height - 12}" fill="#b8c0cf" font-size="12">${rows[0].date.slice(5)}</text><text x="${width - pad.right - 38}" y="${height - 12}" fill="#b8c0cf" font-size="12">${rows[rows.length - 1].date.slice(5)}</text>`
+    : "";
+  return `
+    <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(data.stockName)} K线图">
+      <rect x="0" y="0" width="${width}" height="${height}" fill="rgba(9,18,32,.72)" />
+      ${grid}
+      <line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${height - pad.bottom}" stroke="rgba(255,255,255,.25)" />
+      <line x1="${pad.left}" y1="${height - pad.bottom}" x2="${width - pad.right}" y2="${height - pad.bottom}" stroke="rgba(255,255,255,.25)" />
+      ${candles}
+      ${lineFor(data.costLine, "成本", "#ffd36a")}
+      ${lineFor(data.takeProfitLine, "止盈", "#ff4d62")}
+      ${lineFor(data.stopLossLine, "止损", "#35d07f")}
+      ${data.buyPoints.map((point) => tradePoint(point, "buy")).join("")}
+      ${data.sellPoints.map((point) => tradePoint(point, "sell")).join("")}
+      ${data.actionMarkers.map(actionMarker).join("")}
+      ${labels}
+    </svg>
+  `;
+}
+
+function renderStockKlinePointDetail(side, date, price) {
+  if (!currentStockKlineData || !els.stockKlineDetail) return;
+  const point = { date, price: Number(price) || 0 };
+  const meta = stockKlinePointMeta(currentStockKlineData, point, side, { fallbackByDate: true });
+  let rawTrades = state.trades
+    .filter((trade) => normalizeSymbol(trade.symbol) === currentStockKlineData.stockCode)
+    .filter((trade) => trade.side === side && trade.date === date && Math.abs((Number(trade.price) || 0) - point.price) < 0.0005)
+    .sort((a, b) => String(a.createdAt || "").localeCompare(String(b.createdAt || "")));
+  if (!rawTrades.length) {
+    rawTrades = state.trades
+      .filter((trade) => normalizeSymbol(trade.symbol) === currentStockKlineData.stockCode)
+      .filter((trade) => trade.side === side && trade.date === date)
+      .sort((a, b) => String(a.createdAt || "").localeCompare(String(b.createdAt || "")));
+  }
+  const sideText = side === "buy" ? "买入" : "卖出";
+  const unmatchedHtml = meta.unmatched.length
+    ? meta.unmatched.map((lot) => `
+      <article class="mobile-card">
+        <div class="mobile-card-head"><strong>未匹配${sideText}</strong><span>${date}</span></div>
+        <dl>
+          <div><dt>数量</dt><dd class="${classByValue(lot.signedQuantity)}">${number(lot.signedQuantity, 0)} 股</dd></div>
+          <div><dt>价格</dt><dd>¥${number(lot.price, 3)}</dd></div>
+          <div><dt>金额</dt><dd>${money(lot.quantity * lot.price)}</dd></div>
+        </dl>
+      </article>
+    `).join("")
+    : `<div class="empty-state">这个点没有未匹配 ${sideText} lot。</div>`;
+  const matchedHtml = meta.matched.length
+    ? meta.matched.map((match) => `
+      <article class="mobile-card">
+        <div class="mobile-card-head"><strong>已匹配</strong><span class="${classByValue(match.pnl)}">${money(match.pnl)}</span></div>
+        <dl>
+          <div><dt>卖出</dt><dd>${match.sellDate} ¥${number(match.sellPrice, 2)}</dd></div>
+          <div><dt>买入</dt><dd>${match.buyDate} ¥${number(match.buyPrice, 2)}</dd></div>
+          <div><dt>股数</dt><dd>${number(match.quantity, 0)}</dd></div>
+          <div><dt>成交金额</dt><dd>${money(Math.max(Number(match.sellIncome) || 0, Number(match.buyCost) || 0))}</dd></div>
+          <div><dt>盈亏</dt><dd class="${classByValue(match.pnl)}">${money(match.pnl)}</dd></div>
+        </dl>
+      </article>
+    `).join("")
+    : `<div class="empty-state">这个点没有已完成匹配。</div>`;
+  const rawHtml = rawTrades.length
+    ? rawTrades.map((trade) => `
+      <article class="mobile-card">
+        <div class="mobile-card-head"><strong>原始${sideText}成交</strong><span>${trade.date}</span></div>
+        <dl>
+          <div><dt>价格</dt><dd>¥${number(trade.price, 3)}</dd></div>
+          <div><dt>数量</dt><dd>${number(trade.quantity, 0)}</dd></div>
+          <div><dt>金额</dt><dd>${money(tradeAmount(trade))}</dd></div>
+          <div><dt>费用</dt><dd>${money(totalFee(trade))}</dd></div>
+          <div><dt>备注</dt><dd>${escapeHtml(trade.note || "-")}</dd></div>
+        </dl>
+      </article>
+    `).join("")
+    : `<div class="empty-state">没有找到对应原始成交。</div>`;
+  const unmatchedSection = `
+      <div class="panel-header spacing-top"><h3>未匹配</h3></div>
+      <div class="mobile-list">${unmatchedHtml}</div>
+  `;
+  const matchedSection = `
+      <div class="panel-header spacing-top"><h3>已匹配</h3></div>
+      <div class="mobile-list">${matchedHtml}</div>
+  `;
+  const primarySections = side === currentStockKlineData.unmatchedSide
+    ? `${unmatchedSection}${matchedSection}`
+    : `${matchedSection}${unmatchedSection}`;
+  els.stockKlineDetail.innerHTML = `
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h3>${escapeHtml(currentStockKlineData.stockName)} ${date} ${sideText} ¥${number(point.price, 3)}</h3>
+          <span>高亮优先显示当前未匹配方向；反方向点显示对应匹配。</span>
+        </div>
+      </div>
+      ${primarySections}
+      <div class="panel-header spacing-top"><h3>原始成交</h3></div>
+      <div class="mobile-list">${rawHtml}</div>
+    </section>
+  `;
+}
+
+function populateStockKlineSymbols(selected = "") {
+  const names = stockNameMap();
+  const symbols = [...allKnownSymbols()].sort((a, b) => (names.get(a) || a).localeCompare(names.get(b) || b, "zh-CN"));
+  els.stockKlineSymbol.innerHTML = symbols.length
+    ? symbols.map((symbol) => `<option value="${symbol}">${escapeHtml(names.get(symbol) || symbol)} ${symbol}</option>`).join("")
+    : `<option value="">暂无股票</option>`;
+  const key = normalizeSymbol(selected);
+  if (symbols.includes(key)) els.stockKlineSymbol.value = key;
+}
+
+function defaultKlineRange(symbol, days = 120) {
+  const key = normalizeSymbol(symbol);
+  const lastTradeDate = state.trades
+    .filter((trade) => normalizeSymbol(trade.symbol) === key)
+    .map((trade) => trade.date)
+    .filter(Boolean)
+    .sort((a, b) => b.localeCompare(a))[0];
+  const endDate = lastTradeDate || today();
+  return { startDate: addDays(endDate, -days), endDate };
+}
+
+async function renderStockKline() {
+  const symbol = normalizeSymbol(els.stockKlineSymbol.value || selectedDetailSymbol);
+  if (!symbol) {
+    els.stockKlineChart.innerHTML = `<div class="empty-state">请先选择股票。</div>`;
+    return;
+  }
+  const startDate = els.stockKlineStart.value || defaultKlineRange(symbol).startDate;
+  const endDate = els.stockKlineEnd.value || defaultKlineRange(symbol).endDate;
+  if (startDate > endDate) {
+    els.stockKlineStatus.textContent = "开始日期不能晚于结束日期。";
+    return;
+  }
+  els.stockKlineStatus.textContent = "正在加载K线...";
+  els.stockKlineChart.innerHTML = `<div class="empty-state">正在加载 ${symbol} K线...</div>`;
+  try {
+    const data = await buildStockKlineData(symbol, startDate, endDate, els.stockKlineSource.value || "auto");
+    currentStockKlineData = data;
+    const visibleData = stockKlineVisibleData(data);
+    els.stockKlineTitle.textContent = `${data.stockName} ${data.stockCode} K线图`;
+    els.stockKlineSubtitle.textContent = `${startDate} 至 ${endDate} · ${data.source} · ${visibleData.klineRows.length}/${data.klineRows.length} 条`;
+    els.stockKlineStatus.textContent = data.message || `已加载 ${data.klineRows.length} 条K线，买点 ${data.buyPoints.length}，卖点 ${data.sellPoints.length}，公司行为 ${data.actionMarkers.length}。`;
+    els.stockKlineChart.innerHTML = renderStockKlineChart(visibleData);
+    if (els.stockKlineDetail) els.stockKlineDetail.innerHTML = "";
+  } catch (error) {
+    currentStockKlineData = null;
+    els.stockKlineStatus.textContent = `K线加载失败：${error.message || error}`;
+    els.stockKlineChart.innerHTML = `<div class="empty-state">没有取到K线数据，可换价格来源或缩短日期范围。</div>`;
+  }
+}
+
+function redrawStockKlineFromCache() {
+  if (!currentStockKlineData) return;
+  const visibleData = stockKlineVisibleData(currentStockKlineData);
+  if (els.stockKlineSubtitle) {
+    const startDate = els.stockKlineStart.value || visibleData.klineRows[0]?.date || "";
+    const endDate = els.stockKlineEnd.value || visibleData.klineRows[visibleData.klineRows.length - 1]?.date || "";
+    els.stockKlineSubtitle.textContent = `${startDate} 至 ${endDate} · ${currentStockKlineData.source} · ${visibleData.klineRows.length}/${currentStockKlineData.klineRows.length} 条`;
+  }
+  els.stockKlineChart.innerHTML = renderStockKlineChart(visibleData);
+}
+
+function openStockKlineModal(symbol) {
+  const key = normalizeSymbol(symbol || selectedDetailSymbol);
+  populateStockKlineSymbols(key);
+  const range = defaultKlineRange(key);
+  els.stockKlineStart.value = range.startDate;
+  els.stockKlineEnd.value = range.endDate;
+  if (els.stockKlineWindow) els.stockKlineWindow.value = "0";
+  if (els.stockKlineDetail) els.stockKlineDetail.innerHTML = "";
+  openModal("stock-kline-modal");
+  renderStockKline();
+}
+
+function renderStockDetailV2() {
+  const symbols = [...allKnownSymbols()].sort();
+  if (!selectedDetailSymbol && symbols.length) selectedDetailSymbol = symbols[0];
+  const data = buildStockDetailData(selectedDetailSymbol || symbols[0] || "");
+  const currentPrice = Number(data.currentPrice) || Number(data.currentHolding.currentPrice) || Number(state.prices[data.stockCode]) || 0;
+
+  els.stockV2Title.textContent = `${data.stockName || "个股详情"} ${data.stockCode || ""}`;
+  els.stockV2Subtitle.textContent = "V2 展示层：复用现有算法结果，不改旧版匹配逻辑";
+  els.stockV2Hero.innerHTML = `
+    <div>
+      <div class="stock-v2-title"><strong>${escapeHtml(data.stockName || data.stockCode || "-")}</strong><span class="tag">${escapeHtml(data.stockCode || "-")}</span></div>
+      <p class="muted">当前只做展示适配；手动数据没有成交时间时按日期降级显示。</p>
+    </div>
+    <div class="stock-v2-price"><span>当前价</span><strong>${currentPrice > 0 ? money(currentPrice) : "-"}</strong></div>
+  `;
+  els.stockV2Metrics.innerHTML = `
+    <article class="metric"><span>当前持仓</span><strong>${number(data.currentHolding.quantity || 0, 0)} 股</strong></article>
+    <article class="metric"><span>未匹配方向</span><strong class="${data.unmatchedDirection === "sell" ? "warning" : data.unmatchedDirection === "buy" ? "positive" : ""}">${data.unmatchedDirection === "sell" ? "待买回" : data.unmatchedDirection === "buy" ? "未匹配买入" : "无"}</strong></article>
+    <article class="metric"><span>未匹配数量</span><strong>${number(data.unmatchedQty || 0, 0)} 股</strong></article>
+    <article class="metric"><span>累计匹配收益</span><strong class="${classByValue(data.totalMatchProfit)}">${money(data.totalMatchProfit)}</strong></article>
+  `;
+  [...els.stockV2Tabs.querySelectorAll("[data-stock-v2-tab]")].forEach((button) => {
+    button.classList.toggle("active", button.dataset.stockV2Tab === selectedStockV2Tab);
+  });
+  const panes = {
+    matches: renderStockV2Matches,
+    lots: renderStockV2Lots,
+    charts: renderStockV2Charts,
+    trades: renderStockV2Trades,
+    overview: renderStockV2Overview,
+  };
+  els.stockV2Content.innerHTML = (panes[selectedStockV2Tab] || renderStockV2Matches)(data);
 }
 
 function renderStockDetail() {
@@ -9917,6 +11800,7 @@ function renderSettings() {
   if (!els.cashTransferDate.value) els.cashTransferDate.value = today();
   renderCashTransfers();
   renderCorporateActions();
+  ensureCorporateActionImportDefaults();
 
   if (!state.initialPositions.length) {
     els.initialPositionsBody.innerHTML = `<tr><td colspan="8" class="empty-state">暂无初始持仓</td></tr>`;
@@ -9972,11 +11856,21 @@ function renderSettings() {
 }
 
 function renderCorporateActions() {
-  const rows = [...state.corporateActions].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  const allRows = [...state.corporateActions].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  const hiddenDividendRows = allRows.filter((action) => action.type === "dividend").length;
+  const hiddenAutoRows = allRows.filter((action) => action.type !== "dividend" && isAutoImportedCorporateAction(action)).length;
+  const rows = allRows.filter((action) => action.type !== "dividend" && !isAutoImportedCorporateAction(action));
 
   if (!rows.length) {
-    els.corporateActionsBody.innerHTML = `<tr><td colspan="10" class="empty-state">暂无分红或送股记录</td></tr>`;
-    els.corporateActionsCards.innerHTML = `<div class="empty-state">暂无分红或送股记录</div>`;
+    const hiddenText = [
+      hiddenDividendRows ? `${hiddenDividendRows} 条分红记录` : "",
+      hiddenAutoRows ? `${hiddenAutoRows} 条自动补记录` : "",
+    ].filter(Boolean).join("、");
+    const message = hiddenText
+      ? `暂无手动送股/转增记录。已隐藏 ${hiddenText}，可点“查询”按年度查看分红。`
+      : "暂无送股或转增记录";
+    els.corporateActionsBody.innerHTML = `<tr><td colspan="10" class="empty-state">${message}</td></tr>`;
+    els.corporateActionsCards.innerHTML = `<div class="empty-state">${message}</div>`;
     return;
   }
 
@@ -10027,6 +11921,269 @@ function renderCorporateActions() {
       `,
     )
     .join("");
+}
+
+function dateOnly(value) {
+  const text = String(value || "").trim();
+  const match = text.match(/\d{4}-\d{2}-\d{2}/);
+  return match ? match[0] : "";
+}
+
+function corporateActionImportStartDefault() {
+  const dates = [
+    portfolioCalculationStartDate(),
+    ...state.initialPositions.map((item) => item.date),
+    ...state.trades.map((trade) => trade.date),
+    ...state.corporateActions.map((action) => action.date),
+  ].filter(validDateString).sort((a, b) => a.localeCompare(b));
+  return dates[0] || `${beijingNow().getFullYear()}-01-01`;
+}
+
+function ensureCorporateActionImportDefaults() {
+  if (els.corporateActionImportStart && !els.corporateActionImportStart.value) {
+    els.corporateActionImportStart.value = corporateActionImportStartDefault();
+  }
+  if (els.corporateActionImportEnd && !els.corporateActionImportEnd.value) {
+    els.corporateActionImportEnd.value = today();
+  }
+}
+
+function corporateActionImportSymbols() {
+  const scope = els.corporateActionImportScope.value || "all";
+  if (scope === "single") {
+    const symbol = normalizeSymbol(els.corporateActionImportSymbol.value || els.actionSymbol.value);
+    return symbol ? [symbol] : [];
+  }
+  return allKnownSymbols().filter((symbol) => /^\d{6}$/.test(symbol));
+}
+
+function corporateActionKey(action, includeValue = true) {
+  const parts = [
+    action.date || "",
+    normalizeSymbol(action.symbol),
+    action.type || "",
+  ];
+  if (includeValue) parts.push(Number(action.value || 0).toFixed(action.type === "bonus" ? 0 : 2));
+  return parts.join("|");
+}
+
+function corporateActionDuplicateStatus(action) {
+  const exactKey = corporateActionKey(action, true);
+  const dateTypeKey = corporateActionKey(action, false);
+  const exact = state.corporateActions.some((item) => corporateActionKey(item, true) === exactKey);
+  if (exact) return { status: "duplicate", text: "已存在", importable: false };
+  const conflict = state.corporateActions.some((item) => corporateActionKey(item, false) === dateTypeKey);
+  if (conflict) return { status: "conflict", text: "疑似冲突", importable: false };
+  return { status: "ready", text: "可导入", importable: true };
+}
+
+function normalizeCorporateActionRows(rawRows = []) {
+  return rawRows
+    .map((row) => {
+      const exDate = dateOnly(row.EX_DIVIDEND_DATE || row.EX_RIGHT_DATE || row.EX_DIVIDEND_DAYS);
+      const recordDate = dateOnly(row.EQUITY_RECORD_DATE || row.RECORD_DATE) || exDate;
+      const reportDate = dateOnly(row.REPORT_DATE);
+      const progress = String(row.ASSIGN_PROGRESS || "");
+      const planText = String(row.IMPL_PLAN_PROFILE || row.PLAN_PROFILE || "").trim();
+      const cashPer10 = Number(row.PRETAX_BONUS_RMB ?? row.DIVIDENT_RATIO ?? row.CASH_DIVIDEND_RATIO) || 0;
+      const bonusRatio = Number(row.BONUS_RATIO) || 0;
+      const transferRatio = Number(row.IT_RATIO) || 0;
+      const combinedRatio = Number(row.BONUS_IT_RATIO) || 0;
+      const sharePer10 = bonusRatio || transferRatio ? bonusRatio + transferRatio : combinedRatio;
+      return {
+        symbol: normalizeSymbol(row.SECURITY_CODE || row.SECUCODE),
+        name: row.SECURITY_NAME_ABBR || row.SECURITY_NAME || "",
+        exDate,
+        recordDate,
+        reportDate,
+        progress,
+        planText,
+        cashPer10,
+        sharePer10,
+        source: "东方财富",
+      };
+    })
+    .filter((row) => row.symbol && validDateString(row.exDate) && (row.cashPer10 > 0 || row.sharePer10 > 0))
+    .filter((row) => !row.progress || row.progress.includes("实施") || row.progress.includes("分配"));
+}
+
+async function fetchCorporateActions(symbol) {
+  const callbackName = `corp_action_${normalizeSymbol(symbol)}_${Date.now()}_${Math.random().toString(16).slice(2)}`.replace(/\W/g, "_");
+  const filter = `(SECURITY_CODE="${normalizeSymbol(symbol)}")`;
+  const url = `https://datacenter-web.eastmoney.com/api/data/v1/get?callback=${callbackName}&sortColumns=EX_DIVIDEND_DATE&sortTypes=-1&pageSize=100&pageNumber=1&reportName=RPT_SHAREBONUS_DET&columns=ALL&filter=${encodeURIComponent(filter)}`;
+  const result = await jsonp(url, callbackName);
+  const rows = result?.result?.data || [];
+  return normalizeCorporateActionRows(rows);
+}
+
+function buildCorporateActionEntries(row, startDate, endDate, extraQuantity = 0) {
+  if (!dateInRange(row.exDate, startDate, endDate)) return [];
+  const quantityDate = row.recordDate || addDays(row.exDate, -1);
+  const holdingQuantity = positionQuantityOnDate(row.symbol, quantityDate) + (Number(extraQuantity) || 0);
+  const entries = [];
+  const baseNote = `${row.planText || "分红送转"}；来源：${row.source}；登记日：${row.recordDate || "-"}；除权除息日：${row.exDate}`;
+  if (holdingQuantity <= 0) {
+    entries.push({
+      date: row.exDate,
+      symbol: row.symbol,
+      name: row.name || stockNameMap().get(row.symbol) || row.symbol,
+      type: "skip",
+      value: 0,
+      tax: 0,
+      holdingQuantity,
+      planText: row.planText,
+      note: baseNote,
+      status: "empty",
+      statusText: "登记日前无持仓",
+      importable: false,
+    });
+    return entries;
+  }
+  if (row.cashPer10 > 0) {
+    const action = {
+      id: uid(),
+      date: row.exDate,
+      symbol: row.symbol,
+      name: row.name || stockNameMap().get(row.symbol) || row.symbol,
+      type: "dividend",
+      value: roundMoney((holdingQuantity / 10) * row.cashPer10),
+      tax: 0,
+      holdingQuantity,
+      planText: row.planText,
+      note: baseNote,
+    };
+    action.dividendYield = dividendYieldRate(action);
+    const duplicate = corporateActionDuplicateStatus(action);
+    entries.push({ ...action, status: duplicate.status, statusText: duplicate.text, importable: duplicate.importable });
+  }
+  if (row.sharePer10 > 0) {
+    const action = {
+      id: uid(),
+      date: row.exDate,
+      symbol: row.symbol,
+      name: row.name || stockNameMap().get(row.symbol) || row.symbol,
+      type: "bonus",
+      value: Math.round((holdingQuantity / 10) * row.sharePer10),
+      tax: 0,
+      holdingQuantity,
+      planText: row.planText,
+      note: baseNote,
+    };
+    const duplicate = corporateActionDuplicateStatus(action);
+    entries.push({ ...action, status: duplicate.status, statusText: duplicate.text, importable: duplicate.importable });
+  }
+  return entries;
+}
+
+function renderCorporateActionImportPreview(summary = {}) {
+  const rows = pendingCorporateActionImports;
+  const importable = rows.filter((row) => row.importable);
+  if (els.confirmCorporateActionImport) els.confirmCorporateActionImport.disabled = importable.length === 0;
+  if (els.corporateActionImportSummary) {
+    els.corporateActionImportSummary.innerHTML = [
+      { label: "可导入", value: `${importable.length} 条`, tone: importable.length ? "positive" : "" },
+      { label: "跳过/冲突", value: `${rows.length - importable.length} 条`, tone: "" },
+      { label: "查询股票", value: `${summary.symbolCount || 0} 只`, tone: "" },
+    ].map((item) => `<article class="metric"><span>${item.label}</span><strong class="${item.tone}">${item.value}</strong></article>`).join("");
+  }
+  if (!els.corporateActionImportPreview) return;
+  if (!rows.length) {
+    els.corporateActionImportPreview.innerHTML = `<div class="empty-state">${summary.message || "暂无可预览的公司行为"}</div>`;
+    return;
+  }
+  els.corporateActionImportPreview.innerHTML = rows.map((row) => `
+    <article class="mobile-card">
+      <div class="mobile-card-head">
+        <strong class="stock-name-chip">${escapeHtml(row.name || row.symbol)}</strong>
+        <span>${escapeHtml(row.symbol)}</span>
+      </div>
+      <dl>
+        <div><dt>除权除息日</dt><dd>${row.date || "-"}</dd></div>
+        <div><dt>类型</dt><dd>${row.type === "dividend" ? "现金分红" : row.type === "bonus" ? "送股/转增" : "跳过"}</dd></div>
+        <div><dt>登记日前持股</dt><dd>${number(row.holdingQuantity || 0, 0)}</dd></div>
+        <div><dt>换算金额/数量</dt><dd>${row.type === "dividend" ? money(row.value) : row.type === "bonus" ? `${number(row.value, 0)} 股` : "-"}</dd></div>
+        <div><dt>状态</dt><dd class="${row.importable ? "positive" : "negative"}">${row.statusText || "-"}</dd></div>
+        <div><dt>方案</dt><dd>${escapeHtml(row.planText || row.note || "-")}</dd></div>
+      </dl>
+    </article>
+  `).join("");
+}
+
+async function buildCorporateActionImportPreview() {
+  ensureCorporateActionImportDefaults();
+  const startDate = els.corporateActionImportStart.value || corporateActionImportStartDefault();
+  const endDate = els.corporateActionImportEnd.value || today();
+  const symbols = corporateActionImportSymbols();
+  if (!symbols.length) {
+    pendingCorporateActionImports = [];
+    els.corporateActionImportStatus.textContent = "没有可查询的股票代码。单股查询时请先填写代码。";
+    renderCorporateActionImportPreview({ message: "没有可查询的股票代码" });
+    return;
+  }
+  els.fetchCorporateActions.disabled = true;
+  els.corporateActionImportStatus.textContent = `正在查询 ${symbols.length} 只股票的分红送转记录...`;
+  pendingCorporateActionImports = [];
+  const rows = [];
+  const fetchedActionRows = [];
+  const errors = [];
+  for (let index = 0; index < symbols.length; index += 1) {
+    const symbol = symbols[index];
+    try {
+      els.corporateActionImportStatus.textContent = `正在查询 ${symbol}（${index + 1}/${symbols.length}）...`;
+      const fetchedRows = await withRetry(() => fetchCorporateActions(symbol), 1, 500);
+      fetchedActionRows.push(...fetchedRows);
+      await wait(120);
+    } catch (error) {
+      errors.push(`${symbol}: ${error.message || error}`);
+    }
+  }
+  const pendingBonusBySymbol = new Map();
+  fetchedActionRows
+    .sort((a, b) => (a.exDate || "").localeCompare(b.exDate || ""))
+    .forEach((row) => {
+      const key = normalizeSymbol(row.symbol);
+      const entries = buildCorporateActionEntries(row, startDate, endDate, pendingBonusBySymbol.get(key) || 0);
+      rows.push(...entries);
+      entries
+        .filter((entry) => entry.importable && entry.type === "bonus")
+        .forEach((entry) => pendingBonusBySymbol.set(key, (pendingBonusBySymbol.get(key) || 0) + (Number(entry.value) || 0)));
+    });
+  pendingCorporateActionImports = rows;
+  const importable = rows.filter((row) => row.importable).length;
+  els.corporateActionImportStatus.textContent = errors.length
+    ? `已生成 ${rows.length} 条预览，可导入 ${importable} 条；${errors.length} 只股票查询失败。`
+    : `已生成 ${rows.length} 条预览，可导入 ${importable} 条。`;
+  if (!rows.length && errors.length) els.corporateActionImportStatus.textContent = `查询失败：${errors.slice(0, 3).join("；")}`;
+  renderCorporateActionImportPreview({ symbolCount: symbols.length, message: errors.length ? errors.slice(0, 3).join("；") : "日期范围内没有可导入的公司行为" });
+  els.fetchCorporateActions.disabled = false;
+}
+
+function clearCorporateActionImportPreview() {
+  pendingCorporateActionImports = [];
+  if (els.corporateActionImportStatus) els.corporateActionImportStatus.textContent = "默认扫描所有出现过的股票；导入前会跳过已存在记录，疑似冲突不会自动导入。";
+  renderCorporateActionImportPreview();
+}
+
+function confirmCorporateActionImport() {
+  const rows = pendingCorporateActionImports.filter((row) => row.importable).map((row) => ({
+    id: row.id || uid(),
+    date: row.date,
+    symbol: row.symbol,
+    name: row.name,
+    type: row.type,
+    value: Number(row.value) || 0,
+    tax: row.type === "dividend" ? Number(row.tax) || 0 : 0,
+    dividendYield: row.type === "dividend" ? Number(row.dividendYield) || 0 : 0,
+    source: "auto",
+    note: row.note || "",
+  }));
+  if (!rows.length) return;
+  if (!confirm(`确认导入 ${rows.length} 条分红/送股记录吗？`)) return;
+  state.corporateActions.push(...rows);
+  save();
+  clearCorporateActionImportPreview();
+  renderAll();
+  els.corporateActionImportStatus.textContent = `已导入 ${rows.length} 条公司行为记录。`;
 }
 
 function updateCorporateActionNet() {
@@ -10173,6 +12330,7 @@ function renderView(viewId = activeViewId(), options = {}) {
     reports: renderReportsView,
     settings: renderSettings,
     "stock-detail": renderStockDetail,
+    "stock-detail-v2": renderStockDetailV2,
   };
   const render = renderers[viewId] || renderDashboard;
   if (!options.force && isViewFresh(viewId)) {
@@ -10405,9 +12563,7 @@ function pauseForBrowser() {
 }
 
 function readStoredBackupJson() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) return raw;
-  return JSON.stringify(state);
+  return createBackupJson();
 }
 
 function createBackupJson() {
@@ -10482,11 +12638,14 @@ function renderBackupStatusOnly() {
     ? `${backupStatusText()} 建议导出备份，防止浏览器数据丢失。`
     : backupStatusText();
   renderImportGuardStatus();
+  renderVersionSnapshots();
 }
 
 function summarizeBackupData(data) {
   const settings = data && typeof data.settings === "object" ? data.settings : {};
   const plans = data && data.stockPlans && typeof data.stockPlans === "object" ? data.stockPlans : {};
+  const prices = data && data.prices && typeof data.prices === "object" ? data.prices : {};
+  const previousCloses = data && data.previousCloses && typeof data.previousCloses === "object" ? data.previousCloses : {};
   return {
     trades: Array.isArray(data?.trades) ? data.trades.length : 0,
     initialPositions: Array.isArray(data?.initialPositions) ? data.initialPositions.length : 0,
@@ -10494,12 +12653,118 @@ function summarizeBackupData(data) {
     cashTransfers: Array.isArray(data?.cashTransfers) ? data.cashTransfers.length : 0,
     corporateActions: Array.isArray(data?.corporateActions) ? data.corporateActions.length : 0,
     stockPlans: Object.keys(plans).length,
+    priceCache: Object.keys(prices).length + Object.keys(previousCloses).length,
     initialCash: Number(settings.initialCash) || 0,
   };
 }
 
 function backupSummaryText(summary) {
-  return `交易 ${summary.trades} 笔，初始持仓 ${summary.initialPositions} 只，收盘 ${summary.closeSnapshots} 天，现金流水 ${summary.cashTransfers} 条，企业行为 ${summary.corporateActions} 条，计划 ${summary.stockPlans} 只，初始现金 ${money(summary.initialCash)}`;
+  return `交易 ${summary.trades} 笔，初始持仓 ${summary.initialPositions} 只，收盘 ${summary.closeSnapshots} 天，现金流水 ${summary.cashTransfers} 条，企业行为 ${summary.corporateActions} 条，计划 ${summary.stockPlans} 只，价格缓存 ${summary.priceCache || 0} 条，初始现金 ${money(summary.initialCash)}`;
+}
+
+function applyBackupState(next) {
+  state.trades = next.trades;
+  state.prices = next.prices;
+  state.previousCloses = next.previousCloses;
+  state.initialPositions = next.initialPositions;
+  state.corporateActions = next.corporateActions;
+  state.cashTransfers = next.cashTransfers;
+  state.closeSnapshots = next.closeSnapshots;
+  state.stockPlans = next.stockPlans;
+  state.settings = next.settings;
+  state.historicalRebuild = next.historicalRebuild;
+}
+
+async function pruneVersionSnapshots() {
+  const rows = await idbGetAll(INDEXED_DB_SNAPSHOT_STORE);
+  const sorted = rows.sort((a, b) => String(b.createdAt || b.id).localeCompare(String(a.createdAt || a.id)));
+  const extra = sorted.slice(MAX_VERSION_SNAPSHOTS);
+  await Promise.all(extra.map((item) => idbDelete(INDEXED_DB_SNAPSHOT_STORE, item.id)));
+}
+
+async function createVersionSnapshot(reason = "手动快照") {
+  const createdAt = new Date().toISOString();
+  const payload = cloneStateForStorage(state);
+  const snapshot = {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    createdAt,
+    reason,
+    summary: summarizeBackupData(payload),
+    state: payload,
+  };
+  await idbPut(INDEXED_DB_SNAPSHOT_STORE, snapshot);
+  await pruneVersionSnapshots();
+  renderVersionSnapshots();
+  return snapshot;
+}
+
+async function getVersionSnapshots() {
+  const rows = await idbGetAll(INDEXED_DB_SNAPSHOT_STORE);
+  return rows.sort((a, b) => String(b.createdAt || b.id).localeCompare(String(a.createdAt || a.id)));
+}
+
+function snapshotTimeLabel(value) {
+  if (!value) return "未知时间";
+  return new Date(value).toLocaleString("zh-CN", {
+    timeZone: "Asia/Shanghai",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+async function renderVersionSnapshots() {
+  if (!els.versionSnapshotStatus || !els.versionSnapshotList) return;
+  try {
+    const snapshots = await getVersionSnapshots();
+    els.versionSnapshotStatus.textContent = indexedDbAvailable
+      ? `IndexedDB 已启用，当前保留 ${snapshots.length} 个版本快照。`
+      : "IndexedDB 暂不可用，版本快照无法保存。";
+    els.versionSnapshotList.innerHTML = snapshots.length
+      ? snapshots.map((item) => `
+          <article class="mobile-card">
+            <div class="card-head">
+              <strong>${escapeHtml(item.reason || "版本快照")}</strong>
+              <span>${escapeHtml(snapshotTimeLabel(item.createdAt))}</span>
+            </div>
+            <dl>
+              <div><dt>摘要</dt><dd>${escapeHtml(backupSummaryText(item.summary || {}))}</dd></div>
+            </dl>
+            <div class="row-actions">
+              <button class="primary-button small" type="button" data-restore-version-snapshot="${escapeHtml(item.id)}">恢复</button>
+              <button class="danger-button small" type="button" data-delete-version-snapshot="${escapeHtml(item.id)}">删除</button>
+            </div>
+          </article>
+        `).join("")
+      : `<div class="empty-state">还没有版本快照。导入、清空、倒推写入前会自动保存。</div>`;
+  } catch (error) {
+    els.versionSnapshotStatus.textContent = `版本快照读取失败：${error.message || error}`;
+    els.versionSnapshotList.innerHTML = "";
+  }
+}
+
+async function restoreVersionSnapshot(id) {
+  const snapshot = await idbGet(INDEXED_DB_SNAPSHOT_STORE, id);
+  if (!snapshot || !snapshot.state) {
+    alert("这个版本快照不存在或已损坏。");
+    renderVersionSnapshots();
+    return;
+  }
+  const summary = summarizeBackupData(snapshot.state);
+  const ok = confirm(`确认恢复到这个快照吗？\n${snapshotTimeLabel(snapshot.createdAt)} ${snapshot.reason || ""}\n${backupSummaryText(summary)}\n\n当前数据会被覆盖。`);
+  if (!ok) return;
+  createVersionSnapshot("恢复快照前").catch((error) => console.warn("Snapshot before restore failed", error));
+  applyBackupState(normalizeImportedBackup(snapshot.state));
+  save();
+  renderAll();
+  alert("已恢复版本快照。");
+}
+
+async function deleteVersionSnapshot(id) {
+  if (!confirm("确定删除这个版本快照吗？")) return;
+  await idbDelete(INDEXED_DB_SNAPSHOT_STORE, id);
+  renderVersionSnapshots();
 }
 
 function normalizeImportedBackup(next) {
@@ -10541,6 +12806,7 @@ function saveImportUndoSnapshot() {
   const summary = summarizeBackupData(parsed);
   localStorage.setItem(IMPORT_UNDO_DATA_KEY, raw);
   localStorage.setItem(IMPORT_UNDO_META_KEY, JSON.stringify({ createdAt: new Date().toISOString(), summary }));
+  createVersionSnapshot("导入前快照").catch((error) => console.warn("Version snapshot before import failed", error));
   renderImportGuardStatus();
 }
 
@@ -10565,7 +12831,7 @@ async function exportData() {
     const lastBackupAt = new Date().toISOString();
     state.settings.lastBackupAt = lastBackupAt;
     const content = createBackupJson();
-    localStorage.setItem(STORAGE_KEY, content);
+    save();
     const exportedSize = await downloadLargeText(filename, content, handle, "application/json");
     localStorage.setItem(BACKUP_META_KEY, JSON.stringify({ lastBackupAt }));
     renderBackupStatusOnly();
@@ -10583,7 +12849,7 @@ function showBackupText() {
     const lastBackupAt = new Date().toISOString();
     state.settings.lastBackupAt = lastBackupAt;
     const content = createBackupJson();
-    localStorage.setItem(STORAGE_KEY, content);
+    save();
     localStorage.setItem(BACKUP_META_KEY, JSON.stringify({ lastBackupAt }));
     els.backupTextOutput.value = content;
     els.backupTextWrap.hidden = false;
@@ -10717,7 +12983,7 @@ function brokerDate(value) {
   const serial = Number(text);
   if (Number.isFinite(serial) && serial > 20000 && serial < 80000) {
     const date = new Date(Math.round((serial - 25569) * 86400000));
-    if (!Number.isNaN(date.getTime())) return toISODate(date);
+    if (!Number.isNaN(date.getTime())) return formatDate(date);
   }
   return "";
 }
@@ -10764,8 +13030,28 @@ function brokerHeaderIndex(headers, aliases) {
   return index;
 }
 
-function brokerColumnAliases(mode = "broker1") {
+function uniqueBrokerAliases(values) {
+  return [...new Set(values.filter(Boolean))];
+}
+
+function brokerTemplateLabel(mode = "broker1") {
   return {
+    broker1: "券商1",
+    broker2: "券商2",
+    auto: "自动识别",
+    generic: "通用模板",
+    huatai: "华泰/涨乐财富通",
+    guotai: "国泰海通/国泰君安",
+    eastmoney: "东方财富证券",
+    galaxy: "中国银河证券",
+    cms: "招商证券",
+    citic: "中信证券",
+    gf: "广发证券",
+  }[mode] || mode;
+}
+
+function brokerColumnAliases(mode = "broker1") {
+  const base = {
     date: mode === "broker2" ? ["成交日期", "交易日期", "发生日期", "业务日期", "日期"] : ["交易日期", "成交日期", "发生日期", "业务日期", "日期"],
     time: ["成交时间", "交易时间", "委托时间", "时间"],
     symbol: ["证券代码", "股票代码", "代码"],
@@ -10774,6 +13060,29 @@ function brokerColumnAliases(mode = "broker1") {
     price: ["成交价格", "成交价", "价格", "均价"],
     quantity: ["成交数量", "成交股数", "发生数量", "数量", "股数"],
     dealNo: ["成交编号", "合同编号", "委托编号", "编号"],
+  };
+  const expanded = {
+    date: ["成交日期", "交易日期", "发生日期", "业务日期", "委托日期", "清算日期", "成交日", "交易日", "日期"],
+    time: ["成交时间", "交易时间", "委托时间", "发生时间", "成交时刻", "时间"],
+    symbol: ["证券代码", "股票代码", "代码", "证券编号", "证券号码", "品种代码", "资产代码", "合约代码"],
+    name: ["证券名称", "股票名称", "名称", "证券简称", "品种名称", "资产名称", "合约名称"],
+    side: ["买卖标志", "买卖方向", "操作", "业务名称", "摘要", "成交类别", "成交类型", "委托类别", "交易类别", "业务类型", "买卖类别", "证券买卖", "买卖"],
+    price: ["成交价格", "成交价", "价格", "均价", "成交均价", "成交单价", "发生价格", "委托价格"],
+    quantity: ["成交数量", "成交股数", "发生数量", "数量", "股数", "成交份额", "成交量", "证券数量", "股份余额变动"],
+    dealNo: ["成交编号", "合同编号", "委托编号", "编号", "合同序号", "成交序号", "流水号", "委托序号", "成交单号"],
+  };
+  if (["auto", "generic", "huatai", "guotai", "eastmoney", "galaxy", "cms", "citic", "gf"].includes(mode)) {
+    return Object.fromEntries(Object.keys(base).map((key) => [key, uniqueBrokerAliases([...expanded[key], ...base[key]])]));
+  }
+  return {
+    date: base.date,
+    time: base.time,
+    symbol: base.symbol,
+    name: base.name,
+    side: base.side,
+    price: base.price,
+    quantity: base.quantity,
+    dealNo: base.dealNo,
   };
 }
 
@@ -10785,9 +13094,43 @@ function findBrokerHeaderIndex(lines, mode = "broker1") {
   });
 }
 
+function brokerFieldIndexes(headers, mode = "broker1") {
+  const aliases = brokerColumnAliases(mode);
+  return {
+    date: brokerHeaderIndex(headers, aliases.date),
+    time: brokerHeaderIndex(headers, aliases.time),
+    symbol: brokerHeaderIndex(headers, aliases.symbol),
+    name: brokerHeaderIndex(headers, aliases.name),
+    side: brokerHeaderIndex(headers, aliases.side),
+    price: brokerHeaderIndex(headers, aliases.price),
+    quantity: brokerHeaderIndex(headers, aliases.quantity),
+    dealNo: brokerHeaderIndex(headers, aliases.dealNo),
+  };
+}
+
+function brokerRequiredIndexScore(indexes) {
+  return ["date", "symbol", "name", "side", "price", "quantity"].reduce((sum, key) => sum + (indexes[key] >= 0 ? 1 : 0), 0);
+}
+
+function detectBrokerTemplate(lines, requestedMode = "broker1") {
+  const modes = requestedMode === "auto"
+    ? ["broker1", "broker2", "generic", "huatai", "guotai", "eastmoney", "galaxy", "cms", "citic", "gf"]
+    : [requestedMode || "broker1"];
+  let best = { mode: requestedMode, headerIndex: -1, headers: [], indexes: {}, score: -1 };
+  for (const mode of modes) {
+    const headerIndex = findBrokerHeaderIndex(lines, mode);
+    if (headerIndex < 0) continue;
+    const headers = splitBrokerLine(lines[headerIndex]);
+    const indexes = brokerFieldIndexes(headers, mode);
+    const score = brokerRequiredIndexScore(indexes) + (indexes.time >= 0 ? 0.25 : 0) + (indexes.dealNo >= 0 ? 0.25 : 0);
+    if (score > best.score) best = { mode, headerIndex, headers, indexes, score };
+  }
+  return best;
+}
+
 function looksLikeBrokerText(text, mode = "broker1") {
   const lines = String(text || "").split(/\r?\n/).slice(0, 30);
-  return findBrokerHeaderIndex(lines, mode) >= 0;
+  return detectBrokerTemplate(lines, mode).headerIndex >= 0;
 }
 
 function brokerTradeKey(trade) {
@@ -10801,10 +13144,37 @@ function brokerTradeKey(trade) {
   ].join("|");
 }
 
+function brokerCoreTradeKey(trade) {
+  return [
+    trade.date,
+    normalizeSymbol(trade.symbol),
+    trade.side,
+    Number(trade.price).toFixed(4),
+    Number(trade.quantity).toFixed(0),
+  ].join("|");
+}
+
+function brokerTradeForSave(trade) {
+  const { duplicateReason, duplicateKey, sourceRow, sourceMode, importIndexes, ...clean } = trade;
+  return clean;
+}
+
 function brokerCreatedAt(date, time, offset = 0) {
   const safeTime = /^\d{2}:\d{2}:\d{2}$/.test(time) ? time : "09:30:00";
   const stamp = Date.parse(`${date}T${safeTime}`);
   return Number.isFinite(stamp) ? stamp + offset : Date.now() + offset;
+}
+
+function normalizeBrokerSide(sideText, mode = "broker1") {
+  const text = cleanBrokerCell(sideText).replace(/\s/g, "");
+  if (!text) return "";
+  const buyWords = ["买入", "证券买入", "担保品买入", "融资买入", "买入成交", "B"];
+  const sellWords = ["卖出", "证券卖出", "担保品卖出", "融券卖出", "卖券还款", "卖出成交", "S"];
+  if (mode === "broker1" && text === "买入") return "buy";
+  if (mode === "broker1" && text === "卖出") return "sell";
+  if (buyWords.some((word) => text === word || text.includes(word))) return "buy";
+  if (sellWords.some((word) => text === word || text.includes(word))) return "sell";
+  return "";
 }
 
 function isReverseRepoTrade(symbol, name) {
@@ -10863,26 +13233,17 @@ function parseBrokerTrades(text, mode = "broker1") {
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean);
-  const headerIndex = findBrokerHeaderIndex(lines, mode);
+  const detected = detectBrokerTemplate(lines, mode);
+  const headerIndex = detected.headerIndex;
   if (headerIndex < 0) {
-    return { trades: [], skipped: lines.length, reason: "没有找到成交/交易日期和证券代码表头；如果是 xls/xlsx，请先另存为 CSV 或 TXT 后导入" };
+    return { trades: [], skipped: lines.length, reason: "没有找到成交/交易日期和证券代码表头；如果是 xls/xlsx，请先另存为 CSV 或 TXT 后导入", mode, headers: [], indexes: {}, headerIndex: -1, totalRows: lines.length };
   }
 
-  const aliases = brokerColumnAliases(mode);
-  const headers = splitBrokerLine(lines[headerIndex]);
-  const indexes = {
-    date: brokerHeaderIndex(headers, aliases.date),
-    time: brokerHeaderIndex(headers, aliases.time),
-    symbol: brokerHeaderIndex(headers, aliases.symbol),
-    name: brokerHeaderIndex(headers, aliases.name),
-    side: brokerHeaderIndex(headers, aliases.side),
-    price: brokerHeaderIndex(headers, aliases.price),
-    quantity: brokerHeaderIndex(headers, aliases.quantity),
-    dealNo: brokerHeaderIndex(headers, aliases.dealNo),
-  };
+  const headers = detected.headers;
+  const indexes = detected.indexes;
   const required = [indexes.date, indexes.symbol, indexes.name, indexes.side, indexes.price, indexes.quantity];
   if (required.some((index) => index < 0)) {
-    return { trades: [], skipped: lines.length - headerIndex - 1, reason: "表头缺少日期、代码、名称、方向、价格或数量" };
+    return { trades: [], skipped: lines.length - headerIndex - 1, reason: "表头缺少日期、代码、名称、方向、价格或数量", mode: detected.mode, headers, indexes, headerIndex, totalRows: lines.length };
   }
 
   const trades = [];
@@ -10890,9 +13251,8 @@ function parseBrokerTrades(text, mode = "broker1") {
   for (let i = headerIndex + 1; i < lines.length; i += 1) {
     const cells = splitBrokerLine(lines[i]);
     const sideText = cells[indexes.side] || "";
-    const isBuy = mode === "broker2" ? sideText.includes("买入") : sideText === "买入";
-    const isSell = mode === "broker2" ? sideText.includes("卖出") : sideText === "卖出";
-    if (!isBuy && !isSell) {
+    const side = normalizeBrokerSide(sideText, detected.mode);
+    if (!side) {
       skipped += 1;
       continue;
     }
@@ -10914,18 +13274,82 @@ function parseBrokerTrades(text, mode = "broker1") {
       date,
       symbol,
       name,
-      side: isBuy ? "buy" : "sell",
+      side,
       price,
       quantity,
       note: `券商导入${time ? ` ${time}` : ""}${dealNo ? ` 编号${dealNo}` : ""}`,
       createdAt: brokerCreatedAt(date, time, trades.length),
+      sourceRow: i + 1,
+      sourceMode: detected.mode,
     });
   }
-  return { trades, skipped, reason: "" };
+  return { trades, skipped, reason: "", mode: detected.mode, headers, indexes, headerIndex, totalRows: lines.length };
 }
+
+function renderBrokerMappingPreview(summary = {}) {
+  if (!els.brokerImportMapping) return;
+  if (!summary || !summary.headers || !summary.headers.length) {
+    els.brokerImportMapping.innerHTML = "";
+    return;
+  }
+  const fieldLabels = {
+    date: "日期",
+    time: "时间",
+    symbol: "代码",
+    name: "名称",
+    side: "方向",
+    price: "价格",
+    quantity: "数量",
+    dealNo: "成交/委托编号",
+  };
+  const fields = ["date", "time", "symbol", "name", "side", "price", "quantity", "dealNo"];
+  const mapping = fields.map((field) => {
+    const index = summary.indexes?.[field];
+    return `<div><dt>${fieldLabels[field]}</dt><dd>${index >= 0 ? escapeHtml(summary.headers[index]) : "未识别"}</dd></div>`;
+  }).join("");
+  els.brokerImportMapping.innerHTML = `
+    <article class="mobile-card">
+      <div class="card-title">
+        <strong>字段映射预览</strong>
+        <span>${escapeHtml(brokerTemplateLabel(summary.mode))} · 表头第 ${Number(summary.headerIndex) + 1} 行</span>
+      </div>
+      <dl>${mapping}</dl>
+    </article>
+  `;
+}
+
+function renderBrokerDuplicatePreview(duplicates = []) {
+  if (!els.brokerImportDuplicates) return;
+  if (!duplicates.length) {
+    els.brokerImportDuplicates.innerHTML = "";
+    return;
+  }
+  const rows = duplicates.slice(0, 10);
+  els.brokerImportDuplicates.innerHTML = rows.map((trade) => `
+    <article class="mobile-card">
+      <div class="card-title">
+        <strong>${escapeHtml(trade.name)} ${escapeHtml(trade.symbol)}</strong>
+        <span>${trade.duplicateReason || "重复成交"}</span>
+      </div>
+      <dl>
+        <div><dt>日期</dt><dd>${trade.date}</dd></div>
+        <div><dt>方向</dt><dd class="${trade.side === "buy" ? "positive" : "negative"}">${trade.side === "buy" ? "买入" : "卖出"}</dd></div>
+        <div><dt>价格</dt><dd>${number(trade.price, 3)}</dd></div>
+        <div><dt>数量</dt><dd>${number(trade.quantity, 0)}</dd></div>
+        <div><dt>来源行</dt><dd>${trade.sourceRow || "-"}</dd></div>
+      </dl>
+    </article>
+  `).join("");
+  if (duplicates.length > rows.length) {
+    els.brokerImportDuplicates.innerHTML += `<p class="history-note">还有 ${duplicates.length - rows.length} 笔重复/疑似重复成交需要核对。</p>`;
+  }
+}
+
 function renderBrokerImportPreview(summary = {}) {
   const rows = pendingBrokerTrades;
   els.confirmBrokerImport.disabled = rows.length === 0;
+  renderBrokerMappingPreview(summary);
+  renderBrokerDuplicatePreview(summary.duplicateRows || []);
   els.brokerImportSummary.innerHTML = [
     { label: "可导入", value: `${rows.length} 笔`, tone: rows.length ? "positive" : "" },
     { label: "重复跳过", value: `${summary.duplicates || 0} 笔`, tone: "" },
@@ -10967,8 +13391,9 @@ function renderBrokerImportPreview(summary = {}) {
 
 function clearBrokerImportPreview() {
   pendingBrokerTrades = [];
+  pendingBrokerImportSummary = null;
   els.brokerImportFile.value = "";
-  els.brokerImportStatus.textContent = "券商1保持原格式；券商2建议导入 CSV/TXT，支持“成交日期/交易日期、证券买入/证券卖出”，GC001 等逆回购会忽略。xls/xlsx 请先另存为 CSV。导入前会先预览。";
+  els.brokerImportStatus.textContent = BROKER_IMPORT_HELP_TEXT;
   renderBrokerImportPreview();
 }
 
@@ -10978,25 +13403,36 @@ function handleBrokerImportFile(file) {
   reader.onload = () => {
     const mode = els.brokerImportMode.value || "broker1";
     const parsed = parseBrokerTrades(decodeBrokerFile(reader.result, mode), mode);
-    const existingKeys = new Set(state.trades.map(brokerTradeKey));
+    const existingExactKeys = new Set(state.trades.map(brokerTradeKey));
+    const existingCoreKeys = new Set(state.trades.map(brokerCoreTradeKey));
     const seenKeys = new Set();
+    const seenCoreKeys = new Set();
+    const duplicateRows = [];
     let duplicates = 0;
     pendingBrokerTrades = parsed.trades.filter((trade) => {
       const key = brokerTradeKey(trade);
-      if (existingKeys.has(key) || seenKeys.has(key)) {
+      const coreKey = brokerCoreTradeKey(trade);
+      if (existingExactKeys.has(key) || seenKeys.has(key)) {
         duplicates += 1;
+        duplicateRows.push({ ...trade, duplicateReason: existingExactKeys.has(key) ? "已存在相同成交" : "文件内重复成交" });
         return false;
       }
+      if (existingCoreKeys.has(coreKey) || seenCoreKeys.has(coreKey)) {
+        duplicateRows.push({ ...trade, duplicateReason: existingCoreKeys.has(coreKey) ? "疑似已导入，默认仍导入" : "文件内疑似重复，默认仍导入" });
+      }
       seenKeys.add(key);
+      seenCoreKeys.add(coreKey);
       return true;
     });
+    pendingBrokerImportSummary = { ...parsed, duplicates, duplicateRows };
     els.brokerImportStatus.textContent = parsed.reason
       ? `识别失败：${parsed.reason}`
-      : `已读取 ${file.name}，费用将按当前设置重新计算。`;
-    renderBrokerImportPreview({ skipped: parsed.skipped, duplicates, reason: parsed.reason });
+      : `已读取 ${file.name}，识别为 ${brokerTemplateLabel(parsed.mode)}，费用将按当前设置重新计算。`;
+    renderBrokerImportPreview(pendingBrokerImportSummary);
   };
   reader.onerror = () => {
     pendingBrokerTrades = [];
+    pendingBrokerImportSummary = null;
     els.brokerImportStatus.textContent = "文件读取失败，请重新选择。";
     renderBrokerImportPreview({ reason: "文件读取失败" });
   };
@@ -11516,6 +13952,7 @@ function applyHistoricalRebuild() {
     return;
   }
   if (!confirm(`确认用 ${pendingHistoricalRebuild.startDate} 第一笔成交前的倒推结果替换初始现金和初始持仓吗？交易流水不会删除。`)) return;
+  createVersionSnapshot("倒推写入前快照").catch((error) => console.warn("Version snapshot before rebuild failed", error));
   state.settings.initialCash = roundMoney(pendingHistoricalRebuild.initialCash);
   state.initialPositions = pendingHistoricalRebuild.positions.filter((item) => item.quantity > 0).map((item) => ({ id: uid(), symbol: item.symbol, name: item.name || item.symbol, quantity: Math.round(item.quantity), cost: roundMoney(item.quantity * item.price), price: item.price, date: pendingHistoricalRebuild.startDate }));
   state.historicalRebuild = { snapshotDate: pendingHistoricalRebuild.snapshotDate, cash: pendingHistoricalRebuild.sourceCash, holdings: pendingHistoricalRebuild.sourceHoldings, appliedStartDate: pendingHistoricalRebuild.startDate, currentSnapshot: historicalCurrentSnapshotPayload({ snapshotDate: pendingHistoricalRebuild.snapshotDate, cash: pendingHistoricalRebuild.sourceCash, holdings: pendingHistoricalRebuild.sourceHoldings, basisMode: pendingHistoricalRebuild.basisMode }) };
@@ -11549,16 +13986,7 @@ function importData(file) {
         if (!ok) return;
       }
 
-      state.trades = next.trades;
-      state.prices = next.prices;
-      state.previousCloses = next.previousCloses;
-      state.initialPositions = next.initialPositions;
-      state.corporateActions = next.corporateActions;
-      state.cashTransfers = next.cashTransfers;
-      state.closeSnapshots = next.closeSnapshots;
-      state.stockPlans = next.stockPlans;
-      state.settings = next.settings;
-      state.historicalRebuild = next.historicalRebuild;
+      applyBackupState(next);
       save();
       renderAll();
       alert(`导入完成。\n${backupSummaryText(nextSummary)}\n\n如果发现不对，可以在设置里点“撤销最近导入”。`);
@@ -11585,16 +14013,7 @@ function undoLastImport() {
   }
   const summary = summarizeBackupData(previous);
   if (!confirm(`确认恢复到最近导入前的数据吗？\n${backupSummaryText(summary)}`)) return;
-  state.trades = previous.trades;
-  state.prices = previous.prices;
-  state.previousCloses = previous.previousCloses;
-  state.initialPositions = previous.initialPositions;
-  state.corporateActions = previous.corporateActions;
-  state.cashTransfers = previous.cashTransfers;
-  state.closeSnapshots = previous.closeSnapshots;
-  state.stockPlans = previous.stockPlans;
-  state.settings = previous.settings;
-  state.historicalRebuild = previous.historicalRebuild;
+  applyBackupState(previous);
   save();
   localStorage.removeItem(IMPORT_UNDO_DATA_KEY);
   localStorage.removeItem(IMPORT_UNDO_META_KEY);
@@ -11658,7 +14077,7 @@ function openModal(id) {
     "range-modal": renderRangeSummary,
     "match-range-modal": renderMatchRangeQuery,
     "pair-modal": renderTradePairPnL,
-    "dividend-modal": () => renderDividendDetails(dividendModalSymbolFilter),
+    "dividend-modal": () => renderDividendDetails(dividendModalSymbolFilter, dividendModalYearFilter),
     "cash-flow-modal": renderCashFlowDetails,
     "report-year-modal": renderReportYear,
   };
@@ -11674,7 +14093,10 @@ function closeModal(modal) {
 
 document.querySelectorAll("[data-modal-open]").forEach((button) => {
   button.addEventListener("click", () => {
-    if (button.dataset.modalOpen === "dividend-modal") dividendModalSymbolFilter = "";
+    if (button.dataset.modalOpen === "dividend-modal") {
+      dividendModalSymbolFilter = "";
+      dividendModalYearFilter = "";
+    }
     openModal(button.dataset.modalOpen);
   });
 });
@@ -11719,6 +14141,10 @@ els.form.addEventListener("submit", (event) => {
 document.querySelector("#reset-form").addEventListener("click", resetForm);
 els.brokerImportFile.addEventListener("change", (event) => {
   const file = event.target.files && event.target.files[0];
+  if (file) handleBrokerImportFile(file);
+});
+els.brokerImportMode.addEventListener("change", () => {
+  const file = els.brokerImportFile.files && els.brokerImportFile.files[0];
   if (file) handleBrokerImportFile(file);
 });
 els.confirmBrokerImport.addEventListener("click", confirmBrokerImport);
@@ -11776,6 +14202,38 @@ optionalElement("#add-cash-transfer").addEventListener("click", addCashTransfer)
 optionalElement("#reset-cash-transfer").addEventListener("click", resetCashTransferForm);
 optionalElement("#add-corporate-action").addEventListener("click", addCorporateAction);
 optionalElement("#reset-corporate-action").addEventListener("click", resetCorporateActionForm);
+if (els.openYearDividendDetail) {
+  els.openYearDividendDetail.addEventListener("click", () => {
+    const date = validDateString(els.actionDate.value) ? els.actionDate.value : today();
+    dividendModalSymbolFilter = "";
+    dividendModalYearFilter = date.slice(0, 4);
+    openModal("dividend-modal");
+  });
+}
+function setDividendDetailYear(year) {
+  dividendModalYearFilter = year ? String(year) : "";
+  if (els.dividendDetailYear) els.dividendDetailYear.value = dividendModalYearFilter;
+  renderDividendDetails(dividendModalSymbolFilter, dividendModalYearFilter);
+}
+els.dividendDetailYear?.addEventListener("change", () => {
+  const year = Number(els.dividendDetailYear.value);
+  setDividendDetailYear(year >= 2000 && year <= 2099 ? year : "");
+});
+els.dividendDetailPrevYear?.addEventListener("click", () => {
+  const year = Number(dividendModalYearFilter || els.dividendDetailYear?.value || today().slice(0, 4));
+  setDividendDetailYear(year - 1);
+});
+els.dividendDetailCurrentYear?.addEventListener("click", () => setDividendDetailYear(today().slice(0, 4)));
+els.dividendDetailNextYear?.addEventListener("click", () => {
+  const year = Number(dividendModalYearFilter || els.dividendDetailYear?.value || today().slice(0, 4));
+  setDividendDetailYear(year + 1);
+});
+els.dividendDetailAllYears?.addEventListener("click", () => setDividendDetailYear(""));
+els.fetchCorporateActions.addEventListener("click", buildCorporateActionImportPreview);
+els.confirmCorporateActionImport.addEventListener("click", confirmCorporateActionImport);
+els.clearCorporateActionImport.addEventListener("click", clearCorporateActionImportPreview);
+els.corporateActionImportSymbol.addEventListener("change", () => { els.corporateActionImportSymbol.value = normalizeSymbol(els.corporateActionImportSymbol.value); });
+els.corporateActionImportSymbol.addEventListener("blur", () => { els.corporateActionImportSymbol.value = normalizeSymbol(els.corporateActionImportSymbol.value); });
 els.actionType.addEventListener("change", updateCorporateActionNet);
 els.actionDate.addEventListener("change", updateCorporateActionNet);
 els.actionSymbol.addEventListener("input", updateCorporateActionNet);
@@ -11791,6 +14249,7 @@ optionalElement("#clear-initial-positions").addEventListener("click", () => {
 optionalElement("#refresh-quotes").addEventListener("click", refreshQuotes);
 document.querySelector("#clear-data").addEventListener("click", () => {
   if (!confirm("确定清空全部数据吗？")) return;
+  createVersionSnapshot("清空前快照").catch((error) => console.warn("Version snapshot before clear failed", error));
   state.trades = [];
   state.prices = {};
   state.previousCloses = {};
@@ -11804,6 +14263,29 @@ document.querySelector("#clear-data").addEventListener("click", () => {
   save();
   renderAll();
 });
+
+if (els.createVersionSnapshot) {
+  els.createVersionSnapshot.addEventListener("click", async () => {
+    try {
+      els.createVersionSnapshot.disabled = true;
+      await createVersionSnapshot("手动快照");
+      if (els.versionSnapshotStatus) els.versionSnapshotStatus.textContent = "已保存手动版本快照。";
+    } catch (error) {
+      if (els.versionSnapshotStatus) els.versionSnapshotStatus.textContent = `保存版本快照失败：${error.message || error}`;
+    } finally {
+      els.createVersionSnapshot.disabled = false;
+    }
+  });
+}
+
+if (els.versionSnapshotList) {
+  els.versionSnapshotList.addEventListener("click", (event) => {
+    const restoreId = event.target.closest("[data-restore-version-snapshot]")?.dataset.restoreVersionSnapshot;
+    const deleteId = event.target.closest("[data-delete-version-snapshot]")?.dataset.deleteVersionSnapshot;
+    if (restoreId) restoreVersionSnapshot(restoreId);
+    if (deleteId) deleteVersionSnapshot(deleteId);
+  });
+}
 
 document.querySelector("#import-data").addEventListener("change", (event) => {
   const [file] = event.target.files;
@@ -11926,6 +14408,7 @@ els.reportSummaryMetrics.addEventListener("click", (event) => {
   const button = event.target.closest("[data-report-dividend-symbol]");
   if (!button) return;
   dividendModalSymbolFilter = button.dataset.reportDividendSymbol || "";
+  dividendModalYearFilter = "";
   openModal("dividend-modal");
 });
 els.reportYearSummary?.addEventListener("click", (event) => {
@@ -11941,6 +14424,7 @@ els.reportYearSummary?.addEventListener("click", (event) => {
   const button = event.target.closest("[data-report-dividend-symbol]");
   if (!button) return;
   dividendModalSymbolFilter = button.dataset.reportDividendSymbol || "";
+  dividendModalYearFilter = "";
   openModal("dividend-modal");
 });
 els.rangeStartDate.addEventListener("change", renderRangeSummary);
@@ -11997,6 +14481,60 @@ els.detailMatchStartDate.addEventListener("change", renderStockDetail);
 els.detailMatchEndDate.addEventListener("change", renderStockDetail);
 els.detailTimelineStartDate.addEventListener("change", renderStockDetail);
 els.detailTimelineEndDate.addEventListener("change", renderStockDetail);
+els.stockV2Tabs.addEventListener("click", (event) => {
+  const tab = event.target.closest("[data-stock-v2-tab]");
+  if (!tab) return;
+  selectedStockV2Tab = tab.dataset.stockV2Tab || "matches";
+  renderStockDetailV2();
+});
+els.stockV2Content.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-stock-v2-more]");
+  if (!button) return;
+  if (button.dataset.stockV2More === "dates") stockV2DateLimit += 10;
+  if (button.dataset.stockV2More === "lots") stockV2LotLimit += 10;
+  renderStockDetailV2();
+});
+els.stockV2Back.addEventListener("click", () => setView("positions"));
+els.stockV2OldDetail.addEventListener("click", () => openStockDetail(selectedDetailSymbol));
+els.loadStockKline.addEventListener("click", renderStockKline);
+els.stockKlineSymbol.addEventListener("change", renderStockKline);
+els.stockKlineSource.addEventListener("change", renderStockKline);
+els.stockKlineStart.addEventListener("change", renderStockKline);
+els.stockKlineEnd.addEventListener("change", renderStockKline);
+els.stockKlineWindow?.addEventListener("input", redrawStockKlineFromCache);
+els.stockKlineLast120.addEventListener("click", () => {
+  const range = defaultKlineRange(els.stockKlineSymbol.value, 120);
+  els.stockKlineStart.value = range.startDate;
+  els.stockKlineEnd.value = range.endDate;
+  if (els.stockKlineWindow) els.stockKlineWindow.value = "0";
+  renderStockKline();
+});
+els.stockKlineAll.addEventListener("click", () => {
+  const symbol = normalizeSymbol(els.stockKlineSymbol.value || selectedDetailSymbol);
+  const start = firstStockDate(symbol);
+  const range = defaultKlineRange(symbol, 520);
+  els.stockKlineStart.value = start || range.startDate;
+  els.stockKlineEnd.value = range.endDate;
+  if (els.stockKlineWindow) els.stockKlineWindow.value = "0";
+  renderStockKline();
+});
+els.stockKlineChart?.addEventListener("click", (event) => {
+  const point = event.target.closest("[data-kline-point-side]");
+  if (!point) return;
+  renderStockKlinePointDetail(point.dataset.klinePointSide, point.dataset.klinePointDate, point.dataset.klinePointPrice);
+});
+els.stockKlineChart?.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  const point = event.target.closest("[data-kline-point-side]");
+  if (!point) return;
+  event.preventDefault();
+  renderStockKlinePointDetail(point.dataset.klinePointSide, point.dataset.klinePointDate, point.dataset.klinePointPrice);
+});
+document.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-open-kline-symbol]");
+  if (!button) return;
+  openStockKlineModal(button.dataset.openKlineSymbol || selectedDetailSymbol);
+});
 els.recordsBody.addEventListener("click", (event) => {
   const editId = event.target.dataset.edit;
   const deleteId = event.target.dataset.delete;
@@ -12032,11 +14570,15 @@ els.recordsCards.addEventListener("click", (event) => {
 });
 
 els.positionsBody.addEventListener("click", (event) => {
+  const v2Symbol = event.target.dataset.detailV2Symbol;
+  if (v2Symbol) openStockDetailV2(v2Symbol);
   const symbol = event.target.dataset.detailSymbol;
   if (symbol) openStockDetail(symbol);
 });
 
 els.positionsCards.addEventListener("click", (event) => {
+  const v2Symbol = event.target.dataset.detailV2Symbol;
+  if (v2Symbol) openStockDetailV2(v2Symbol);
   const symbol = event.target.dataset.detailSymbol;
   if (symbol) openStockDetail(symbol);
 });
@@ -12135,6 +14677,32 @@ els.corporateActionsCards.addEventListener("click", (event) => {
   renderAll();
 });
 
+function handleDividendDetailAction(event) {
+  const editButton = event.target.closest("[data-edit-dividend-action]");
+  if (editButton) {
+    const id = editButton.dataset.editDividendAction;
+    closeModal(document.querySelector("#dividend-modal"));
+    editCorporateAction(id);
+    return;
+  }
+
+  const deleteButton = event.target.closest("[data-delete-dividend-action]");
+  if (!deleteButton) return;
+  const id = deleteButton.dataset.deleteDividendAction;
+  const action = state.corporateActions.find((item) => item.id === id);
+  if (!action) return;
+  const label = [action.name, action.symbol, action.date].filter(Boolean).join(" ");
+  if (!confirm(`确认删除${label ? ` ${label}` : ""} 的分红记录吗？`)) return;
+  state.corporateActions = state.corporateActions.filter((item) => item.id !== id);
+  if (els.editingActionId.value === id) resetCorporateActionForm();
+  save();
+  renderAll();
+  renderDividendDetails(dividendModalSymbolFilter, dividendModalYearFilter);
+}
+
+els.dividendDetailBody?.addEventListener("click", handleDividendDetailAction);
+els.dividendDetailCards?.addEventListener("click", handleDividendDetailAction);
+
 els.cashTransferCards.addEventListener("click", (event) => {
   const editId = event.target.dataset.editCashTransfer;
   if (editId) {
@@ -12146,11 +14714,18 @@ els.cashTransferCards.addEventListener("click", (event) => {
   deleteCashTransfer(id);
 });
 
-load();
-resetForm();
-resetInitialPositionForm();
-resetCorporateActionForm();
-renderAll();
+loadAppState()
+  .catch((error) => {
+    console.warn("App state load failed", error);
+    load();
+  })
+  .finally(() => {
+    resetForm();
+    resetInitialPositionForm();
+    resetCorporateActionForm();
+    renderAll();
+    renderVersionSnapshots();
+  });
 
 if ("serviceWorker" in navigator && window.location.protocol.startsWith("http")) {
   window.addEventListener("load", () => {
@@ -12162,48 +14737,3 @@ if ("serviceWorker" in navigator && window.location.protocol.startsWith("http"))
     </script>
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
