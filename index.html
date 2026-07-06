@@ -1005,6 +1005,35 @@ body.modal-open {
   background: linear-gradient(180deg, rgba(53, 208, 127, 0.15), rgba(8, 35, 25, 0.78));
 }
 
+.pnl-day.closed-day {
+  border-color: rgba(190, 120, 255, 0.72);
+  background: linear-gradient(180deg, rgba(122, 67, 196, 0.3), rgba(40, 22, 74, 0.86));
+  color: #e9d5ff;
+}
+
+.pnl-day.missing-day {
+  border-color: rgba(255, 77, 98, 0.72);
+  background: linear-gradient(180deg, rgba(255, 77, 98, 0.18), rgba(36, 12, 18, 0.82));
+}
+
+.pnl-day.future-day {
+  border-color: rgba(148, 163, 184, 0.28);
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.58), rgba(15, 23, 42, 0.62));
+  color: var(--muted);
+}
+
+.pnl-day.missing-day span {
+  color: var(--danger);
+}
+
+.pnl-day.closed-day span {
+  color: #d8b4fe;
+}
+
+.pnl-day.future-day span {
+  color: var(--muted);
+}
+
 .pnl-day strong {
   font-size: 13px;
 }
@@ -4775,15 +4804,18 @@ details[open] > summary .expand-hint::after {
                   每次补
                   <input type="number" id="auto-close-batch-size" min="1" max="60" step="1" value="5" />
                 </label>
-                <label class="wide">
-                  自动补忽略代码
-                  <input type="text" id="auto-close-ignore-symbols" placeholder="例如 688818，多个用逗号分隔" />
-                </label>
                 <label><input type="checkbox" id="auto-close-continuous" /> 连续补完</label><button class="ghost-button small" id="auto-fill-close-snapshots" type="button">自动补历史收盘</button><button class="danger-button small" id="stop-auto-close-fill" type="button" disabled>停止自动补</button>
               </div>
             </div>
             <div class="range-summary" id="close-snapshot-summary"></div>
             <div class="metric-grid three spacing-top" id="auto-close-summary"></div>
+            <div class="form-actions spacing-top">
+              <button class="ghost-button small" id="audit-day-pnl" type="button">校验历史当日盈亏</button>
+              <button class="primary-button small" id="fix-day-pnl-audit" type="button" disabled>修正差异</button>
+              <button class="ghost-button small" id="clear-day-pnl-audit" type="button" disabled>清除报告</button>
+            </div>
+            <div class="range-summary spacing-top" id="day-pnl-audit-summary"></div>
+            <div class="mobile-list spacing-top" id="day-pnl-audit-list"></div>
             <p class="save-status" id="close-snapshot-status"></p>
             <div class="table-wrap compact-table">
               <table>
@@ -5657,6 +5689,35 @@ details[open] > summary .expand-hint::after {
 
           <section class="panel spacing-top">
             <div class="panel-header">
+              <div>
+                <h3>交易所休市公告源</h3>
+                <span>每年 1 月 1 日后按上交所/深交所年度休市公告登记整年日历；未登记年份不自动认定休市。</span>
+              </div>
+            </div>
+            <div class="range-summary" id="holiday-calendar-status"></div>
+            <div class="form-actions">
+              <button class="primary-button" id="update-holiday-calendar" type="button">从交易所更新本年</button>
+              <a class="ghost-button" href="https://www.sse.com.cn/disclosure/announcement/general/" target="_blank" rel="noreferrer">上交所公告</a>
+              <a class="ghost-button" href="https://www.szse.cn/disclosure/notice/general/" target="_blank" rel="noreferrer">深交所公告</a>
+            </div>
+            <div class="form-grid compact spacing-top">
+              <label>
+                手动休市日期
+                <input type="date" id="manual-holiday-date" />
+              </label>
+              <label>
+                原因
+                <input type="text" id="manual-holiday-reason" placeholder="例如 交易所临时休市" />
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="ghost-button" id="add-manual-holiday" type="button">添加休市日期</button>
+            </div>
+            <div class="mobile-list spacing-top" id="manual-holiday-list"></div>
+          </section>
+
+          <section class="panel spacing-top">
+            <div class="panel-header">
               <h3>初始持仓</h3>
               <span id="initial-position-mode">用于录入开始使用工具之前已经持有的股票</span>
             </div>
@@ -5919,8 +5980,74 @@ const defaultSettings = {
   lastBackupAt: "",
   autoCloseSource: "auto",
   autoCloseBatchSize: 5,
-  autoCloseIgnoreSymbols: "",
   autoCloseContinuous: false,
+  exchangeHolidayCalendars: {},
+  lastHolidayCalendarCheckYear: "",
+  manualMarketHolidays: {},
+};
+
+const EXCHANGE_HOLIDAY_CALENDARS = {
+  2025: {
+    source: "待交易所公告更新",
+    sourceTitle: "2025 年全年休市安排",
+    completeYear: false,
+    sourceUrls: [
+      "https://www.sse.com.cn/disclosure/announcement/general/",
+      "https://www.szse.cn/disclosure/notice/general/",
+    ],
+    updatedAt: "2026-07-06",
+    holidays: {
+      "2025-01-01": "元旦休市",
+      "2025-01-28": "春节休市",
+      "2025-01-29": "春节休市",
+      "2025-01-30": "春节休市",
+      "2025-01-31": "春节休市",
+      "2025-02-03": "春节休市",
+      "2025-02-04": "春节休市",
+      "2025-04-04": "清明休市",
+      "2025-05-01": "劳动节休市",
+      "2025-05-02": "劳动节休市",
+      "2025-05-05": "劳动节休市",
+      "2025-06-02": "端午休市",
+      "2025-10-01": "国庆/中秋休市",
+      "2025-10-02": "国庆/中秋休市",
+      "2025-10-03": "国庆/中秋休市",
+      "2025-10-06": "国庆/中秋休市",
+      "2025-10-07": "国庆/中秋休市",
+      "2025-10-08": "国庆/中秋休市",
+    },
+  },
+  2026: {
+    source: "交易所年度休市公告",
+    sourceTitle: "2026 年全年休市安排",
+    completeYear: true,
+    sourceUrls: [
+      "https://www.sse.com.cn/disclosure/announcement/general/",
+      "https://www.szse.cn/disclosure/notice/general/",
+    ],
+    updatedAt: "2026-07-06",
+    holidays: {
+      "2026-01-01": "元旦休市",
+      "2026-01-02": "元旦休市",
+      "2026-02-16": "春节休市",
+      "2026-02-17": "春节休市",
+      "2026-02-18": "春节休市",
+      "2026-02-19": "春节休市",
+      "2026-02-20": "春节休市",
+      "2026-02-23": "春节休市",
+      "2026-04-06": "清明休市",
+      "2026-05-01": "劳动节休市",
+      "2026-05-04": "劳动节休市",
+      "2026-05-05": "劳动节休市",
+      "2026-06-19": "端午休市",
+      "2026-09-25": "中秋休市",
+      "2026-10-01": "国庆休市",
+      "2026-10-02": "国庆休市",
+      "2026-10-05": "国庆休市",
+      "2026-10-06": "国庆休市",
+      "2026-10-07": "国庆休市",
+    },
+  },
 };
 
 const state = {
@@ -6095,10 +6222,20 @@ const els = {
   autoFillCloseSnapshots: optionalElement("#auto-fill-close-snapshots"),
   autoCloseSource: optionalElement("#auto-close-source"),
   autoCloseBatchSize: optionalElement("#auto-close-batch-size"),
-  autoCloseIgnoreSymbols: optionalElement("#auto-close-ignore-symbols"),
   autoCloseContinuous: optionalElement("#auto-close-continuous"),
   stopAutoCloseFill: optionalElement("#stop-auto-close-fill"),
   autoCloseSummary: optionalElement("#auto-close-summary"),
+  updateHolidayCalendar: optionalElement("#update-holiday-calendar"),
+  holidayCalendarStatus: optionalElement("#holiday-calendar-status"),
+  manualHolidayDate: optionalElement("#manual-holiday-date"),
+  manualHolidayReason: optionalElement("#manual-holiday-reason"),
+  addManualHoliday: optionalElement("#add-manual-holiday"),
+  manualHolidayList: optionalElement("#manual-holiday-list"),
+  auditDayPnl: optionalElement("#audit-day-pnl"),
+  fixDayPnlAudit: optionalElement("#fix-day-pnl-audit"),
+  clearDayPnlAudit: optionalElement("#clear-day-pnl-audit"),
+  dayPnlAuditSummary: optionalElement("#day-pnl-audit-summary"),
+  dayPnlAuditList: optionalElement("#day-pnl-audit-list"),
   closeSnapshotSummary: optionalElement("#close-snapshot-summary"),
   closeSnapshotStatus: optionalElement("#close-snapshot-status"),
   closeSnapshotBody: optionalElement("#close-snapshot-body"),
@@ -6319,6 +6456,10 @@ function money(value) {
     currency: "CNY",
     minimumFractionDigits: 2,
   }).format(Number(value) || 0);
+}
+
+function dayPnlMoney(value) {
+  return value === null ? "缺收盘价" : money(value);
 }
 
 function moneyInt(value) {
@@ -6893,6 +7034,42 @@ function dividendNet(action) {
   return (Number(action.value) || 0) - (Number(action.tax) || 0);
 }
 
+function stockDividendOnDate(symbol, date) {
+  const key = normalizeSymbol(symbol);
+  if (!key || !validDateString(date)) return 0;
+  return state.corporateActions
+    .filter((action) => action.type === "dividend")
+    .filter((action) => normalizeSymbol(action.symbol) === key && action.date === date)
+    .reduce((sum, action) => sum + dividendNet(action), 0);
+}
+
+function dividendTotalOnDate(date) {
+  if (!validDateString(date)) return 0;
+  return state.corporateActions
+    .filter((action) => action.type === "dividend" && action.date === date)
+    .reduce((sum, action) => sum + dividendNet(action), 0);
+}
+
+function stockDayCashFlow(symbol, date, trades = state.trades, preparedDayTrades = null) {
+  const key = normalizeSymbol(symbol);
+  const dayTrades = preparedDayTrades || sortedTrades(trades).filter((trade) => normalizeSymbol(trade.symbol) === key && trade.date === date);
+  return dayTrades.reduce(
+    (acc, trade) => {
+      const amount = tradeAmount(trade);
+      const fee = totalFee(trade);
+      if (trade.side === "buy") {
+        acc.buyQuantity += Number(trade.quantity) || 0;
+        acc.buyCashOut += amount + fee;
+      } else {
+        acc.sellQuantity += Number(trade.quantity) || 0;
+        acc.sellCashIn += amount - fee;
+      }
+      return acc;
+    },
+    { buyQuantity: 0, sellQuantity: 0, buyCashOut: 0, sellCashIn: 0 },
+  );
+}
+
 function positionQuantityOnDate(symbol, date) {
   const key = normalizeSymbol(symbol);
   if (!key || !validDateString(date)) return 0;
@@ -7063,10 +7240,11 @@ function calculatePortfolio(trades = state.trades, asOfDate = "") {
       if (book) book.adjustedCost -= dividendNet(action);
     });
 
-  const latestDate = orderedTrades.at(-1)?.date || today();
+  const dayPnlDate = asOfDate || today();
+  const previousCloseBySymbol = previousCloseMapFromSnapshots(dayPnlDate);
   const latestTradesBySymbol = new Map();
   orderedTrades.forEach((trade) => {
-    if (trade.date !== latestDate) return;
+    if (trade.date !== dayPnlDate) return;
     const symbol = normalizeSymbol(trade.symbol);
     if (!latestTradesBySymbol.has(symbol)) latestTradesBySymbol.set(symbol, []);
     latestTradesBySymbol.get(symbol).push(trade);
@@ -7082,7 +7260,7 @@ function calculatePortfolio(trades = state.trades, asOfDate = "") {
     const floating = marketValue - holdingCost;
     const totalPnl = quantity > 0 ? marketValue - adjustedCost : book.realized + stockDividendTotal(book.symbol);
     const assetRealized = totalPnl - floating;
-    const dayPnl = calculateStockDayPnl(book.symbol, quantity, price, trades, latestTradesBySymbol.get(book.symbol) || []);
+    const dayPnl = calculateStockDayPnl(book.symbol, quantity, price, trades, latestTradesBySymbol.get(book.symbol) || [], previousCloseBySymbol[book.symbol], dayPnlDate);
     realizedRows.push(...book.realizedRows);
 
     return {
@@ -7113,35 +7291,30 @@ function latestTradeDate(trades = state.trades) {
   return sortedTrades(trades).at(-1)?.date || today();
 }
 
-function calculateStockDayPnl(symbol, endingQuantity, currentPrice, trades = state.trades, preparedDayTrades = null) {
+function calculateStockDayPnl(symbol, endingQuantity, currentPrice, trades = state.trades, preparedDayTrades = null, previousCloseOverride = null, dayPnlDate = today()) {
   const key = normalizeSymbol(symbol);
   const price = Number(currentPrice) || 0;
-  const previousClose = Number(state.previousCloses[key]) || 0;
-  if (!price) return 0;
+  const previousClose = Number(previousCloseOverride) || Number(state.previousCloses[key]) || 0;
 
-  const dayTrades = preparedDayTrades || (() => {
-    const dayKey = latestTradeDate(trades);
-    return sortedTrades(trades).filter((trade) => normalizeSymbol(trade.symbol) === key && trade.date === dayKey);
-  })();
-  const traded = dayTrades.reduce(
-    (acc, trade) => {
-      const amount = tradeAmount(trade);
-      if (trade.side === "buy") {
-        acc.buyQuantity += trade.quantity;
-        acc.buyAmount += amount;
-      } else {
-        acc.sellQuantity += trade.quantity;
-        acc.sellAmount += amount;
-      }
-      acc.fees += totalFee(trade);
-      return acc;
-    },
-    { buyQuantity: 0, sellQuantity: 0, buyAmount: 0, sellAmount: 0, fees: 0 },
-  );
+  const traded = stockDayCashFlow(key, dayPnlDate, trades, preparedDayTrades);
   const openingQuantity = Math.max(0, endingQuantity - traded.buyQuantity + traded.sellQuantity);
-  const openingPrice = previousClose || price;
+  const dividend = stockDividendOnDate(key, dayPnlDate);
+  const hasActivity = traded.buyQuantity > 0 || traded.sellQuantity > 0 || dividend !== 0 || endingQuantity > 0 || openingQuantity > 0;
+  if (!hasActivity) return 0;
+  if (endingQuantity > 0 && price <= 0) return null;
+  if (openingQuantity > 0 && previousClose <= 0) return null;
 
-  return endingQuantity * price + traded.sellAmount - traded.buyAmount - openingQuantity * openingPrice - traded.fees;
+  const todayMarketValue = endingQuantity > 0 ? endingQuantity * price : 0;
+  const yesterdayMarketValue = openingQuantity > 0 ? openingQuantity * previousClose : 0;
+
+  return todayMarketValue - yesterdayMarketValue + traded.sellCashIn - traded.buyCashOut + dividend;
+}
+
+function sumDayPnlValues(items) {
+  return items.reduce((sum, item) => {
+    if (sum === null || item.dayPnl === null) return null;
+    return sum + (Number(item.dayPnl) || 0);
+  }, 0);
 }
 
 function uniqueTradeDates() {
@@ -7210,7 +7383,7 @@ function calculateSnapshotCalendarRows() {
       marketValue: Number(snapshot.marketValue) || 0,
       assets: Number(snapshot.assets) || 0,
       pnl: Number(snapshot.totalPnl) || 0,
-      periodPnl: Number(snapshot.dayPnl) || 0,
+      periodPnl: snapshot.dayPnl === null ? null : Number(snapshot.dayPnl) || 0,
       fromSnapshot: true,
     }));
 }
@@ -7413,11 +7586,15 @@ function periodPnlSummary(rows) {
   const monthKey = latest ? latest.date.slice(0, 7) : `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   const yearKey = latest ? latest.date.slice(0, 4) : String(now.getFullYear());
   const dayKey = latest ? latest.date : today();
+  const addPeriodPnl = (current, value) => {
+    if (current === null || value === null) return null;
+    return current + (Number(value) || 0);
+  };
   return rows.reduce(
     (acc, row) => {
-      if (row.date === dayKey) acc.day += row.periodPnl;
-      if (row.date.startsWith(monthKey)) acc.month += row.periodPnl;
-      if (row.date.startsWith(yearKey)) acc.year += row.periodPnl;
+      if (row.date === dayKey) acc.day = addPeriodPnl(acc.day, row.periodPnl);
+      if (row.date.startsWith(monthKey)) acc.month = addPeriodPnl(acc.month, row.periodPnl);
+      if (row.date.startsWith(yearKey)) acc.year = addPeriodPnl(acc.year, row.periodPnl);
       return acc;
     },
     { day: 0, month: 0, year: 0, dayKey, monthKey, yearKey },
@@ -7819,15 +7996,15 @@ function stockDayReport(symbol, date) {
   const buyAmount = tradeFlows.buyAmount;
   const sellAmount = tradeFlows.sellAmount;
   const fees = tradeFlows.fees;
-  const totalPnl = snapshotPosition ? Number(snapshotPosition.dayPnl) || 0 : 0;
+  const totalPnl = snapshotPosition?.dayPnl === null ? null : (snapshotPosition ? Number(snapshotPosition.dayPnl) || 0 : 0);
   const previousFromSnapshot = snapshotStockMarketValue(previousSnapshot, key);
   const netInflow = tradeFlows.buyFlow - tradeFlows.sellFlow - dividends;
-  const previousFromFlow = currentMarketValue - netInflow - totalPnl;
+  const previousFromFlow = totalPnl === null ? 0 : currentMarketValue - netInflow - totalPnl;
   const rawPreviousMarketValue = previousFromSnapshot > 0 ? previousFromSnapshot : (previousFromFlow > 0 ? previousFromFlow : 0);
   const previousMarketValue = rawPreviousMarketValue > 1 ? rawPreviousMarketValue : 0;
   const dailyReturnPnl = totalPnl;
   const dailyReturnBase = previousMarketValue + netInflow;
-  const dailyReturnRate = dailyReturnBase > 0 ? (dailyReturnPnl / dailyReturnBase) * 100 : null;
+  const dailyReturnRate = totalPnl !== null && dailyReturnBase > 0 ? (dailyReturnPnl / dailyReturnBase) * 100 : null;
 
   return {
     date,
@@ -8761,13 +8938,7 @@ function portfolioTotals() {
 
 function calculateDayPnl() {
   const { positions } = currentPortfolioSnapshot();
-  return positions.reduce((sum, position) => {
-    if (position.quantity <= 0) return sum;
-    const current = Number(state.prices[position.symbol]) || 0;
-    const previous = Number(state.previousCloses[position.symbol]) || 0;
-    if (!current || !previous) return sum;
-    return sum + position.quantity * (current - previous);
-  }, 0);
+  return sumDayPnlValues(positions);
 }
 
 function setView(viewId) {
@@ -9442,7 +9613,7 @@ function renderPositions() {
           <td>${money(position.averageCost)}</td>
           <td><input class="current-price-input" type="number" min="0" step="0.001" value="${position.currentPrice}" data-price-symbol="${position.symbol}" /></td>
           <td>${money(position.marketValue)}</td>
-          <td class="${classByValue(position.dayPnl)}">${money(position.dayPnl)}</td>
+          <td class="${classByValue(position.dayPnl)}">${dayPnlMoney(position.dayPnl)}</td>
           <td class="${twr.valid ? classByValue(twr.rate) : ""}">${twr.valid ? `${number(twr.rate, 2)}%` : "-"}</td>
           <td class="${classByValue(matchedRealized)}">${money(matchedRealized)}</td>
           <td class="${classByValue(position.totalPnl)}">${money(position.totalPnl)}</td>
@@ -9459,7 +9630,7 @@ function renderPositions() {
             <div><dt>数量</dt><dd>${number(position.quantity, 0)}</dd></div>
             <div><dt>市值</dt><dd>${money(position.marketValue)}</dd></div>
             <div><dt>现价</dt><dd><input class="current-price-input compact-price-input" type="number" min="0" step="0.001" value="${position.currentPrice}" data-price-symbol="${position.symbol}" /></dd></div>
-            <div><dt>当日</dt><dd class="${classByValue(position.dayPnl)}">${money(position.dayPnl)}</dd></div>
+            <div><dt>当日</dt><dd class="${classByValue(position.dayPnl)}">${dayPnlMoney(position.dayPnl)}</dd></div>
             <div><dt>总盈亏</dt><dd class="${classByValue(position.totalPnl)}">${money(position.totalPnl)}</dd></div>
             <div><dt>时间加权</dt><dd class="${twr.valid ? classByValue(twr.rate) : ""}">${twr.valid ? `${number(twr.rate, 2)}%` : "-"}</dd></div>
           </div>
@@ -9494,9 +9665,9 @@ function renderDashboard() {
   els.cost.textContent = money(initialAssets);
   if (els.unrealized) els.unrealized.textContent = money(totals.floating);
   els.floating.textContent = money(totalPnl);
-  els.dayPnl.textContent = money(dayPnl);
-  els.monthPnl.textContent = money(periodSummary.month);
-  els.yearPnl.textContent = money(periodSummary.year);
+  els.dayPnl.textContent = dayPnlMoney(dayPnl);
+  els.monthPnl.textContent = dayPnlMoney(periodSummary.month);
+  els.yearPnl.textContent = dayPnlMoney(periodSummary.year);
   if (els.realized) els.realized.textContent = money(assetRealizedPnl);
   els.totalFees.textContent = money(totalFees);
   if (els.totalTurnover) els.totalTurnover.textContent = `总成交 ${money(totalTurnover)}`;
@@ -9680,6 +9851,30 @@ function renderEquityCurve() {
   renderAssetLineChart(chronological);
 }
 
+function weekdayCalendarOffset(year, month) {
+  const firstDayOfWeek = new Date(year, month - 1, 1).getDay();
+  return firstDayOfWeek >= 1 && firstDayOfWeek <= 5 ? firstDayOfWeek - 1 : 0;
+}
+
+function renderClosedCalendarDay(day, reason) {
+  return `
+    <div class="pnl-day closed-day" title="${escapeHtml(reason)}">
+      <time>${day}</time>
+      <span>休市</span>
+      <small>${escapeHtml(reason.replace("休市", "")) || "节假日"}</small>
+      <small>无收盘</small>
+    </div>
+  `;
+}
+
+function renderFutureCalendarDay(day, date) {
+  return `
+    <div class="pnl-day future-day" title="${date}">
+      <time>${day}</time>
+    </div>
+  `;
+}
+
 function renderPnlCalendar(rows, matchedPnlByDate = null, matchDetailsByDate = null) {
   const monthKey = els.calendarMonth.value || currentMonthKey();
   if (!rows.length) {
@@ -9694,26 +9889,27 @@ function renderPnlCalendar(rows, matchedPnlByDate = null, matchDetailsByDate = n
   }
   const [year, month] = monthKey.split("-").map(Number);
   const monthRows = rows.filter((row) => row.date.startsWith(monthKey));
-  const monthTotal = monthRows.reduce((sum, row) => sum + (Number(row.periodPnl) || 0), 0);
+  const monthTotal = monthRows.some((row) => row.periodPnl === null) ? null : monthRows.reduce((sum, row) => sum + (Number(row.periodPnl) || 0), 0);
   const pnlByDate = new Map(monthRows.map((row) => [row.date, row.periodPnl]));
   const rowByDate = new Map(rows.map((row) => [row.date, row]));
   const daysInMonth = new Date(year, month, 0).getDate();
+  const missingTradingDates = [];
+  const closedTradingDates = [];
   const cells = [];
-  els.calendarMonthTotal.textContent = moneyInt(monthTotal);
+  els.calendarMonthTotal.textContent = monthTotal === null ? "缺收盘价" : moneyInt(monthTotal);
   els.calendarMonthTotal.className = classByValue(monthTotal);
   const firstMonthRow = monthRows[0];
-  const monthStartAssets = firstMonthRow ? (Number(firstMonthRow.assets) || 0) - (Number(firstMonthRow.periodPnl) || 0) : 0;
-  const monthReturn = monthStartAssets > 0 ? (monthTotal / monthStartAssets) * 100 : 0;
-  els.calendarMonthReturn.textContent = `${number(monthReturn, 2)}%`;
-  els.calendarMonthReturn.className = classByValue(monthReturn);
+  const monthStartAssets = firstMonthRow && firstMonthRow.periodPnl !== null ? (Number(firstMonthRow.assets) || 0) - (Number(firstMonthRow.periodPnl) || 0) : 0;
+  const monthReturn = monthTotal !== null && monthStartAssets > 0 ? (monthTotal / monthStartAssets) * 100 : null;
+  els.calendarMonthReturn.textContent = monthReturn === null ? "-" : `${number(monthReturn, 2)}%`;
+  els.calendarMonthReturn.className = monthReturn === null ? "" : classByValue(monthReturn);
   const monthMatched = matchedPnlByDate
     ? [...matchedPnlByDate.entries()].reduce((sum, [date, pnl]) => date.startsWith(monthKey) ? sum + (Number(pnl) || 0) : sum, 0)
     : null;
   els.calendarMonthMatched.textContent = monthMatched === null ? "…" : moneyInt(monthMatched);
   els.calendarMonthMatched.className = monthMatched === null ? "" : classByValue(monthMatched);
 
-  const firstDayOfWeek = new Date(year, month - 1, 1).getDay();
-  const firstTradingOffset = firstDayOfWeek >= 1 && firstDayOfWeek <= 5 ? firstDayOfWeek - 1 : 0;
+  const firstTradingOffset = weekdayCalendarOffset(year, month);
   for (let index = 0; index < firstTradingOffset; index += 1) {
     cells.push(`<div class="pnl-day empty" aria-hidden="true"></div>`);
   }
@@ -9722,8 +9918,43 @@ function renderPnlCalendar(rows, matchedPnlByDate = null, matchDetailsByDate = n
     const dayOfWeek = new Date(year, month - 1, day).getDay();
     if (dayOfWeek === 0 || dayOfWeek === 6) continue;
     const date = `${monthKey}-${String(day).padStart(2, "0")}`;
-    const pnl = pnlByDate.get(date) || 0;
+    const closeReason = marketCloseReason(date);
+    if (closeReason) {
+      closedTradingDates.push(date);
+      cells.push(renderClosedCalendarDay(day, closeReason));
+      continue;
+    }
     const row = rowByDate.get(date);
+    if (date > today()) {
+      cells.push(renderFutureCalendarDay(day, date));
+      continue;
+    }
+    const expectedSymbols = autoClosePositionSymbolsOnDate(date);
+    if (row?.periodPnl === null) {
+      missingTradingDates.push(date);
+      cells.push(`
+        <div class="pnl-day missing-day" title="${date} 缺少完整收盘价或昨收">
+          <time>${day}</time>
+          <span>缺价</span>
+          <small>${expectedSymbols.length || row.positionCount || 0} 只</small>
+          <small>需补收盘</small>
+        </div>
+      `);
+      continue;
+    }
+    if (!row && expectedSymbols.length) {
+      missingTradingDates.push(date);
+      cells.push(`
+        <div class="pnl-day missing-day" title="${date} 是交易日，缺少收盘记录">
+          <time>${day}</time>
+          <span>待补</span>
+          <small>${expectedSymbols.length} 只</small>
+          <small>需补收盘</small>
+        </div>
+      `);
+      continue;
+    }
+    const pnl = pnlByDate.get(date) || 0;
     const previousRow = row ? [...rows].filter((item) => item.date < date).sort((a, b) => b.date.localeCompare(a.date))[0] : null;
     const previousAssets = previousRow ? Number(previousRow.assets) || 0 : originalAssetsTotal(date);
     const netCashFlow = row ? cashTransferBetween(previousRow?.date || "", date) : 0;
@@ -9743,6 +9974,8 @@ function renderPnlCalendar(rows, matchedPnlByDate = null, matchDetailsByDate = n
   }
 
   els.equityChart.innerHTML = `
+    ${missingTradingDates.length ? `<p class="history-note negative">本月有 ${missingTradingDates.length} 个交易日缺少收盘记录：${missingTradingDates.slice(0, 6).join("、")}${missingTradingDates.length > 6 ? "…" : ""}。请补收盘记录；除休市日外不会自动跳过。</p>` : ""}
+    ${closedTradingDates.length ? `<p class="history-note">本月交易所公告休市 ${closedTradingDates.length} 天，日历已标注“休市”。</p>` : ""}
     <div class="pnl-calendar" aria-label="阶段盈亏日历">
       ${["一", "二", "三", "四", "五"].map((day) => `<div class="calendar-weekday">${day}</div>`).join("")}
       ${cells.join("")}
@@ -9973,7 +10206,7 @@ function buildCloseSnapshot(date = today()) {
       totalPnl: position.totalPnl,
       matchedPnl: matchedRows.get(position.symbol) || 0,
     }));
-  const dayPnl = openPositions.reduce((sum, position) => sum + (Number(position.dayPnl) || 0), 0);
+  const dayPnl = sumDayPnlValues(positions);
 
   return {
     id: `close-${date}`,
@@ -10019,7 +10252,7 @@ function buildCloseSnapshotForDate(date, priceMap, previousCloseMap = {}, symbol
     const marketValue = openPositions.reduce((sum, position) => sum + position.marketValue, 0);
     const assets = cash + marketValue;
     const totalPnl = assets - initialAssets;
-    const dayPnl = openPositions.reduce((sum, position) => sum + (Number(position.dayPnl) || 0), 0);
+    const dayPnl = sumDayPnlValues(positions);
 
     return {
       id: `close-${date}`,
@@ -10065,15 +10298,9 @@ function nearbySnapshotSymbolsOnDate(date) {
   return [...new Set([...snapshotPositionSymbols(before), ...snapshotPositionSymbols(after)])];
 }
 
-function autoCloseIgnoreSet() {
-  const raw = els.autoCloseIgnoreSymbols.value || state.settings.autoCloseIgnoreSymbols || "";
-  return new Set(String(raw).split(/[，,\s]+/).map(normalizeSymbol).filter(Boolean));
-}
-
 function autoClosePositionSymbolsOnDate(date) {
-  const ignore = autoCloseIgnoreSet();
   const symbols = new Set([...positionSymbolsOnDate(date), ...nearbySnapshotSymbolsOnDate(date)]);
-  return [...symbols].filter((symbol) => !ignore.has(normalizeSymbol(symbol)));
+  return [...symbols];
 }
 
 function previousCloseMapFromSnapshots(date) {
@@ -10093,6 +10320,7 @@ function previousCloseMapFromSnapshots(date) {
 function snapshotNeedsPriceRetry(snapshot) {
   if (!snapshot) return true;
   if (snapshot.partialPrice) return true;
+  if (snapshot.dayPnl === null) return true;
   if (Array.isArray(snapshot.missingPriceSymbols) && snapshot.missingPriceSymbols.length) return true;
   return (snapshot.positions || []).some((position) => (Number(position.quantity) || 0) > 0 && (Number(position.price) || 0) <= 0);
 }
@@ -10107,6 +10335,194 @@ function closeSourceLabel(source) {
 function isWeekday(dateString) {
   const day = localDate(dateString).getDay();
   return day >= 1 && day <= 5;
+}
+
+function marketCloseReason(dateString) {
+  if (!validDateString(dateString)) return "";
+  if (!isWeekday(dateString)) return "周末休市";
+  const manualReason = state.settings.manualMarketHolidays?.[dateString];
+  if (manualReason) return manualReason;
+  const year = Number(dateString.slice(0, 4));
+  const calendar = holidayCalendarForYear(year);
+  if (!calendar?.completeYear) return "";
+  return calendar.holidays?.[dateString] || "";
+}
+
+function isAShareTradingDate(dateString) {
+  return validDateString(dateString) && isWeekday(dateString) && !marketCloseReason(dateString);
+}
+
+function holidayCalendarForYear(year) {
+  const key = String(Number(year));
+  return state.settings.exchangeHolidayCalendars?.[key] || EXCHANGE_HOLIDAY_CALENDARS[Number(year)] || null;
+}
+
+function holidayCalendarYearStatus(year) {
+  const calendar = holidayCalendarForYear(year);
+  if (!calendar) return { verified: false, text: `${year} 年休市公告未登记`, sourceUrls: [] };
+  const count = Object.keys(calendar.holidays || {}).length;
+  const sourceText = calendar.source || "交易所公告";
+  const sourceTitle = calendar.sourceTitle || `${year} 年休市安排`;
+  if (!calendar.completeYear) {
+    return {
+      verified: false,
+      text: `${year} 年只有部分休市数据，必须按交易所年度公告更新整年日历`,
+      sourceUrls: calendar.sourceUrls || [],
+    };
+  }
+  return {
+    verified: true,
+    text: `${year} 年：${sourceText}《${sourceTitle}》，已登记 ${count} 个工作日休市，更新 ${calendar.updatedAt || "-"}`,
+    sourceUrls: calendar.sourceUrls || [],
+  };
+}
+
+const EXCHANGE_HOLIDAY_ANNOUNCEMENT_SOURCES = [
+  {
+    name: "上交所",
+    listUrl: "https://www.sse.com.cn/disclosure/announcement/general/",
+    origin: "https://www.sse.com.cn",
+  },
+  {
+    name: "深交所",
+    listUrl: "https://www.szse.cn/disclosure/notice/general/",
+    origin: "https://www.szse.cn",
+  },
+];
+
+function normalizeAnnouncementUrl(href, source) {
+  if (!href) return "";
+  try {
+    return new URL(href, source.origin).href;
+  } catch {
+    return "";
+  }
+}
+
+function findHolidayAnnouncementLinks(html, year, source) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  return [...doc.querySelectorAll("a")]
+    .map((link) => ({
+      title: (link.textContent || "").replace(/\s+/g, " ").trim(),
+      url: normalizeAnnouncementUrl(link.getAttribute("href"), source),
+    }))
+    .filter((item) => item.url)
+    .filter((item) => item.title.includes(String(year)) && item.title.includes("休市") && item.title.includes("安排"))
+    .sort((a, b) => {
+      const aScore = (a.title.includes("全年") ? 2 : 0) + (a.title.includes("节假日") ? 1 : 0);
+      const bScore = (b.title.includes("全年") ? 2 : 0) + (b.title.includes("节假日") ? 1 : 0);
+      return bScore - aScore;
+    });
+}
+
+function addDateRangeToHolidayMap(map, year, startMonth, startDay, endMonth, endDay, reason) {
+  const start = `${year}-${String(startMonth).padStart(2, "0")}-${String(startDay).padStart(2, "0")}`;
+  const end = `${year}-${String(endMonth).padStart(2, "0")}-${String(endDay).padStart(2, "0")}`;
+  for (let date = start; validDateString(date) && date <= end; date = addDays(date, 1)) {
+    if (isWeekday(date)) map[date] = `${reason}休市`;
+  }
+}
+
+function parseExchangeHolidayAnnouncement(text, year) {
+  const normalized = String(text || "")
+    .replace(/\s+/g, "")
+    .replace(/[：:]/g, "：")
+    .replace(/[（(][^）)]*[）)]/g, "");
+  const holidays = {};
+  const sections = normalized.split(/[一二三四五六七八九十]+、/).filter(Boolean);
+  sections.forEach((section) => {
+    if (!section.includes("休市")) return;
+    const reason = (section.match(/^([^：，。；;]{1,12})[：，。；;]/) || [])[1] || "交易所公告";
+    const rangeRegex = /(\d{1,2})月(\d{1,2})日(?:至|到)(\d{1,2})月(\d{1,2})日休市/g;
+    let matched = false;
+    let rangeMatch;
+    while ((rangeMatch = rangeRegex.exec(section))) {
+      matched = true;
+      addDateRangeToHolidayMap(holidays, year, Number(rangeMatch[1]), Number(rangeMatch[2]), Number(rangeMatch[3]), Number(rangeMatch[4]), reason);
+    }
+    const sameMonthRangeRegex = /(\d{1,2})月(\d{1,2})日(?:至|到)(\d{1,2})日休市/g;
+    let sameMonthMatch;
+    while ((sameMonthMatch = sameMonthRangeRegex.exec(section))) {
+      matched = true;
+      addDateRangeToHolidayMap(holidays, year, Number(sameMonthMatch[1]), Number(sameMonthMatch[2]), Number(sameMonthMatch[1]), Number(sameMonthMatch[3]), reason);
+    }
+    if (matched) return;
+    const singleRegex = /(\d{1,2})月(\d{1,2})日休市/g;
+    let singleMatch;
+    while ((singleMatch = singleRegex.exec(section))) {
+      addDateRangeToHolidayMap(holidays, year, Number(singleMatch[1]), Number(singleMatch[2]), Number(singleMatch[1]), Number(singleMatch[2]), reason);
+    }
+  });
+  return holidays;
+}
+
+async function fetchTextFromOfficialSource(url) {
+  const response = await fetch(url, { cache: "no-store" });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.text();
+}
+
+async function fetchExchangeHolidayCalendar(year = beijingNow().getFullYear()) {
+  const errors = [];
+  for (const source of EXCHANGE_HOLIDAY_ANNOUNCEMENT_SOURCES) {
+    try {
+      const listHtml = await fetchTextFromOfficialSource(source.listUrl);
+      const links = findHolidayAnnouncementLinks(listHtml, year, source);
+      for (const link of links) {
+        const detailHtml = await fetchTextFromOfficialSource(link.url);
+        const doc = new DOMParser().parseFromString(detailHtml, "text/html");
+        const text = doc.body ? doc.body.textContent : detailHtml;
+        const holidays = parseExchangeHolidayAnnouncement(text, year);
+        if (Object.keys(holidays).length) {
+          return {
+            source: `${source.name}交易所年度休市公告`,
+            sourceTitle: link.title,
+            sourceUrls: [link.url],
+            updatedAt: today(),
+            completeYear: true,
+            holidays,
+          };
+        }
+        errors.push(`${source.name}:${link.title} 未解析出休市日期`);
+      }
+      if (!links.length) errors.push(`${source.name}:未找到 ${year} 年休市安排公告`);
+    } catch (error) {
+      errors.push(`${source.name}:${error.message || error}`);
+    }
+  }
+  throw new Error(errors.join("；") || "未从交易所公告获得休市日期");
+}
+
+async function updateCurrentYearHolidayCalendarFromExchange() {
+  const year = beijingNow().getFullYear();
+  if (!els.updateHolidayCalendar) return;
+  els.updateHolidayCalendar.disabled = true;
+  if (els.closeSnapshotStatus) els.closeSnapshotStatus.textContent = `正在从交易所公告获取 ${year} 年全年休市安排...`;
+  try {
+    const calendar = await fetchExchangeHolidayCalendar(year);
+    state.settings.exchangeHolidayCalendars = {
+      ...(state.settings.exchangeHolidayCalendars || {}),
+      [String(year)]: calendar,
+    };
+    state.settings.lastHolidayCalendarCheckYear = String(year);
+    save();
+    renderAutoCloseSummary();
+    renderDashboardCalendar(true);
+    renderHolidayCalendarStatus();
+    if (els.closeSnapshotStatus) els.closeSnapshotStatus.textContent = `已按${calendar.sourceTitle}更新 ${year} 年休市日历，共 ${Object.keys(calendar.holidays).length} 个工作日休市。`;
+  } catch (error) {
+    if (els.closeSnapshotStatus) els.closeSnapshotStatus.textContent = `未能从交易所公告更新 ${year} 年休市日历：${error.message || error}。不会使用非交易所来源推断。`;
+  } finally {
+    els.updateHolidayCalendar.disabled = false;
+  }
+}
+
+function scheduleAnnualHolidayCalendarUpdate() {
+  const year = beijingNow().getFullYear();
+  if (state.settings.lastHolidayCalendarCheckYear === String(year)) return;
+  window.setTimeout(() => {
+    updateCurrentYearHolidayCalendarFromExchange();
+  }, 800);
 }
 
 function closeSnapshotBoundsFromExisting() {
@@ -10130,7 +10546,16 @@ function closeSnapshotCandidateDates() {
   if (end > today()) end = today();
   const dates = [];
   for (let date = start; validDateString(date) && date <= end; date = addDays(date, 1)) {
-    if (isWeekday(date)) dates.push(date);
+    if (isAShareTradingDate(date)) dates.push(date);
+  }
+  return dates;
+}
+
+function marketClosedDatesInRange(startDate, endDate) {
+  if (!validDateString(startDate) || !validDateString(endDate)) return [];
+  const dates = [];
+  for (let date = startDate; validDateString(date) && date <= endDate; date = addDays(date, 1)) {
+    if (isWeekday(date) && marketCloseReason(date)) dates.push(date);
   }
   return dates;
 }
@@ -10167,8 +10592,16 @@ function estimatedMissingCloseSnapshotCount() {
 function renderAutoCloseSummary(summary = {}) {
   const estimatedMissing = estimatedMissingCloseSnapshotCount();
   const missingCount = summary.missing ?? estimatedMissing;
+  const queryActive = hasDateQuery(els.closeSnapshotStartDate.value, els.closeSnapshotEndDate.value);
+  const range = queryActive
+    ? dateRangeBounds(els.closeSnapshotStartDate.value, els.closeSnapshotEndDate.value)
+    : closeSnapshotBoundsFromExisting();
+  const closedCount = range.startDate && range.endDate ? marketClosedDatesInRange(range.startDate, range.endDate).length : 0;
+  const unverifiedYears = relevantHolidayCalendarYears().filter((year) => !holidayCalendarForYear(year));
   const cards = [
     { label: "待补日期", value: `${missingCount} 天`, tone: missingCount ? "negative" : "" },
+    { label: "休市日期", value: `${closedCount} 天`, tone: "" },
+    { label: "公告未登记", value: `${unverifiedYears.length} 年`, tone: unverifiedYears.length ? "negative" : "" },
     { label: "已自动补", value: `${summary.added || 0} 天`, tone: summary.added ? "positive" : "" },
     { label: "未成功", value: `${summary.failed || 0} 天`, tone: summary.failed ? "negative" : "" },
   ];
@@ -10182,11 +10615,107 @@ function renderAutoCloseSummary(summary = {}) {
       `,
     )
     .join("");
+  const currentYear = beijingNow().getFullYear();
+  const currentYearStatus = holidayCalendarYearStatus(currentYear);
+  if (!currentYearStatus.verified && els.closeSnapshotStatus) {
+    els.closeSnapshotStatus.textContent = `${currentYear} 年休市日历尚未按交易所年度公告登记完整；请先按上交所/深交所公告更新当年休市日期，再补收盘记录。`;
+  }
+  renderHolidayCalendarStatus();
+}
+
+function relevantHolidayCalendarYears() {
+  const years = new Set([String(beijingNow().getFullYear())]);
+  state.trades.forEach((trade) => { if (validDateString(trade.date)) years.add(trade.date.slice(0, 4)); });
+  state.closeSnapshots.forEach((snapshot) => { if (validDateString(snapshot.date)) years.add(snapshot.date.slice(0, 4)); });
+  if (validDateString(els.closeSnapshotStartDate?.value)) years.add(els.closeSnapshotStartDate.value.slice(0, 4));
+  if (validDateString(els.closeSnapshotEndDate?.value)) years.add(els.closeSnapshotEndDate.value.slice(0, 4));
+  return [...years].map(Number).filter(Boolean).sort((a, b) => b - a);
+}
+
+function renderHolidayCalendarStatus() {
+  if (!els.holidayCalendarStatus) return;
+  const years = relevantHolidayCalendarYears();
+  els.holidayCalendarStatus.innerHTML = years.map((year) => {
+    const status = holidayCalendarYearStatus(year);
+    const tone = status.verified ? "positive" : "negative";
+    const links = status.sourceUrls.length
+      ? status.sourceUrls.map((url, index) => `<a class="icon-action" href="${url}" target="_blank" rel="noreferrer">${index === 0 ? "上交所" : "深交所"}</a>`).join("")
+      : "";
+    return `
+      <article class="metric">
+        <span>${year} 休市规则</span>
+        <strong class="${tone}">${status.verified ? "已登记" : "未登记"}</strong>
+        <small>${escapeHtml(status.text)}</small>
+        <div class="row-actions">${links}</div>
+      </article>
+    `;
+  }).join("");
+}
+
+function renderManualMarketHolidays() {
+  if (!els.manualHolidayList) return;
+  const rows = Object.entries(state.settings.manualMarketHolidays || {})
+    .filter(([date]) => validDateString(date))
+    .sort((a, b) => b[0].localeCompare(a[0]));
+  if (!rows.length) {
+    els.manualHolidayList.innerHTML = `<div class="empty-state">暂无手动休市日期</div>`;
+    return;
+  }
+  els.manualHolidayList.innerHTML = rows.map(([date, reason]) => `
+    <article class="mobile-card">
+      <div class="mobile-card-head">
+        <strong>${escapeHtml(date)}</strong>
+        <button class="icon-action" type="button" data-delete-manual-holiday="${escapeHtml(date)}">删除</button>
+      </div>
+      <dl>
+        <div><dt>原因</dt><dd>${escapeHtml(reason || "手动休市")}</dd></div>
+      </dl>
+    </article>
+  `).join("");
+}
+
+function addManualMarketHoliday() {
+  const date = els.manualHolidayDate?.value || "";
+  if (!validDateString(date)) {
+    if (els.closeSnapshotStatus) els.closeSnapshotStatus.textContent = "请选择有效的手动休市日期。";
+    return;
+  }
+  if (!isWeekday(date)) {
+    if (els.closeSnapshotStatus) els.closeSnapshotStatus.textContent = `${date} 是周末，已自动视为休市，不需要手动添加。`;
+    return;
+  }
+  const reason = (els.manualHolidayReason?.value || "").trim() || "手动休市";
+  state.settings.manualMarketHolidays = {
+    ...(state.settings.manualMarketHolidays || {}),
+    [date]: reason.includes("休市") ? reason : `${reason}休市`,
+  };
+  if (els.manualHolidayReason) els.manualHolidayReason.value = "";
+  save();
+  renderManualMarketHolidays();
+  renderHolidayCalendarStatus();
+  renderAutoCloseSummary();
+  renderDashboardCalendar(true);
+  if (els.closeSnapshotStatus) els.closeSnapshotStatus.textContent = `已添加手动休市日期：${date}。`;
+}
+
+function deleteManualMarketHoliday(date) {
+  if (!validDateString(date)) return;
+  if (!confirm(`确认删除 ${date} 的手动休市日期吗？`)) return;
+  const next = { ...(state.settings.manualMarketHolidays || {}) };
+  delete next[date];
+  state.settings.manualMarketHolidays = next;
+  save();
+  renderManualMarketHolidays();
+  renderHolidayCalendarStatus();
+  renderAutoCloseSummary();
+  renderDashboardCalendar(true);
+  if (els.closeSnapshotStatus) els.closeSnapshotStatus.textContent = `已删除手动休市日期：${date}。`;
 }
 
 let closeSnapshotRenderTimer = null;
 let dividendModalSymbolFilter = "";
 let dividendModalYearFilter = "";
+let pendingAutoCloseManualRequest = null;
 function scheduleRenderCloseSnapshots() {
   window.clearTimeout(closeSnapshotRenderTimer);
   closeSnapshotRenderTimer = window.setTimeout(renderCloseSnapshots, 180);
@@ -10198,7 +10727,7 @@ async function autoFillHistoricalCloseBatch(options = {}) {
   const allDates = missingCloseSnapshotDates()
     .filter((date) => dateInRange(date, els.closeSnapshotStartDate.value, els.closeSnapshotEndDate.value));
   const dates = allDates.slice(0, batchSize);
-  if (!dates.length) return { added: 0, failed: 0, failedNotes: [], remaining: 0, total: 0 };
+  if (!dates.length) return { added: 0, failed: 0, failedNotes: [], remaining: 0, total: 0, manualRequest: null };
 
   let added = 0;
   let failed = 0;
@@ -10218,8 +10747,10 @@ async function autoFillHistoricalCloseBatch(options = {}) {
         const symbol = queue.shift();
         try {
           const quote = await fetchCloseBySource(symbol, date, source);
+          if (!(Number(quote.price) > 0)) throw new Error("缺今日收盘价");
+          if (!(Number(quote.previousClose) > 0)) throw new Error("缺昨日收盘价");
           priceMap[symbol] = Number(quote.price.toFixed(3));
-          previousCloseMap[symbol] = Number((quote.previousClose || quote.price).toFixed(3));
+          previousCloseMap[symbol] = Number(quote.previousClose.toFixed(3));
         } catch (error) {
           failedNotes.push(`${date} ${symbol} ${error.message || "取价失败"}`);
         }
@@ -10236,16 +10767,26 @@ async function autoFillHistoricalCloseBatch(options = {}) {
     const missingSymbols = symbols.filter((symbol) => !priceMap[symbol]);
     if (!resolvedCount) {
       state.closeSnapshots = state.closeSnapshots.filter((snapshot) => snapshot.date !== date || !snapshotNeedsPriceRetry(snapshot));
-      failed += 1;
-      renderAutoCloseSummary({ missing: allDates.length, added: options.totalAdded + added, failed: options.totalFailed + failed });
-      continue;
+      return {
+        added,
+        failed,
+        failedNotes,
+        remaining: allDates.length - added,
+        total: allDates.length,
+        manualRequest: { date, symbols, priceMap, previousCloseMap, missingSymbols, notes: failedNotes.filter((note) => note.startsWith(`${date} `)) },
+      };
     }
 
     if (missingSymbols.length) {
       state.closeSnapshots = state.closeSnapshots.filter((snapshot) => snapshot.date !== date || !snapshotNeedsPriceRetry(snapshot));
-      failed += 1;
-      renderAutoCloseSummary({ missing: allDates.length, added: options.totalAdded + added, failed: options.totalFailed + failed });
-      continue;
+      return {
+        added,
+        failed,
+        failedNotes,
+        remaining: allDates.length - added,
+        total: allDates.length,
+        manualRequest: { date, symbols, priceMap, previousCloseMap, missingSymbols, notes: failedNotes.filter((note) => note.startsWith(`${date} `)) },
+      };
     }
 
     state.closeSnapshots = state.closeSnapshots.filter((snapshot) => snapshot.date !== date);
@@ -10261,7 +10802,7 @@ async function autoFillHistoricalCloseBatch(options = {}) {
   save();
   renderAfterCloseSnapshotChange();
   const remaining = missingCloseSnapshotDates().filter((date) => dateInRange(date, els.closeSnapshotStartDate.value, els.closeSnapshotEndDate.value)).length;
-  return { added, failed, failedNotes, remaining, total: allDates.length };
+  return { added, failed, failedNotes, remaining, total: allDates.length, manualRequest: null };
 }
 
 async function autoFillHistoricalCloseSnapshots() {
@@ -10270,7 +10811,6 @@ async function autoFillHistoricalCloseSnapshots() {
   const continuous = Boolean(els.autoCloseContinuous.checked);
   state.settings.autoCloseSource = source;
   state.settings.autoCloseBatchSize = batchSize;
-  state.settings.autoCloseIgnoreSymbols = els.autoCloseIgnoreSymbols.value.trim();
   state.settings.autoCloseContinuous = continuous;
   save();
 
@@ -10300,10 +10840,15 @@ async function autoFillHistoricalCloseSnapshots() {
       totalFailed += result.failed;
       allFailedNotes.push(...result.failedNotes);
       renderAutoCloseSummary({ missing: result.remaining, added: totalAdded, failed: totalFailed });
+      if (result.manualRequest) {
+        els.closeSnapshotStatus.textContent = `${result.manualRequest.date} 有 ${result.manualRequest.missingSymbols.length} 只股票缺价格，请手动补齐收盘价和昨收价，保存后会继续自动补。`;
+        openManualCloseModal({ ...result.manualRequest, continueAuto: true });
+        break;
+      }
       if (!continuous || stopAutoCloseFillRequested || result.remaining <= 0 || result.added <= 0) {
         const stopped = stopAutoCloseFillRequested ? "已停止。" : (continuous && result.remaining > 0 && result.added <= 0 ? "已暂停，避免反复请求同一批缺价日期。" : "");
         els.closeSnapshotStatus.textContent = totalFailed
-          ? `${stopped}完整补好 ${totalAdded} 天，部分股票没有同日收盘价：${allFailedNotes.slice(0, 6).join("、")}${allFailedNotes.length > 6 ? "..." : ""}。这些日期不会写入错误快照，会继续留在待补里；可换价格来源、加入忽略代码，或用“手动补收盘价”修正。${result.remaining ? `还剩 ${result.remaining} 天。` : ""}`
+          ? `${stopped}完整补好 ${totalAdded} 天，部分股票没有同日收盘价：${allFailedNotes.slice(0, 6).join("、")}${allFailedNotes.length > 6 ? "..." : ""}。这些日期不会写入错误快照，会继续留在待补里；请手动补收盘价和昨收价。${result.remaining ? `还剩 ${result.remaining} 天。` : ""}`
           : `${stopped}已补 ${totalAdded} 天历史收盘记录。${result.remaining ? `还剩 ${result.remaining} 天，可继续分段补。` : ""}`;
         break;
       }
@@ -10480,19 +11025,21 @@ function manualClosePositions(date) {
     .filter((position) => position.quantity > 0);
 }
 
-function renderManualCloseModal() {
-  const date = els.closeSnapshotDate.value || today();
+function renderManualCloseModal(request = null) {
+  const date = request?.date || els.closeSnapshotDate.value || today();
   if (!validDateString(date)) {
     els.closeSnapshotStatus.textContent = "请先选择要补录的日期。";
     return false;
   }
+  if (request?.date && els.closeSnapshotDate) els.closeSnapshotDate.value = request.date;
 
   const positions = manualClosePositions(date);
   const existing = state.closeSnapshots.find((snapshot) => snapshot.date === date);
+  const missingSet = new Set((request?.missingSymbols || []).map(normalizeSymbol));
   els.manualCloseSummary.innerHTML = [
     { label: "补录日期", value: date, tone: "" },
     { label: "持仓股票", value: `${positions.length} 只`, tone: positions.length ? "" : "negative" },
-    { label: "已有记录", value: existing ? "有" : "无", tone: existing ? "negative" : "" },
+    { label: request ? "缺价股票" : "已有记录", value: request ? `${missingSet.size} 只` : (existing ? "有" : "无"), tone: request || existing ? "negative" : "" },
   ]
     .map((card) => `<article class="metric"><span>${card.label}</span><strong class="${card.tone}">${card.value}</strong></article>`)
     .join("");
@@ -10503,15 +11050,18 @@ function renderManualCloseModal() {
   }
 
   const existingPrices = new Map((existing?.positions || []).map((position) => [normalizeSymbol(position.symbol), Number(position.price) || ""]));
+  const previousCloseMap = previousCloseMapFromSnapshots(date);
   els.manualCloseList.innerHTML = positions
     .map((position) => {
       const symbol = normalizeSymbol(position.symbol);
-      const price = existingPrices.get(symbol) || state.prices[symbol] || "";
+      const price = request?.priceMap?.[symbol] || existingPrices.get(symbol) || state.prices[symbol] || "";
+      const previousClose = request?.previousCloseMap?.[symbol] || previousCloseMap[symbol] || "";
+      const isMissing = missingSet.has(symbol) || !price || !previousClose;
       return `
-        <article class="mobile-card">
+        <article class="mobile-card ${isMissing ? "missing-day" : ""}">
           <div class="mobile-card-head">
             <strong class="stock-name-chip">${escapeHtml(position.name)}</strong>
-            <span>${symbol}</span>
+            <span>${symbol}${isMissing ? " · 需补" : ""}</span>
           </div>
           <dl>
             <div><dt>数量</dt><dd>${number(position.quantity, 0)}</dd></div>
@@ -10521,6 +11071,10 @@ function renderManualCloseModal() {
             收盘价
             <input type="number" min="0" step="0.001" data-manual-close-symbol="${symbol}" value="${price}" placeholder="填写当天收盘价" />
           </label>
+          <label class="mobile-price spacing-top">
+            昨收价
+            <input type="number" min="0" step="0.001" data-manual-prev-close-symbol="${symbol}" value="${previousClose}" placeholder="填写上一交易日收盘价" />
+          </label>
         </article>
       `;
     })
@@ -10528,36 +11082,45 @@ function renderManualCloseModal() {
   return true;
 }
 
-function openManualCloseModal() {
-  if (!renderManualCloseModal()) return;
+function openManualCloseModal(request = null) {
+  pendingAutoCloseManualRequest = request || null;
+  if (!renderManualCloseModal(request)) return;
   openModal("manual-close-modal");
 }
 
 function saveManualCloseSnapshot() {
-  const date = els.closeSnapshotDate.value || today();
+  const date = pendingAutoCloseManualRequest?.date || els.closeSnapshotDate.value || today();
   const inputs = [...document.querySelectorAll("[data-manual-close-symbol]")];
+  const previousInputs = [...document.querySelectorAll("[data-manual-prev-close-symbol]")];
   if (!inputs.length) {
     els.closeSnapshotStatus.textContent = `${date} 没有可保存的持仓收盘价。`;
     return;
   }
 
   const priceMap = {};
+  const previousCloseMap = {};
   const missing = [];
   inputs.forEach((input) => {
     const symbol = normalizeSymbol(input.dataset.manualCloseSymbol);
     const price = Number(input.value) || 0;
     if (price > 0) priceMap[symbol] = Number(price.toFixed(3));
-    else missing.push(symbol);
+    else missing.push(`${symbol} 收盘价`);
+  });
+  previousInputs.forEach((input) => {
+    const symbol = normalizeSymbol(input.dataset.manualPrevCloseSymbol);
+    const price = Number(input.value) || 0;
+    if (price > 0) previousCloseMap[symbol] = Number(price.toFixed(3));
+    else missing.push(`${symbol} 昨收价`);
   });
   if (missing.length) {
-    alert(`还有 ${missing.length} 只股票没有填写有效收盘价：${missing.join("、")}`);
+    alert(`还有 ${missing.length} 项没有填写有效价格：${missing.join("、")}`);
     return;
   }
 
   const existingIndex = state.closeSnapshots.findIndex((item) => item.date === date);
   if (existingIndex >= 0 && !confirm(`${date} 已有收盘记录，是否覆盖？`)) return;
 
-  const snapshot = buildCloseSnapshotForDate(date, priceMap, previousCloseMapFromSnapshots(date));
+  const snapshot = buildCloseSnapshotForDate(date, priceMap, previousCloseMap);
   snapshot.source = "manual-history";
   if (existingIndex >= 0) {
     state.closeSnapshots[existingIndex] = snapshot;
@@ -10566,9 +11129,14 @@ function saveManualCloseSnapshot() {
   }
   state.closeSnapshots.sort((a, b) => b.date.localeCompare(a.date));
   save();
+  const shouldContinueAuto = Boolean(pendingAutoCloseManualRequest?.continueAuto);
+  pendingAutoCloseManualRequest = null;
   closeModal(document.getElementById("manual-close-modal"));
   els.closeSnapshotStatus.textContent = `已手动补录 ${date} 收盘，总资产 ${money(snapshot.assets)}。`;
   renderAfterCloseSnapshotChange(snapshot);
+  if (shouldContinueAuto && !stopAutoCloseFillRequested) {
+    window.setTimeout(autoFillHistoricalCloseSnapshots, 250);
+  }
 }
 
 function renderCloseSnapshotPositions(snapshot) {
@@ -10586,7 +11154,7 @@ function renderCloseSnapshotPositions(snapshot) {
             <div><dt>数量</dt><dd>${number(position.quantity, 0)}</dd></div>
             <div><dt>收盘价</dt><dd>${money(position.price)}</dd></div>
             <div><dt>市值</dt><dd>${money(position.marketValue)}</dd></div>
-            <div><dt>当日盈亏</dt><dd class="${classByValue(position.dayPnl)}">${money(position.dayPnl)}</dd></div>
+            <div><dt>当日盈亏</dt><dd class="${classByValue(position.dayPnl)}">${dayPnlMoney(position.dayPnl)}</dd></div>
             <div><dt>总盈亏</dt><dd class="${classByValue(position.totalPnl)}">${money(position.totalPnl)}</dd></div>
             <div><dt>匹配实现</dt><dd class="${classByValue(position.matchedPnl)}">${money(position.matchedPnl)}</dd></div>
           </dl>
@@ -10618,7 +11186,7 @@ function renderCloseSnapshotPositions(snapshot) {
                   <td>${number(position.quantity, 0)}</td>
                   <td>${money(position.price)}</td>
                   <td>${money(position.marketValue)}</td>
-                  <td class="${classByValue(position.dayPnl)}">${money(position.dayPnl)}</td>
+                  <td class="${classByValue(position.dayPnl)}">${dayPnlMoney(position.dayPnl)}</td>
                   <td class="${classByValue(position.totalPnl)}">${money(position.totalPnl)}</td>
                   <td class="${classByValue(position.matchedPnl)}">${money(position.matchedPnl)}</td>
                 </tr>
@@ -10638,7 +11206,7 @@ function renderCloseSnapshotDateButton(row) {
       <summary>
         <span class="summary-button">
           <span>${row.date}</span>
-          <span class="${classByValue(row.dayPnl)}">${money(row.dayPnl)}</span>
+          <span class="${classByValue(row.dayPnl)}">${dayPnlMoney(row.dayPnl)}</span>
           <small>${row.positionCount} 只</small>
         </span>
       </summary>
@@ -10647,7 +11215,7 @@ function renderCloseSnapshotDateButton(row) {
         <article class="metric"><span>现金</span><strong>${money(row.cash)}</strong></article>
         <article class="metric"><span>持仓市值</span><strong>${money(row.marketValue)}</strong></article>
         <article class="metric"><span>总盈亏</span><strong class="${classByValue(row.totalPnl)}">${money(row.totalPnl)}</strong></article>
-        <article class="metric"><span>当日盈亏</span><strong class="${classByValue(row.dayPnl)}">${money(row.dayPnl)}</strong></article>
+        <article class="metric"><span>当日盈亏</span><strong class="${classByValue(row.dayPnl)}">${dayPnlMoney(row.dayPnl)}</strong></article>
         <article class="metric"><span>持仓数</span><strong>${row.positionCount}</strong></article>
       </div>
       <h4 class="section-kicker">各股明细</h4>
@@ -10659,11 +11227,232 @@ function renderCloseSnapshotDateButton(row) {
   `;
 }
 
+function snapshotPositionPrice(position) {
+  const quantity = Number(position?.quantity) || 0;
+  return Number(position?.price) || Number(position?.currentPrice) || (quantity > 0 ? (Number(position?.marketValue) || 0) / quantity : 0);
+}
+
+function previousSnapshotPosition(symbol, date) {
+  const key = normalizeSymbol(symbol);
+  const previous = [...state.closeSnapshots]
+    .filter((snapshot) => validDateString(snapshot.date) && snapshot.date < date)
+    .sort((a, b) => b.date.localeCompare(a.date))
+    [0];
+  if (!previous) return null;
+  const position = (previous.positions || []).find((item) => normalizeSymbol(item.symbol) === key);
+  return {
+    snapshot: previous,
+    position: position || { symbol: key, quantity: 0, price: 0, marketValue: 0 },
+  };
+}
+
+function expectedSnapshotPositionDayPnl(snapshot, position) {
+  const symbol = normalizeSymbol(position.symbol);
+  const date = snapshot.date;
+  const currentPrice = snapshotPositionPrice(position);
+  const endingQuantity = Number(position.quantity) || 0;
+  const previous = previousSnapshotPosition(symbol, date);
+  if (!previous) return null;
+
+  const openingQuantity = Number(previous.position.quantity) || 0;
+  const openingPrice = snapshotPositionPrice(previous.position);
+  if (endingQuantity > 0 && currentPrice <= 0) return null;
+  if (openingQuantity > 0 && openingPrice <= 0) return null;
+
+  const traded = stockDayCashFlow(symbol, date);
+  const dividend = stockDividendOnDate(symbol, date);
+  const todayMarketValue = endingQuantity > 0 ? endingQuantity * currentPrice : 0;
+  const yesterdayMarketValue = openingQuantity > 0 ? openingQuantity * openingPrice : 0;
+
+  return roundMoney(todayMarketValue - yesterdayMarketValue + traded.sellCashIn - traded.buyCashOut + dividend);
+}
+
+function expectedSnapshotTotalDayPnl(snapshot) {
+  const previous = [...state.closeSnapshots]
+    .filter((item) => validDateString(item.date) && item.date < snapshot.date)
+    .sort((a, b) => b.date.localeCompare(a.date))
+    [0];
+  if (!previous) return null;
+  if (snapshotNeedsPriceRetry(snapshot) || snapshotNeedsPriceRetry(previous)) return null;
+
+  const traded = state.trades.filter((trade) => trade.date === snapshot.date).reduce(
+    (acc, trade) => {
+      const amount = tradeAmount(trade);
+      const fee = totalFee(trade);
+      if (trade.side === "buy") {
+        acc.buyCashOut += amount + fee;
+      } else {
+        acc.sellCashIn += amount - fee;
+      }
+      return acc;
+    },
+    { buyCashOut: 0, sellCashIn: 0 },
+  );
+  const dividend = dividendTotalOnDate(snapshot.date);
+  const todayMarketValue = Number(snapshot.marketValue) || 0;
+  const yesterdayMarketValue = Number(previous.marketValue) || 0;
+  return roundMoney(todayMarketValue - yesterdayMarketValue + traded.sellCashIn - traded.buyCashOut + dividend);
+}
+
+function auditCloseSnapshotDayPnl() {
+  const positionRows = [];
+  const totalRows = [];
+  let checked = 0;
+  let skipped = 0;
+  const sorted = [...state.closeSnapshots].filter((snapshot) => validDateString(snapshot.date)).sort((a, b) => a.date.localeCompare(b.date));
+
+  sorted.forEach((snapshot) => {
+    const expectedTotal = expectedSnapshotTotalDayPnl(snapshot);
+    if (expectedTotal !== null) {
+      const storedTotal = roundMoney(Number(snapshot.dayPnl) || 0);
+      const totalDiff = roundMoney(storedTotal - expectedTotal);
+      if (Math.abs(totalDiff) >= 1) {
+        totalRows.push({
+          date: snapshot.date,
+          stored: storedTotal,
+          expected: expectedTotal,
+          diff: totalDiff,
+          positionCount: (snapshot.positions || []).length,
+        });
+      }
+    }
+    (snapshot.positions || []).forEach((position) => {
+      const expected = expectedSnapshotPositionDayPnl(snapshot, position);
+      if (expected === null) {
+        skipped += 1;
+        return;
+      }
+      checked += 1;
+      const stored = roundMoney(Number(position.dayPnl) || 0);
+      const diff = roundMoney(stored - expected);
+      if (Math.abs(diff) >= 1) {
+        positionRows.push({
+          date: snapshot.date,
+          symbol: normalizeSymbol(position.symbol),
+          name: position.name || position.symbol,
+          stored,
+          expected,
+          diff,
+          quantity: Number(position.quantity) || 0,
+          price: snapshotPositionPrice(position),
+        });
+      }
+    });
+  });
+
+  return {
+    checked,
+    skipped,
+    totalRows: totalRows.sort((a, b) => b.date.localeCompare(a.date)),
+    positionRows: positionRows.sort((a, b) => b.date.localeCompare(a.date) || a.symbol.localeCompare(b.symbol)),
+  };
+}
+
+function clearDayPnlAuditReport() {
+  if (els.dayPnlAuditSummary) els.dayPnlAuditSummary.innerHTML = "";
+  if (els.dayPnlAuditList) els.dayPnlAuditList.innerHTML = "";
+  if (els.fixDayPnlAudit) els.fixDayPnlAudit.disabled = true;
+  if (els.clearDayPnlAudit) els.clearDayPnlAudit.disabled = true;
+  if (els.closeSnapshotStatus) els.closeSnapshotStatus.textContent = "已清除历史当日盈亏校验报告。";
+}
+
+function renderDayPnlAuditReport() {
+  if (!els.dayPnlAuditSummary || !els.dayPnlAuditList) return;
+  const audit = auditCloseSnapshotDayPnl();
+  const issueCount = audit.totalRows.length + audit.positionRows.length;
+  els.dayPnlAuditSummary.innerHTML = [
+    { label: "已校验", value: `${audit.checked} 条`, tone: "" },
+    { label: "总体差异", value: `${audit.totalRows.length} 天`, tone: audit.totalRows.length ? "negative" : "positive" },
+    { label: "个股差异", value: `${audit.positionRows.length} 条`, tone: audit.positionRows.length ? "negative" : "positive" },
+    { label: "缺收盘价跳过", value: `${audit.skipped} 条`, tone: audit.skipped ? "warning" : "" },
+  ].map((item) => `<article class="metric"><span>${item.label}</span><strong class="${item.tone}">${item.value}</strong></article>`).join("");
+
+  const totalHtml = audit.totalRows.length
+    ? `
+      <h4 class="section-kicker">总体当日盈亏差异</h4>
+      ${audit.totalRows.slice(0, 60).map((row) => `
+        <article class="mobile-card">
+          <div class="mobile-card-head"><strong>${escapeHtml(row.date)}</strong><span>${number(row.positionCount, 0)} 只</span></div>
+          <dl>
+            <div><dt>原总体</dt><dd class="${classByValue(row.stored)}">${money(row.stored)}</dd></div>
+            <div><dt>重算总体</dt><dd class="${classByValue(row.expected)}">${money(row.expected)}</dd></div>
+            <div><dt>差异</dt><dd class="${classByValue(row.diff)}">${money(row.diff)}</dd></div>
+          </dl>
+        </article>
+      `).join("")}
+      ${audit.totalRows.length > 60 ? `<p class="history-note">总体差异较多，当前先显示前 60 天。</p>` : ""}
+    `
+    : "";
+  const positionHtml = audit.positionRows.length
+    ? `
+      <h4 class="section-kicker">个股当日盈亏差异</h4>
+      ${audit.positionRows.slice(0, 80).map((row) => `
+      <article class="mobile-card">
+        <div class="mobile-card-head"><strong class="stock-name-chip">${escapeHtml(row.name)}</strong><span>${escapeHtml(row.date)}</span></div>
+        <dl>
+          <div><dt>代码</dt><dd>${escapeHtml(row.symbol)}</dd></div>
+          <div><dt>数量</dt><dd>${number(row.quantity, 0)}</dd></div>
+          <div><dt>收盘价</dt><dd>${money(row.price)}</dd></div>
+          <div><dt>原记录</dt><dd class="${classByValue(row.stored)}">${money(row.stored)}</dd></div>
+          <div><dt>重算值</dt><dd class="${classByValue(row.expected)}">${money(row.expected)}</dd></div>
+          <div><dt>差异</dt><dd class="${classByValue(row.diff)}">${money(row.diff)}</dd></div>
+        </dl>
+      </article>
+      `).join("")}
+      ${audit.positionRows.length > 80 ? `<p class="history-note">个股差异较多，当前先显示前 80 条。</p>` : ""}
+    `
+    : "";
+  els.dayPnlAuditList.innerHTML = issueCount
+    ? `${totalHtml}${positionHtml}`
+    : `<div class="empty-state">未发现超过 ¥1 的历史当日盈亏差异。</div>`;
+  if (els.fixDayPnlAudit) els.fixDayPnlAudit.disabled = issueCount === 0;
+  if (els.clearDayPnlAudit) els.clearDayPnlAudit.disabled = false;
+  els.closeSnapshotStatus.textContent = `校验完成：检查 ${audit.checked} 条，发现总体 ${audit.totalRows.length} 天、个股 ${audit.positionRows.length} 条差异；尚未修改历史记录。`;
+}
+
+async function fixDayPnlAuditDiffs() {
+  const audit = auditCloseSnapshotDayPnl();
+  const issueCount = audit.totalRows.length + audit.positionRows.length;
+  if (!issueCount) {
+    renderDayPnlAuditReport();
+    return;
+  }
+  const message = [
+    `将修正历史收盘记录中的当日盈亏差异。`,
+    `总体差异：${audit.totalRows.length} 天`,
+    `个股差异：${audit.positionRows.length} 条`,
+    "",
+    "修正前会自动保存一份版本快照。确认继续吗？",
+  ].join("\n");
+  if (!confirm(message)) return;
+
+  if (els.fixDayPnlAudit) els.fixDayPnlAudit.disabled = true;
+  try {
+    await createVersionSnapshot("修正历史当日盈亏前");
+  } catch (error) {
+    console.warn("Version snapshot before day pnl fix failed", error);
+  }
+
+  const totalByDate = new Map(audit.totalRows.map((row) => [row.date, row.expected]));
+  const positionByKey = new Map(audit.positionRows.map((row) => [`${row.date}|${row.symbol}`, row.expected]));
+  state.closeSnapshots.forEach((snapshot) => {
+    if (totalByDate.has(snapshot.date)) snapshot.dayPnl = totalByDate.get(snapshot.date);
+    (snapshot.positions || []).forEach((position) => {
+      const key = `${snapshot.date}|${normalizeSymbol(position.symbol)}`;
+      if (positionByKey.has(key)) position.dayPnl = positionByKey.get(key);
+    });
+  });
+  save();
+  invalidateRenderCache();
+  renderCloseSnapshots();
+  renderDayPnlAuditReport();
+  els.closeSnapshotStatus.textContent = `已修正历史当日盈亏：总体 ${audit.totalRows.length} 天，个股 ${audit.positionRows.length} 条。`;
+}
+
 function renderCloseSnapshots(pendingOverride = null) {
   if (!els.closeSnapshotDate.value) els.closeSnapshotDate.value = today();
   if (!els.autoCloseSource.value) els.autoCloseSource.value = state.settings.autoCloseSource || "auto";
   if (!els.autoCloseBatchSize.value) els.autoCloseBatchSize.value = state.settings.autoCloseBatchSize || 5;
-  if (!els.autoCloseIgnoreSymbols.value) els.autoCloseIgnoreSymbols.value = state.settings.autoCloseIgnoreSymbols || "";
   els.autoCloseContinuous.checked = Boolean(state.settings.autoCloseContinuous);
   renderAutoCloseSummary();
   const sorted = [...state.closeSnapshots].sort((a, b) => b.date.localeCompare(a.date));
@@ -10674,13 +11463,13 @@ function renderCloseSnapshots(pendingOverride = null) {
     ? [
         { label: "最新记录日期", value: latest.date, tone: "" },
         { label: "最新总资产", value: money(latest.assets), tone: "" },
-        { label: "最新当日盈亏", value: money(latest.dayPnl), tone: classByValue(latest.dayPnl) },
+        { label: "最新当日盈亏", value: dayPnlMoney(latest.dayPnl), tone: classByValue(latest.dayPnl) },
         { label: "当前待记录资产", value: money(pending.assets), tone: "" },
       ]
     : [
         { label: "最新记录日期", value: "暂无", tone: "" },
         { label: "当前待记录资产", value: money(pending.assets), tone: "" },
-        { label: "当前当日盈亏", value: money(pending.dayPnl), tone: classByValue(pending.dayPnl) },
+        { label: "当前当日盈亏", value: dayPnlMoney(pending.dayPnl), tone: classByValue(pending.dayPnl) },
         { label: "当前持仓数", value: `${pending.positionCount} 只`, tone: "" },
       ];
 
@@ -12927,7 +13716,7 @@ function renderStockDetail() {
     <article class="metric"><span>时间加权收益</span><strong class="${twr.valid ? classByValue(twr.rate) : ""}">${twr.valid ? `${number(twr.rate, 2)}%` : "-"}</strong></article>
     <article class="metric"><span>已匹配数量</span><strong>${number(pair.matchedQuantity, 0)}</strong></article>
     <article class="metric"><span>未匹配数量</span><strong class="${classByValue(pair.unmatchedQuantity)}">${number(pair.unmatchedQuantity, 0)}</strong></article>
-    <article class="metric"><span>当日盈亏</span><strong class="${classByValue(position.dayPnl)}">${money(position.dayPnl)}</strong></article>
+    <article class="metric"><span>当日盈亏</span><strong class="${classByValue(position.dayPnl)}">${dayPnlMoney(position.dayPnl)}</strong></article>
   `;
   renderStockPlan(symbol);
   renderTPerformance(pair, position);
@@ -13166,8 +13955,7 @@ function renderStockReportCalendar(rows, monthKey) {
   const daysInMonth = new Date(year, month, 0).getDate();
   const cells = [];
 
-  const firstDayOfWeek = new Date(year, month - 1, 1).getDay();
-  const firstTradingOffset = firstDayOfWeek >= 1 && firstDayOfWeek <= 5 ? firstDayOfWeek - 1 : 0;
+  const firstTradingOffset = weekdayCalendarOffset(year, month);
   for (let index = 0; index < firstTradingOffset; index += 1) {
     cells.push(`<div class="pnl-day empty" aria-hidden="true"></div>`);
   }
@@ -13176,6 +13964,15 @@ function renderStockReportCalendar(rows, monthKey) {
     const dayOfWeek = new Date(year, month - 1, day).getDay();
     if (dayOfWeek === 0 || dayOfWeek === 6) continue;
     const date = `${monthKey}-${String(day).padStart(2, "0")}`;
+    const closeReason = marketCloseReason(date);
+    if (closeReason) {
+      cells.push(renderClosedCalendarDay(day, closeReason));
+      continue;
+    }
+    if (date > today()) {
+      cells.push(renderFutureCalendarDay(day, date));
+      continue;
+    }
     const row = rowByDate.get(date);
     const pnl = row ? row.totalPnl : 0;
     const matched = row ? Number(row.matched) || 0 : 0;
@@ -13363,8 +14160,7 @@ function renderHistoryAssetsCalendar() {
 
   const daysInMonth = new Date(year, month, 0).getDate();
   const cells = [];
-  const firstDayOfWeek = new Date(year, month - 1, 1).getDay();
-  const firstTradingOffset = firstDayOfWeek >= 1 && firstDayOfWeek <= 5 ? firstDayOfWeek - 1 : 0;
+  const firstTradingOffset = weekdayCalendarOffset(year, month);
   for (let index = 0; index < firstTradingOffset; index += 1) {
     cells.push(`<div class="pnl-day empty" aria-hidden="true"></div>`);
   }
@@ -13373,6 +14169,15 @@ function renderHistoryAssetsCalendar() {
     const dayOfWeek = new Date(year, month - 1, day).getDay();
     if (dayOfWeek === 0 || dayOfWeek === 6) continue;
     const date = `${monthKey}-${String(day).padStart(2, "0")}`;
+    const closeReason = marketCloseReason(date);
+    if (closeReason) {
+      cells.push(renderClosedCalendarDay(day, closeReason));
+      continue;
+    }
+    if (date > today()) {
+      cells.push(renderFutureCalendarDay(day, date));
+      continue;
+    }
     const row = rowByDate.get(date);
     const pnl = row ? Number(row.periodPnl) || 0 : 0;
     const previousRow = row ? [...allRows].filter((item) => item.date < date).sort((a, b) => b.date.localeCompare(a.date))[0] : null;
@@ -13393,7 +14198,7 @@ function renderHistoryAssetsCalendar() {
 
   els.historyAssetsCalendar.innerHTML = `
     <div class="pnl-calendar" aria-label="历史资产日历">
-      <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span>
+      ${["一", "二", "三", "四", "五"].map((day) => `<div class="calendar-weekday">${day}</div>`).join("")}
       ${cells.join("")}
     </div>
   `;
@@ -13432,7 +14237,7 @@ function renderHistoryAssetDetail(date) {
     { label: "现金", value: money(snapshot.cash), tone: "asset-value" },
     { label: "持仓市值", value: money(snapshot.marketValue), tone: "asset-value" },
     { label: "总盈亏", value: money(snapshot.totalPnl), tone: classByValue(snapshot.totalPnl) },
-    { label: "当日盈亏", value: money(snapshot.dayPnl), tone: classByValue(snapshot.dayPnl) },
+    { label: "当日盈亏", value: dayPnlMoney(snapshot.dayPnl), tone: classByValue(snapshot.dayPnl) },
     { label: "当天收益率", value: Number.isFinite(dailyReturnRate) ? `${number(dailyReturnRate, 2)}%` : "-", tone: Number.isFinite(dailyReturnRate) ? classByValue(dailyReturnRate) : "" },
     { label: "当日净值", value: Number.isFinite(dailyNav) ? number(dailyNav, 4) : "-", tone: Number.isFinite(dailyNav) ? classByValue(dailyNav - 1) : "" },
     { label: "持仓数", value: `${positionCount} 只`, tone: "" },
@@ -13654,6 +14459,8 @@ function renderSettings() {
   els.etfNoStampTax.checked = state.settings.etfNoStampTax !== false;
   els.backupStatus.textContent = backupStatusText();
   renderImportGuardStatus();
+  renderHolidayCalendarStatus();
+  renderManualMarketHolidays();
   if (!els.cashTransferDate.value) els.cashTransferDate.value = today();
   renderCashTransfers();
   renderCorporateActions();
@@ -15946,6 +16753,7 @@ function openModal(id) {
 
 function closeModal(modal) {
   if (!modal) return;
+  if (modal.id === "manual-close-modal") pendingAutoCloseManualRequest = null;
   modal.hidden = true;
   if (!document.querySelector(".app-modal:not([hidden])")) document.body.classList.remove("modal-open");
 }
@@ -16105,6 +16913,12 @@ els.confirmCorporateActionImport.addEventListener("click", confirmCorporateActio
 els.clearCorporateActionImport.addEventListener("click", clearCorporateActionImportPreview);
 els.corporateActionImportSymbol.addEventListener("change", () => { els.corporateActionImportSymbol.value = normalizeSymbol(els.corporateActionImportSymbol.value); });
 els.corporateActionImportSymbol.addEventListener("blur", () => { els.corporateActionImportSymbol.value = normalizeSymbol(els.corporateActionImportSymbol.value); });
+els.updateHolidayCalendar?.addEventListener("click", updateCurrentYearHolidayCalendarFromExchange);
+els.addManualHoliday?.addEventListener("click", addManualMarketHoliday);
+els.manualHolidayList?.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-delete-manual-holiday]");
+  if (button) deleteManualMarketHoliday(button.dataset.deleteManualHoliday);
+});
 els.actionType.addEventListener("change", updateCorporateActionNet);
 els.actionDate.addEventListener("change", updateCorporateActionNet);
 els.actionSymbol.addEventListener("input", updateCorporateActionNet);
@@ -16228,10 +17042,12 @@ els.openManualCloseModal.addEventListener("click", openManualCloseModal);
 els.saveManualClose.addEventListener("click", saveManualCloseSnapshot);
 els.autoCloseSource.addEventListener("change", () => { state.settings.autoCloseSource = els.autoCloseSource.value || "auto"; save(); });
 els.autoCloseBatchSize.addEventListener("change", () => { state.settings.autoCloseBatchSize = Math.max(1, Math.min(60, Number(els.autoCloseBatchSize.value) || 5)); els.autoCloseBatchSize.value = state.settings.autoCloseBatchSize; save(); });
-els.autoCloseIgnoreSymbols.addEventListener("change", () => { state.settings.autoCloseIgnoreSymbols = els.autoCloseIgnoreSymbols.value.trim(); save(); renderCloseSnapshots(); });
 els.autoCloseContinuous.addEventListener("change", () => { state.settings.autoCloseContinuous = Boolean(els.autoCloseContinuous.checked); save(); });
 els.stopAutoCloseFill.addEventListener("click", () => { stopAutoCloseFillRequested = true; els.closeSnapshotStatus.textContent = "正在停止，当前请求结束后会停下。"; });
 els.autoFillCloseSnapshots.addEventListener("click", autoFillHistoricalCloseSnapshots);
+els.auditDayPnl?.addEventListener("click", renderDayPnlAuditReport);
+els.fixDayPnlAudit?.addEventListener("click", fixDayPnlAuditDiffs);
+els.clearDayPnlAudit?.addEventListener("click", clearDayPnlAuditReport);
 els.closeSnapshotBody.addEventListener("click", (event) => {
   const id = event.target.dataset.deleteClose;
   if (id) deleteCloseSnapshot(id);
@@ -16692,6 +17508,7 @@ loadAppState()
     resetCorporateActionForm();
     renderAll();
     renderVersionSnapshots();
+    scheduleAnnualHolidayCalendarUpdate();
   });
 
 if ("serviceWorker" in navigator && window.location.protocol.startsWith("http")) {
