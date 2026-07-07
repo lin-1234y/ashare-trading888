@@ -4019,8 +4019,14 @@ details[open] > summary .expand-hint::after {
 }
 
 .stock-kline-quantity-bar {
-  fill: rgba(47, 125, 255, 0.22);
-  stroke: rgba(47, 125, 255, 0.46);
+  fill: rgba(255, 79, 216, 0.24);
+  stroke: rgba(255, 79, 216, 0.58);
+  stroke-width: 0.7;
+}
+
+.local-review-position-bar {
+  fill: rgba(255, 79, 216, 0.24);
+  stroke: rgba(255, 79, 216, 0.58);
   stroke-width: 0.7;
 }
 
@@ -4099,6 +4105,13 @@ details[open] > summary .expand-hint::after {
   font-size: 21px;
   line-height: 1.42;
   font-weight: 950;
+}
+
+.stock-kline-tooltip-focus .stock-kline-match-total {
+  color: #ff4fd8;
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 1000;
 }
 
 .stock-kline-tooltip-market {
@@ -4259,7 +4272,7 @@ details[open] > summary .expand-hint::after {
 }
 
 .stock-kline-legend .quantity {
-  --legend-color: #2f7dff;
+  --legend-color: #ff4fd8;
 }
 
 .stock-kline-legend .cost-drop {
@@ -4311,6 +4324,57 @@ details[open] > summary .expand-hint::after {
 
 .stock-kline-range {
   margin-top: 10px;
+}
+
+.report-bar-charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.report-bar-card {
+  min-width: 0;
+  border: 1px solid rgba(120, 183, 255, 0.22);
+  border-radius: 8px;
+  padding: 12px;
+  background: rgba(11, 21, 36, 0.66);
+}
+
+.report-bar-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.report-bar-head strong {
+  color: var(--text);
+}
+
+.report-bar-card svg {
+  width: 100%;
+  min-height: 180px;
+  display: block;
+}
+
+.report-bar-label {
+  fill: #f7ecd1;
+  font-size: 15px;
+  font-weight: 950;
+}
+
+.report-bar-rate-label {
+  font-size: 14px;
+  font-weight: 950;
+}
+
+@media (max-width: 720px) {
+  .report-bar-charts {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
@@ -4971,6 +5035,7 @@ details[open] > summary .expand-hint::after {
             </div>
             <div class="metric-grid six" id="report-summary-metrics"></div>
             <div class="equity-chart" id="report-calendar"></div>
+            <div class="report-bar-charts spacing-top" id="report-bar-charts"></div>
             <div class="panel-header spacing-top">
               <div>
                 <h3>当前未匹配明细</h3>
@@ -4999,6 +5064,22 @@ details[open] > summary .expand-hint::after {
                 <button class="ghost-button small" id="report-next-year" type="button">下年</button>
               </div>
               <div class="metric-grid six spacing-top" id="report-year-summary"></div>
+              <div class="report-bar-charts spacing-top" id="report-year-bar-charts"></div>
+              <div class="form-actions spacing-top">
+                <button class="ghost-button" id="open-report-year-month-data" type="button">查看月度数据</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="app-modal" id="report-year-month-data-modal" hidden>
+            <div class="modal-card">
+              <div class="modal-head">
+                <div>
+                  <h3 id="report-year-month-data-title">月度数据</h3>
+                  <span id="report-year-month-data-subtitle">按月查看盈亏、收益率、匹配实现和成交额</span>
+                </div>
+                <button class="icon-action" type="button" data-modal-close>关闭</button>
+              </div>
               <div class="mobile-list spacing-top" id="report-year-months"></div>
             </div>
           </section>
@@ -5118,6 +5199,7 @@ details[open] > summary .expand-hint::after {
             <div class="metric-grid three spacing-top" id="broker-import-summary"></div>
             <div class="mobile-list" id="broker-import-preview"></div>
             <div class="mobile-list" id="broker-import-duplicates"></div>
+            <div class="mobile-list" id="broker-import-anomalies"></div>
             <div class="form-actions spacing-top">
               <button class="primary-button" type="button" id="confirm-broker-import" disabled>确认导入预览成交</button>
               <button class="ghost-button" type="button" id="clear-broker-import">清空预览</button>
@@ -5578,6 +5660,7 @@ details[open] > summary .expand-hint::after {
               <button class="ghost-button" type="button" id="stock-kline-last-120">近120</button>
               <button class="ghost-button" type="button" id="stock-kline-all">全部区间</button>
               <button class="ghost-button" type="button" id="stock-kline-full-trades">完整交易</button>
+              <button class="ghost-button" type="button" id="open-local-stock-review">无K线复盘</button>
             </div>
             <label class="stock-kline-range">
               <span id="stock-kline-window-label">显示全部K线</span>
@@ -5597,6 +5680,48 @@ details[open] > summary .expand-hint::after {
             </div>
             <div class="stock-kline-chart" id="stock-kline-chart"></div>
             <div class="stock-kline-detail" id="stock-kline-detail"></div>
+          </div>
+        </section>
+
+        <section class="app-modal" id="local-stock-review-modal" hidden>
+          <div class="modal-card">
+            <div class="modal-head">
+              <div>
+                <h3 id="local-stock-review-title">无K线交易复盘</h3>
+                <span id="local-stock-review-subtitle">行情未加载时，使用本地交易、匹配、成本与计划线生成</span>
+              </div>
+              <button class="icon-action" type="button" data-modal-close>关闭</button>
+            </div>
+            <p class="status-text" id="local-stock-review-status"></p>
+            <div class="stock-kline-legend">
+              <span class="quantity">magenta柱：仓位</span>
+              <span class="cost">黄色曲线：持仓成本变化</span>
+              <span class="buy">▲ 买入聚合点</span>
+              <span class="sell">▼ 卖出聚合点</span>
+              <span class="cost-drop">绿色竖条：成本下降日</span>
+              <span class="line">浅蓝线：成交参考价</span>
+              <span class="action">高亮圈：未匹配点</span>
+            </div>
+            <div class="form-grid compact">
+              <label>
+                区间开始
+                <input type="date" id="local-stock-review-start" />
+              </label>
+              <label>
+                区间结束
+                <input type="date" id="local-stock-review-end" />
+              </label>
+            </div>
+            <div class="form-actions spacing-top">
+              <button class="primary-button small" type="button" id="apply-local-stock-review-range">应用区间</button>
+              <button class="ghost-button small" type="button" id="reset-local-stock-review-range">显示全部</button>
+            </div>
+            <label class="stock-kline-range">
+              <span id="local-stock-review-window-label">显示全部本地日期</span>
+              <input type="range" id="local-stock-review-window" min="0" max="0" step="1" value="0" />
+            </label>
+            <div class="stock-kline-chart" id="local-stock-review-chart"></div>
+            <div class="stock-kline-detail" id="local-stock-review-detail"></div>
           </div>
         </section>
 
@@ -6072,6 +6197,7 @@ const stockKlineCache = new Map();
 const shIndexCompareCache = new Map();
 let assetChartCompareRequestId = 0;
 let currentStockKlineData = null;
+let currentLocalStockReviewData = null;
 const stockKlineReviewFilters = {
   costDown: false,
   matchProfit: false,
@@ -6132,6 +6258,7 @@ const els = {
   brokerImportSummary: optionalElement("#broker-import-summary"),
   brokerImportPreview: optionalElement("#broker-import-preview"),
   brokerImportDuplicates: optionalElement("#broker-import-duplicates"),
+  brokerImportAnomalies: optionalElement("#broker-import-anomalies"),
   confirmBrokerImport: optionalElement("#confirm-broker-import"),
   clearBrokerImport: optionalElement("#clear-broker-import"),
   rebuildSnapshotDate: optionalElement("#rebuild-snapshot-date"),
@@ -6294,6 +6421,7 @@ const els = {
   reportNextMonth: optionalElement("#report-next-month"),
   reportSummaryMetrics: optionalElement("#report-summary-metrics"),
   reportCalendar: optionalElement("#report-calendar"),
+  reportBarCharts: optionalElement("#report-bar-charts"),
   reportDailyBody: optionalElement("#report-daily-body"),
   reportDailyCards: optionalElement("#report-daily-cards"),
   reportYear: optionalElement("#report-year"),
@@ -6302,6 +6430,10 @@ const els = {
   reportNextYear: optionalElement("#report-next-year"),
   reportYearTitle: optionalElement("#report-year-title"),
   reportYearSummary: optionalElement("#report-year-summary"),
+  reportYearBarCharts: optionalElement("#report-year-bar-charts"),
+  openReportYearMonthData: optionalElement("#open-report-year-month-data"),
+  reportYearMonthDataTitle: optionalElement("#report-year-month-data-title"),
+  reportYearMonthDataSubtitle: optionalElement("#report-year-month-data-subtitle"),
   reportYearMonths: optionalElement("#report-year-months"),
   reportMatchTitle: optionalElement("#report-match-title"),
   reportMatchSubtitle: optionalElement("#report-match-subtitle"),
@@ -6376,6 +6508,19 @@ const els = {
   stockKlineStatus: optionalElement("#stock-kline-status"),
   stockKlineChart: optionalElement("#stock-kline-chart"),
   stockKlineDetail: optionalElement("#stock-kline-detail"),
+  openLocalStockReview: optionalElement("#open-local-stock-review"),
+  localStockReviewModal: optionalElement("#local-stock-review-modal"),
+  localStockReviewTitle: optionalElement("#local-stock-review-title"),
+  localStockReviewSubtitle: optionalElement("#local-stock-review-subtitle"),
+  localStockReviewStatus: optionalElement("#local-stock-review-status"),
+  localStockReviewStart: optionalElement("#local-stock-review-start"),
+  localStockReviewEnd: optionalElement("#local-stock-review-end"),
+  applyLocalStockReviewRange: optionalElement("#apply-local-stock-review-range"),
+  resetLocalStockReviewRange: optionalElement("#reset-local-stock-review-range"),
+  localStockReviewWindow: optionalElement("#local-stock-review-window"),
+  localStockReviewWindowLabel: optionalElement("#local-stock-review-window-label"),
+  localStockReviewChart: optionalElement("#local-stock-review-chart"),
+  localStockReviewDetail: optionalElement("#local-stock-review-detail"),
   initialCash: document.querySelector("#initial-cash"),
   accountSaveStatus: optionalElement("#account-save-status"),
   commissionRate: document.querySelector("#commission-rate"),
@@ -8612,14 +8757,53 @@ async function fetchStockKlineRange(symbol, startDate, endDate, source = "auto")
   throw new Error(errors.join("；") || "K线获取失败");
 }
 
-async function buildStockKlineData(stockCode, startDate, endDate, source = "auto") {
+function buildLocalStockReviewRows(startDate, endDate, trades, matchDetails, unmatchedLots, actions, referencePrices = []) {
+  const dates = new Set();
+  trades.forEach((trade) => dates.add(trade.date));
+  unmatchedLots.forEach((lot) => dates.add(lot.date));
+  actions.forEach((action) => dates.add(action.date));
+  matchDetails.forEach((match) => {
+    if (match.buyDate) dates.add(match.buyDate);
+    if (match.sellDate) dates.add(match.sellDate);
+    if (match.completionDate) dates.add(match.completionDate);
+  });
+
+  if (!dates.size && validDateString(endDate)) dates.add(endDate);
+
+  const fallbackPrice = referencePrices.find((price) => Number(price) > 0) || 1;
+  return [...dates]
+    .filter((date) => validDateString(date) && dateInRange(date, startDate, endDate))
+    .sort((a, b) => a.localeCompare(b))
+    .map((date) => {
+      const prices = [
+        ...trades.filter((trade) => trade.date === date).map((trade) => Number(trade.price) || 0),
+        ...unmatchedLots.filter((lot) => lot.date === date).map((lot) => Number(lot.price) || 0),
+        ...matchDetails.filter((match) => match.buyDate === date).map((match) => Number(match.buyPrice) || 0),
+        ...matchDetails.filter((match) => match.sellDate === date).map((match) => Number(match.sellPrice) || 0),
+      ].filter((price) => price > 0);
+      const close = prices.length ? prices.reduce((sum, price) => sum + price, 0) / prices.length : fallbackPrice;
+      const high = Math.max(close, ...prices, ...referencePrices.filter((price) => Number(price) > 0));
+      const low = Math.min(close, ...prices, ...referencePrices.filter((price) => Number(price) > 0));
+      return {
+        date,
+        open: close,
+        close,
+        high,
+        low,
+        volume: 0,
+        amount: 0,
+        source: "本地交易复盘",
+        localReviewOnly: true,
+      };
+    });
+}
+
+function buildStockKlineDataFromRows(stockCode, startDate, endDate, klineRows, meta = {}) {
   const symbol = normalizeSymbol(stockCode);
   const names = stockNameMap();
   const position = currentPortfolioSnapshot().positions.find((item) => normalizeSymbol(item.symbol) === symbol) || {};
   const plan = currentStockPlan(symbol);
   const pair = currentTradePairRows().find((row) => normalizeSymbol(row.symbol) === symbol) || emptyPairRow(symbol, position.name || names.get(symbol) || symbol);
-  const klineResult = await fetchStockKlineRange(symbol, startDate, endDate, source);
-  const rows = klineResult.rows.filter((row) => dateInRange(row.date, startDate, endDate));
   const allSymbolTrades = state.trades.filter((trade) => normalizeSymbol(trade.symbol) === symbol);
   const trades = allSymbolTrades
     .filter((trade) => dateInRange(trade.date, startDate, endDate))
@@ -8656,12 +8840,16 @@ async function buildStockKlineData(stockCode, startDate, endDate, source = "auto
       amount: action.type === "dividend" ? dividendNet(action) : 0,
       note: action.note || "",
     }));
+  const rows = (klineRows || []).filter((row) => dateInRange(row.date, startDate, endDate));
   return {
     stockCode: symbol,
     stockName: position.name || names.get(symbol) || symbol,
-    source: klineResult.source,
-    degraded: klineResult.degraded,
-    message: klineResult.message,
+    source: meta.source || "本地交易复盘",
+    degraded: Boolean(meta.degraded),
+    localReviewOnly: Boolean(meta.localReviewOnly),
+    requestedStartDate: startDate,
+    requestedEndDate: endDate,
+    message: meta.message || "",
     klineRows: rows,
     fullTradeCount: allSymbolTrades.length,
     buyPoints: trades.filter((trade) => trade.side === "buy"),
@@ -8673,6 +8861,38 @@ async function buildStockKlineData(stockCode, startDate, endDate, source = "auto
     takeProfitLine: Number(plan.takeProfit) || 0,
     stopLossLine: Number(plan.stopLoss) || 0,
     actionMarkers: actions,
+  };
+}
+
+async function buildStockKlineData(stockCode, startDate, endDate, source = "auto") {
+  const symbol = normalizeSymbol(stockCode);
+  const klineResult = await fetchStockKlineRange(symbol, startDate, endDate, source);
+  return buildStockKlineDataFromRows(symbol, startDate, endDate, klineResult.rows, {
+    source: klineResult.source,
+    degraded: klineResult.degraded,
+    message: klineResult.message,
+  });
+}
+
+function buildLocalStockReviewData(stockCode, startDate, endDate, reason = "") {
+  const symbol = normalizeSymbol(stockCode);
+  const base = buildStockKlineDataFromRows(symbol, startDate, endDate, [], {
+    source: "本地交易复盘",
+    localReviewOnly: true,
+    message: reason ? `未加载行情：${reason}。` : "未加载行情。",
+  });
+  const rows = buildLocalStockReviewRows(
+    startDate,
+    endDate,
+    [...(base.buyPoints || []), ...(base.sellPoints || [])],
+    base.matchDetails || [],
+    base.unmatchedLots || [],
+    base.actionMarkers || [],
+    [base.costLine, base.takeProfitLine, base.stopLossLine],
+  );
+  return {
+    ...base,
+    klineRows: rows,
   };
 }
 
@@ -9980,6 +10200,25 @@ function renderPnlCalendar(rows, matchedPnlByDate = null, matchDetailsByDate = n
       ${["一", "二", "三", "四", "五"].map((day) => `<div class="calendar-weekday">${day}</div>`).join("")}
       ${cells.join("")}
     </div>
+    ${renderDashboardPnlBars(monthRows, matchedPnlByDate, monthKey)}
+  `;
+}
+
+function renderDashboardPnlBars(monthRows, matchedPnlByDate, monthKey) {
+  const pnlRows = monthRows
+    .filter((row) => row.periodPnl !== null)
+    .map((row) => ({ date: row.date, totalPnl: Number(row.periodPnl) || 0 }));
+  const matchedRows = matchedPnlByDate
+    ? [...matchedPnlByDate.entries()]
+        .filter(([date]) => date.startsWith(monthKey))
+        .map(([date, matched]) => ({ date, matched: Number(matched) || 0 }))
+        .sort((a, b) => a.date.localeCompare(b.date))
+    : [];
+  return `
+    <div class="report-bar-charts spacing-top">
+      ${renderReportBarChart(`${monthKey} 当日盈亏`, pnlRows, "totalPnl", "本月没有收盘盈亏数据")}
+      ${renderReportBarChart(`${monthKey} 匹配盈亏`, matchedRows, "matched", matchedPnlByDate ? "本月没有匹配盈亏数据" : "匹配数据正在计算")}
+    </div>
   `;
 }
 
@@ -11083,8 +11322,9 @@ function renderManualCloseModal(request = null) {
 }
 
 function openManualCloseModal(request = null) {
-  pendingAutoCloseManualRequest = request || null;
-  if (!renderManualCloseModal(request)) return;
+  const manualRequest = request && request.date ? request : null;
+  pendingAutoCloseManualRequest = manualRequest || null;
+  if (!renderManualCloseModal(manualRequest)) return;
   openModal("manual-close-modal");
 }
 
@@ -11267,6 +11507,55 @@ function expectedSnapshotPositionDayPnl(snapshot, position) {
   return roundMoney(todayMarketValue - yesterdayMarketValue + traded.sellCashIn - traded.buyCashOut + dividend);
 }
 
+function explainSkippedDayPnlPosition(snapshot, position) {
+  const symbol = normalizeSymbol(position.symbol);
+  const currentPrice = snapshotPositionPrice(position);
+  const endingQuantity = Number(position.quantity) || 0;
+  const previous = previousSnapshotPosition(symbol, snapshot.date);
+  if (!previous) {
+    return {
+      date: snapshot.date,
+      symbol,
+      name: position.name || symbol,
+      reason: "缺少上一条收盘记录，无法取得昨收市值",
+      fixDate: "",
+      missingSymbols: [symbol],
+    };
+  }
+
+  const openingQuantity = Number(previous.position.quantity) || 0;
+  const openingPrice = snapshotPositionPrice(previous.position);
+  if (endingQuantity > 0 && currentPrice <= 0) {
+    return {
+      date: snapshot.date,
+      symbol,
+      name: position.name || symbol,
+      reason: `${snapshot.date} 收盘价为空或为 0`,
+      fixDate: snapshot.date,
+      missingSymbols: [symbol],
+    };
+  }
+  if (openingQuantity > 0 && openingPrice <= 0) {
+    return {
+      date: snapshot.date,
+      symbol,
+      name: position.name || symbol,
+      reason: `上一条收盘 ${previous.snapshot.date} 的收盘价为空或为 0`,
+      fixDate: previous.snapshot.date,
+      missingSymbols: [symbol],
+    };
+  }
+
+  return {
+    date: snapshot.date,
+    symbol,
+    name: position.name || symbol,
+    reason: "收盘价数据不完整",
+    fixDate: snapshot.date,
+    missingSymbols: [symbol],
+  };
+}
+
 function expectedSnapshotTotalDayPnl(snapshot) {
   const previous = [...state.closeSnapshots]
     .filter((item) => validDateString(item.date) && item.date < snapshot.date)
@@ -11297,6 +11586,7 @@ function expectedSnapshotTotalDayPnl(snapshot) {
 function auditCloseSnapshotDayPnl() {
   const positionRows = [];
   const totalRows = [];
+  const skippedRows = [];
   let checked = 0;
   let skipped = 0;
   const sorted = [...state.closeSnapshots].filter((snapshot) => validDateString(snapshot.date)).sort((a, b) => a.date.localeCompare(b.date));
@@ -11320,6 +11610,7 @@ function auditCloseSnapshotDayPnl() {
       const expected = expectedSnapshotPositionDayPnl(snapshot, position);
       if (expected === null) {
         skipped += 1;
+        skippedRows.push(explainSkippedDayPnlPosition(snapshot, position));
         return;
       }
       checked += 1;
@@ -11343,6 +11634,7 @@ function auditCloseSnapshotDayPnl() {
   return {
     checked,
     skipped,
+    skippedRows: skippedRows.sort((a, b) => b.date.localeCompare(a.date) || a.symbol.localeCompare(b.symbol)),
     totalRows: totalRows.sort((a, b) => b.date.localeCompare(a.date)),
     positionRows: positionRows.sort((a, b) => b.date.localeCompare(a.date) || a.symbol.localeCompare(b.symbol)),
   };
@@ -11402,12 +11694,30 @@ function renderDayPnlAuditReport() {
       ${audit.positionRows.length > 80 ? `<p class="history-note">个股差异较多，当前先显示前 80 条。</p>` : ""}
     `
     : "";
+  const missingHtml = audit.skippedRows.length
+    ? `
+      <h4 class="section-kicker">缺收盘价明细</h4>
+      <p class="history-note">这些记录因为缺当天收盘价或上一条收盘价，暂时不能重算当日盈亏。补完后重新点“校验历史当日盈亏”。</p>
+      ${audit.skippedRows.slice(0, 80).map((row) => `
+      <article class="mobile-card missing-day">
+        <div class="mobile-card-head"><strong class="stock-name-chip">${escapeHtml(row.name)}</strong><span>${escapeHtml(row.date)}</span></div>
+        <dl>
+          <div><dt>代码</dt><dd>${escapeHtml(row.symbol)}</dd></div>
+          <div><dt>缺少内容</dt><dd>${escapeHtml(row.reason)}</dd></div>
+          <div><dt>补录日期</dt><dd>${row.fixDate ? escapeHtml(row.fixDate) : "需要先补更早收盘记录"}</dd></div>
+        </dl>
+        ${row.fixDate ? `<div class="row-actions"><button class="ghost-button small" type="button" data-audit-manual-date="${escapeHtml(row.fixDate)}" data-audit-manual-symbols="${escapeHtml(row.missingSymbols.join(","))}">补这个日期</button></div>` : ""}
+      </article>
+      `).join("")}
+      ${audit.skippedRows.length > 80 ? `<p class="history-note">缺价明细较多，当前先显示前 80 条。</p>` : ""}
+    `
+    : "";
   els.dayPnlAuditList.innerHTML = issueCount
-    ? `${totalHtml}${positionHtml}`
-    : `<div class="empty-state">未发现超过 ¥1 的历史当日盈亏差异。</div>`;
+    ? `${totalHtml}${positionHtml}${missingHtml}`
+    : (audit.skippedRows.length ? missingHtml : `<div class="empty-state">未发现超过 ¥1 的历史当日盈亏差异。</div>`);
   if (els.fixDayPnlAudit) els.fixDayPnlAudit.disabled = issueCount === 0;
   if (els.clearDayPnlAudit) els.clearDayPnlAudit.disabled = false;
-  els.closeSnapshotStatus.textContent = `校验完成：检查 ${audit.checked} 条，发现总体 ${audit.totalRows.length} 天、个股 ${audit.positionRows.length} 条差异；尚未修改历史记录。`;
+  els.closeSnapshotStatus.textContent = `校验完成：检查 ${audit.checked} 条，发现总体 ${audit.totalRows.length} 天、个股 ${audit.positionRows.length} 条差异，缺收盘价跳过 ${audit.skippedRows.length} 条；尚未修改历史记录。`;
 }
 
 async function fixDayPnlAuditDiffs() {
@@ -12858,6 +13168,52 @@ function stockKlineVisibleData(data) {
   return data;
 }
 
+function localStockReviewVisibleData(data) {
+  const rows = data?.klineRows || [];
+  const maxWindow = rows.length;
+  if (!els.localStockReviewWindow) return data;
+  els.localStockReviewWindow.max = String(maxWindow);
+  let requestedWindow = Number(els.localStockReviewWindow.value) || 0;
+  if (requestedWindow > maxWindow) {
+    requestedWindow = maxWindow;
+    els.localStockReviewWindow.value = String(maxWindow);
+  }
+  if (els.localStockReviewWindowLabel) {
+    els.localStockReviewWindowLabel.textContent = requestedWindow > 0 && maxWindow > requestedWindow
+      ? `显示最近 ${requestedWindow} 个本地日期`
+      : `显示全部 ${maxWindow} 个本地日期`;
+  }
+  if (!(requestedWindow > 0 && rows.length > requestedWindow)) {
+    return {
+      ...data,
+      visibleStartDate: data.requestedStartDate || rows[0]?.date || "",
+      visibleEndDate: data.requestedEndDate || rows.at(-1)?.date || "",
+      visibleLocalDateCount: rows.length,
+      visibleMode: "all",
+    };
+  }
+  const visibleRows = rows.slice(-requestedWindow);
+  const first = visibleRows[0].date;
+  const last = visibleRows[visibleRows.length - 1].date;
+  return {
+    ...data,
+    visibleStartDate: first,
+    visibleEndDate: last,
+    visibleLocalDateCount: visibleRows.length,
+    visibleMode: "window",
+    klineRows: visibleRows,
+    buyPoints: (data.buyPoints || []).filter((point) => dateInRange(point.date, first, last)),
+    sellPoints: (data.sellPoints || []).filter((point) => dateInRange(point.date, first, last)),
+    actionMarkers: (data.actionMarkers || []).filter((item) => dateInRange(item.date, first, last)),
+    unmatchedLots: (data.unmatchedLots || []).filter((lot) => dateInRange(lot.date || "", first, last)),
+    matchDetails: (data.matchDetails || []).filter((match) => (
+      dateInRange(match.buyDate || "", first, last) ||
+      dateInRange(match.sellDate || "", first, last) ||
+      dateInRange(match.completionDate || "", first, last)
+    )),
+  };
+}
+
 function stockKlineStatusText(data, visibleData) {
   const sourceMessage = data.message ? `${data.message} ` : "";
   const visibleBuyCount = (visibleData.buyPoints || []).length;
@@ -12997,6 +13353,16 @@ function stockKlineTradeSummaryByDate(data, date) {
       quantity,
       amount,
       averagePrice: quantity > 0 ? amount / quantity : 0,
+      items: rows.map((trade) => {
+        const itemQuantity = Number(trade.quantity) || 0;
+        const itemPrice = Number(trade.price) || 0;
+        const itemAmount = Number(trade.amount) || (itemQuantity * itemPrice);
+        return {
+          quantity: itemQuantity,
+          price: itemPrice,
+          amount: itemAmount,
+        };
+      }),
     };
   }).filter((row) => row.count > 0);
 }
@@ -13007,7 +13373,7 @@ function stockKlineMatchSummaryByDate(data, date) {
     count: matches.length,
     quantity: matches.reduce((sum, match) => sum + Math.abs(Number(match.quantity) || 0), 0),
     pnl: matches.reduce((sum, match) => sum + stockKlineMatchPnl(match), 0),
-    items: matches.slice(0, 3).map((match) => ({
+    items: matches.map((match) => ({
       quantity: Math.abs(Number(match.quantity) || 0),
       buyPrice: Number(match.buyPrice) || 0,
       sellPrice: Number(match.sellPrice) || 0,
@@ -13151,11 +13517,17 @@ function stockKlineCostSegments(points, xFor, yFor) {
 function renderStockKlineTooltip(point, label = "当前选中") {
   const change = Number(point?.changePct);
   const trades = point?.trades?.length
-    ? point.trades.map((trade) => `<span class="${trade.side === "buy" ? "negative" : "positive"}">${trade.side === "buy" ? "买入" : "卖出"} ${number(trade.quantity, 0)}股 @${number(trade.averagePrice, 3)}，${money(trade.amount)}</span>`).join("")
+    ? point.trades.map((trade) => {
+      const tone = trade.side === "buy" ? "negative" : "positive";
+      const labelText = trade.side === "buy" ? "买入" : "卖出";
+      const items = trade.items?.length
+        ? trade.items.map((item) => `<span class="${tone}">${labelText} ${number(item.quantity, 0)}股 @${number(item.price, 3)}，${money(item.amount)}</span>`).join("")
+        : `<span class="${tone}">${labelText} ${number(trade.quantity, 0)}股 @${number(trade.averagePrice, 3)}，${money(trade.amount)}</span>`;
+      return items;
+    }).join("")
     : "无";
-  const matchTone = point?.matches?.pnl ? classByValue(point.matches.pnl) : "";
   const matches = point?.matches?.count
-    ? `<span class="${matchTone}">${number(point.matches.quantity, 0)}股，${money(point.matches.pnl)}</span>${point.matches.items?.length ? point.matches.items.map((item) => `<span class="${classByValue(item.pnl)}">${number(item.quantity, 0)}股 ${number(item.buyPrice, 3)}→${number(item.sellPrice, 3)} ${money(item.pnl)}</span>`).join("") : ""}`
+    ? `<span class="stock-kline-match-total">${number(point.matches.quantity, 0)}股，${money(point.matches.pnl)}</span>${point.matches.items?.length ? point.matches.items.map((item) => `<span class="${classByValue(item.pnl)}">${number(item.quantity, 0)}股 ${number(item.buyPrice, 3)}→${number(item.sellPrice, 3)} ${money(item.pnl)}</span>`).join("") : ""}`
     : "无";
   const unmatchedTone = point?.unmatched?.side === "sell" ? "warning" : point?.unmatched?.side === "buy" ? "positive" : "";
   const unmatched = point?.unmatched?.count
@@ -13411,6 +13783,183 @@ function renderStockKlineChart(data) {
   `;
 }
 
+function aggregateLocalReviewTradePoints(points = []) {
+  const groups = new Map();
+  points.forEach((point) => {
+    const date = point.date || "";
+    if (!validDateString(date)) return;
+    const quantity = Number(point.quantity) || 0;
+    const price = Number(point.price) || 0;
+    const amount = Number(point.amount) || (quantity * price);
+    const item = groups.get(date) || { ...point, date, quantity: 0, amount: 0, count: 0, priceAmount: 0 };
+    item.quantity += quantity;
+    item.amount += amount;
+    item.priceAmount += price * quantity;
+    item.count += 1;
+    groups.set(date, item);
+  });
+  return [...groups.values()]
+    .map((item) => ({
+      ...item,
+      price: item.quantity > 0 ? item.priceAmount / item.quantity : Number(item.price) || 0,
+    }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+function renderLocalStockReviewChart(data) {
+  const rows = data.klineRows || [];
+  if (!rows.length) return `<div class="empty-state">这个区间没有本地交易、匹配或公司行为记录。</div>`;
+  const aggregatedBuyPoints = aggregateLocalReviewTradePoints(data.buyPoints || []);
+  const aggregatedSellPoints = aggregateLocalReviewTradePoints(data.sellPoints || []);
+  const width = 760;
+  const height = 360;
+  const pad = { left: 54, right: 20, top: 24, bottom: 42 };
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+  const tooltipPoints = rows.map((row, index) => stockKlineTooltipPoint(data, row, index));
+  const costValues = tooltipPoints.map((point) => Number(point?.costSummary?.after) || 0).filter((value) => value > 0);
+  const extraPrices = [
+    data.costLine,
+    data.takeProfitLine,
+    data.stopLossLine,
+    ...costValues,
+    ...aggregatedBuyPoints.map((point) => point.price),
+    ...aggregatedSellPoints.map((point) => point.price),
+  ].filter((value) => Number(value) > 0);
+  const prices = rows.flatMap((row) => [row.close, row.high, row.low]).concat(extraPrices).filter((value) => Number(value) > 0);
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  const span = Math.max(0.01, max - min);
+  const yMin = Math.max(0, min - span * 0.1);
+  const yMax = max + span * 0.1;
+  const xFor = (index) => pad.left + (rows.length <= 1 ? plotW / 2 : (index / (rows.length - 1)) * plotW);
+  const yFor = (value) => pad.top + ((yMax - value) / (yMax - yMin)) * plotH;
+  const rowIndex = new Map(rows.map((row, index) => [row.date, index]));
+  const grid = [0, 0.25, 0.5, 0.75, 1].map((ratio) => {
+    const y = pad.top + ratio * plotH;
+    const price = yMax - ratio * (yMax - yMin);
+    return `<line x1="${pad.left}" y1="${y}" x2="${width - pad.right}" y2="${y}" stroke="rgba(255,255,255,.16)" /><text x="8" y="${y + 4}" fill="#b8c0cf" font-size="11">${number(price, 2)}</text>`;
+  }).join("");
+  const localLine = rows.map((row, index) => `${xFor(index)},${yFor(row.close)}`).join(" ");
+  const costSegments = stockKlineCostSegments(tooltipPoints, xFor, yFor);
+  const bandW = Math.max(5, Math.min(18, plotW / Math.max(1, rows.length)));
+  const maxQuantity = Math.max(1, ...tooltipPoints.map((point) => Number(point.quantity) || 0));
+  const quantityBaseY = height - pad.bottom;
+  const maxQuantityBarH = Math.min(58, plotH * 0.2);
+  const quantityBars = tooltipPoints.map((point, index) => {
+    const quantity = Number(point.quantity) || 0;
+    if (quantity <= 0) return "";
+    const barH = Math.max(2, (quantity / maxQuantity) * maxQuantityBarH);
+    const x = xFor(index) - bandW / 2;
+    return `<rect class="local-review-position-bar" x="${x}" y="${quantityBaseY - barH}" width="${bandW}" height="${barH}" />`;
+  }).join("");
+  const lineFor = (value, label, color) => {
+    if (!(Number(value) > 0)) return "";
+    const y = yFor(Number(value));
+    return `<line x1="${pad.left}" y1="${y}" x2="${width - pad.right}" y2="${y}" stroke="${color}" stroke-width="1.4" stroke-dasharray="5 4" /><text x="${width - pad.right - 86}" y="${y - 5}" fill="${color}" font-size="12">${label} ${number(value, 2)}</text>`;
+  };
+  const tradePoint = (point, side) => {
+    const index = rowIndex.get(point.date);
+    if (index === undefined || !(Number(point.price) > 0)) return "";
+    const x = xFor(index);
+    const y = yFor(Number(point.price));
+    const highlighted = data.unmatchedSide === side && (data.unmatchedLots || []).some((lot) => lot.side === side && lot.date === point.date);
+    const label = point.count > 1
+      ? `${side === "buy" ? "▲买" : "▼卖"}×${number(point.count, 0)}`
+      : (side === "buy" ? "▲买" : "▼卖");
+    const fill = side === "buy" ? "#ff4d62" : "#35d07f";
+    const textWidth = point.count > 1 ? 44 : 30;
+    const textX = point.count > 1 ? x - 15 : x - 7;
+    const textY = side === "buy" ? y + 18 : y - 8;
+    if (highlighted) {
+      return `
+        <g class="stock-kline-highlight-hit">
+          <circle class="stock-kline-highlight-ring" cx="${x}" cy="${y}" r="13" />
+          <rect class="stock-kline-highlight-bg" x="${textX - 3}" y="${textY - 14}" width="${textWidth}" height="18" rx="4" />
+          <text class="stock-kline-point highlight" x="${textX}" y="${textY}" fill="${fill}">${label}</text>
+        </g>
+      `;
+    }
+    return `<text class="stock-kline-point" x="${textX}" y="${textY}" fill="${fill}">${label}</text>`;
+  };
+  const actionMarker = (action) => {
+    const index = rowIndex.get(action.date);
+    if (index === undefined) return "";
+    const label = action.type === "dividend" ? "分" : "送";
+    return `<text class="stock-kline-point" x="${xFor(index) - 5}" y="${pad.top + 12}" fill="#ffd36a">◆${label}</text>`;
+  };
+  const labels = `<text x="${pad.left}" y="${height - 12}" fill="#b8c0cf" font-size="12">${rows[0].date.slice(5)}</text><text x="${width - pad.right - 38}" y="${height - 12}" fill="#b8c0cf" font-size="12">${rows.at(-1).date.slice(5)}</text>`;
+  const selectedTooltipPoint = tooltipPoints.at(-1);
+  return `
+    <div class="stock-kline-summary">
+      <article><span>数据模式</span><strong>无K线复盘</strong></article>
+      <article><span>当前区间</span><strong>${escapeHtml(data.visibleStartDate || rows[0]?.date || "-")} 至 ${escapeHtml(data.visibleEndDate || rows.at(-1)?.date || "-")}</strong></article>
+      <article><span>本地日期</span><strong>${number(rows.length, 0)} 天</strong></article>
+      <article><span>买点</span><strong>${number((data.buyPoints || []).length, 0)}</strong></article>
+      <article><span>卖点</span><strong>${number((data.sellPoints || []).length, 0)}</strong></article>
+      <article><span>匹配数</span><strong>${number((data.matchDetails || []).length, 0)}</strong></article>
+      <article><span>未匹配</span><strong>${stockKlineUnmatchedText(data.unmatchedSide)}</strong></article>
+    </div>
+    <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(data.stockName)} 无K线交易复盘图"
+      data-stock-kline-tooltip-chart="1"
+      data-points="${escapeHtml(JSON.stringify(tooltipPoints))}"
+      data-points-left="${pad.left}"
+      data-points-width="${plotW}"
+      data-points-count="${tooltipPoints.length}">
+      <rect x="0" y="0" width="${width}" height="${height}" fill="rgba(9,18,32,.72)" />
+      ${grid}
+      <line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${height - pad.bottom}" stroke="rgba(255,255,255,.25)" />
+      <line x1="${pad.left}" y1="${height - pad.bottom}" x2="${width - pad.right}" y2="${height - pad.bottom}" stroke="rgba(255,255,255,.25)" />
+      ${quantityBars}
+      <polyline points="${localLine}" fill="none" stroke="#8fb3ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+      ${rows.map((row, index) => `<circle cx="${xFor(index)}" cy="${yFor(row.close)}" r="3" fill="#8fb3ff" stroke="rgba(8,13,24,.9)" stroke-width="1.2" />`).join("")}
+      ${costSegments.map((segment) => `<polyline points="${segment.join(" ")}" fill="none" stroke="#ffd36a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />`).join("")}
+      <g class="stock-kline-cursor" data-stock-kline-cursor hidden>
+        <line x1="0" y1="${pad.top}" x2="0" y2="${height - pad.bottom}" stroke="rgba(255,211,106,.58)" stroke-width="2" />
+        <rect x="-4" y="${pad.top}" width="8" height="${plotH}" fill="rgba(255,211,106,.08)" />
+      </g>
+      ${lineFor(data.costLine, "当前成本", "rgba(255,211,106,.72)")}
+      ${lineFor(data.takeProfitLine, "止盈", "#ff4d62")}
+      ${lineFor(data.stopLossLine, "止损", "#35d07f")}
+      ${aggregatedBuyPoints.map((point) => tradePoint(point, "buy")).join("")}
+      ${aggregatedSellPoints.map((point) => tradePoint(point, "sell")).join("")}
+      ${(data.actionMarkers || []).map(actionMarker).join("")}
+      ${labels}
+    </svg>
+    <div class="stock-kline-tooltip ${selectedTooltipPoint?.hasTrade ? "has-trade" : ""}" data-stock-kline-tooltip>
+      ${renderStockKlineTooltip(selectedTooltipPoint, "本地最新")}
+    </div>
+  `;
+}
+
+function renderLocalStockReviewDetail(data) {
+  const rows = data.klineRows || [];
+  if (!rows.length) return `<div class="empty-state">这个区间没有可复盘的本地数据。</div>`;
+  return `
+    <div class="mobile-list spacing-top">
+      ${rows.slice().reverse().map((row) => {
+        const trades = stockKlineTradeSummaryByDate(data, row.date);
+        const matches = stockKlineMatchSummaryByDate(data, row.date);
+        const unmatched = stockKlineUnmatchedSummaryByDate(data, row.date);
+        const cost = stockKlineCostSummary(data, row.date);
+        return `
+          <article class="mobile-card">
+            <div class="mobile-card-head"><strong>${escapeHtml(row.date)}</strong><span>本地复盘</span></div>
+            <dl>
+              <div><dt>参考价</dt><dd>¥${number(row.close, 3)}</dd></div>
+              <div><dt>买入</dt><dd>${trades.find((trade) => trade.side === "buy") ? `${number(trades.find((trade) => trade.side === "buy").quantity, 0)} 股` : "无"}</dd></div>
+              <div><dt>卖出</dt><dd>${trades.find((trade) => trade.side === "sell") ? `${number(trades.find((trade) => trade.side === "sell").quantity, 0)} 股` : "无"}</dd></div>
+              <div><dt>匹配盈亏</dt><dd class="${classByValue(matches.pnl)}">${matches.count ? money(matches.pnl) : "无"}</dd></div>
+              <div><dt>未匹配</dt><dd>${unmatched.count ? `${stockKlineUnmatchedText(unmatched.side)} ${number(unmatched.quantity, 0)} 股` : "无"}</dd></div>
+              <div><dt>交易后成本</dt><dd>${cost.hasCost ? `¥${number(cost.after, 3)}` : "-"}</dd></div>
+            </dl>
+          </article>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
 function renderStockKlineMatchCard(match) {
   return renderMatchDetailCard(match);
 }
@@ -13573,6 +14122,7 @@ async function renderStockKline() {
     els.stockKlineChart.innerHTML = `<div class="empty-state">请先选择股票。</div>`;
     return;
   }
+  currentLocalStockReviewData = null;
   const startDate = els.stockKlineStart.value || defaultKlineRange(symbol).startDate;
   const endDate = els.stockKlineEnd.value || defaultKlineRange(symbol).endDate;
   if (startDate > endDate) {
@@ -13584,6 +14134,7 @@ async function renderStockKline() {
   try {
     const data = await buildStockKlineData(symbol, startDate, endDate, els.stockKlineSource.value || "auto");
     currentStockKlineData = data;
+    currentLocalStockReviewData = buildLocalStockReviewData(symbol, startDate, endDate);
     const visibleData = stockKlineVisibleData(data);
     els.stockKlineTitle.textContent = `${data.stockName} ${data.stockCode} K线图`;
     els.stockKlineSubtitle.textContent = `${startDate} 至 ${endDate} · ${data.source} · ${visibleData.klineRows.length}/${data.klineRows.length} 条`;
@@ -13592,9 +14143,66 @@ async function renderStockKline() {
     if (els.stockKlineDetail) els.stockKlineDetail.innerHTML = "";
   } catch (error) {
     currentStockKlineData = null;
-    els.stockKlineStatus.textContent = `K线加载失败：${error.message || error}`;
-    els.stockKlineChart.innerHTML = `<div class="empty-state">没有取到K线数据，可换价格来源或缩短日期范围。</div>`;
+    const message = error.message || String(error);
+    currentLocalStockReviewData = buildLocalStockReviewData(symbol, startDate, endDate, message);
+    els.stockKlineStatus.textContent = `K线加载失败：${message}。已生成无K线交易复盘。`;
+    els.stockKlineChart.innerHTML = `<div class="empty-state">没有取到K线数据。可换价格来源或缩短日期范围；也可以查看“无K线复盘”。</div>`;
+    renderLocalStockReviewModal(currentLocalStockReviewData);
+    openModal("local-stock-review-modal");
   }
+}
+
+function renderLocalStockReviewModal(data = null) {
+  const symbol = normalizeSymbol(els.stockKlineSymbol.value || selectedDetailSymbol);
+  const startDate = els.stockKlineStart.value || defaultKlineRange(symbol).startDate;
+  const endDate = els.stockKlineEnd.value || defaultKlineRange(symbol).endDate;
+  const review = data || currentLocalStockReviewData || buildLocalStockReviewData(symbol, startDate, endDate);
+  currentLocalStockReviewData = review;
+  if (els.localStockReviewStart && !els.localStockReviewStart.value) els.localStockReviewStart.value = review.requestedStartDate || startDate;
+  if (els.localStockReviewEnd && !els.localStockReviewEnd.value) els.localStockReviewEnd.value = review.requestedEndDate || endDate;
+  const visibleReview = localStockReviewVisibleData(review);
+  if (els.localStockReviewTitle) els.localStockReviewTitle.textContent = `${review.stockName} ${review.stockCode} 无K线交易复盘`;
+  if (els.localStockReviewSubtitle) {
+    els.localStockReviewSubtitle.textContent = `${visibleReview.visibleStartDate || review.requestedStartDate || startDate} 至 ${visibleReview.visibleEndDate || review.requestedEndDate || endDate} · ${visibleReview.visibleLocalDateCount ?? (visibleReview.klineRows || []).length}/${review.klineRows.length} 个本地日期`;
+  }
+  if (els.localStockReviewStatus) {
+    els.localStockReviewStatus.textContent = review.message || "使用本地交易、匹配、成本和计划线生成；magenta 柱为仓位，没有使用行情K线。";
+  }
+  if (els.localStockReviewChart) els.localStockReviewChart.innerHTML = renderLocalStockReviewChart(visibleReview);
+  if (els.localStockReviewDetail) els.localStockReviewDetail.innerHTML = renderLocalStockReviewDetail(visibleReview);
+}
+
+function openLocalStockReviewModal() {
+  renderLocalStockReviewModal();
+  openModal("local-stock-review-modal");
+}
+
+function applyLocalStockReviewRange() {
+  const symbol = normalizeSymbol(els.stockKlineSymbol.value || selectedDetailSymbol);
+  if (!symbol) return;
+  const fallback = defaultKlineRange(symbol);
+  const startDate = els.localStockReviewStart?.value || els.stockKlineStart.value || fallback.startDate;
+  const endDate = els.localStockReviewEnd?.value || els.stockKlineEnd.value || fallback.endDate;
+  if (startDate > endDate) {
+    if (els.localStockReviewStatus) els.localStockReviewStatus.textContent = "区间开始不能晚于区间结束。";
+    return;
+  }
+  if (els.localStockReviewWindow) els.localStockReviewWindow.value = "0";
+  currentLocalStockReviewData = buildLocalStockReviewData(symbol, startDate, endDate);
+  renderLocalStockReviewModal(currentLocalStockReviewData);
+}
+
+function resetLocalStockReviewRange() {
+  const symbol = normalizeSymbol(els.stockKlineSymbol.value || selectedDetailSymbol);
+  if (!symbol) return;
+  const fallback = defaultKlineRange(symbol);
+  const startDate = els.stockKlineStart.value || fallback.startDate;
+  const endDate = els.stockKlineEnd.value || fallback.endDate;
+  if (els.localStockReviewStart) els.localStockReviewStart.value = startDate;
+  if (els.localStockReviewEnd) els.localStockReviewEnd.value = endDate;
+  if (els.localStockReviewWindow) els.localStockReviewWindow.value = "0";
+  currentLocalStockReviewData = buildLocalStockReviewData(symbol, startDate, endDate);
+  renderLocalStockReviewModal(currentLocalStockReviewData);
 }
 
 function redrawStockKlineFromCache() {
@@ -13616,7 +14224,13 @@ function openStockKlineModal(symbol) {
   els.stockKlineStart.value = range.startDate;
   els.stockKlineEnd.value = range.endDate;
   if (els.stockKlineWindow) els.stockKlineWindow.value = "0";
+  if (els.localStockReviewWindow) els.localStockReviewWindow.value = "0";
+  if (els.localStockReviewStart) els.localStockReviewStart.value = "";
+  if (els.localStockReviewEnd) els.localStockReviewEnd.value = "";
   if (els.stockKlineDetail) els.stockKlineDetail.innerHTML = "";
+  currentLocalStockReviewData = null;
+  if (els.localStockReviewChart) els.localStockReviewChart.innerHTML = "";
+  if (els.localStockReviewDetail) els.localStockReviewDetail.innerHTML = "";
   openModal("stock-kline-modal");
   renderStockKline();
 }
@@ -13820,6 +14434,7 @@ function renderReports() {
     els.reportSymbol.innerHTML = `<option value="">暂无股票</option>`;
     els.reportSummaryMetrics.innerHTML = `<div class="empty-state">录入交易后显示个股复盘日历</div>`;
     els.reportCalendar.innerHTML = "";
+    if (els.reportBarCharts) els.reportBarCharts.innerHTML = "";
     els.reportDailyBody.innerHTML = `<tr><td colspan="7" class="empty-state">暂无个股记录</td></tr>`;
     els.reportDailyCards.innerHTML = `<div class="empty-state">暂无个股记录</div>`;
     return;
@@ -13874,6 +14489,7 @@ function renderReports() {
     .join("");
 
   renderStockReportCalendar(monthRows, monthKey);
+  renderStockReportBars(monthRows, monthKey);
   renderStockReportUnmatched(selected);
 }
 
@@ -13887,6 +14503,10 @@ function renderReportYear() {
   const selected = els.reportSymbol.value || stockSelectionBuckets().symbols[0] || "";
   if (!selected) {
     els.reportYearSummary.innerHTML = `<div class="empty-state">暂无股票</div>`;
+    if (els.reportYearBarCharts) els.reportYearBarCharts.innerHTML = "";
+    if (els.openReportYearMonthData) els.openReportYearMonthData.disabled = true;
+    if (els.reportYearMonthDataTitle) els.reportYearMonthDataTitle.textContent = "月度数据";
+    if (els.reportYearMonthDataSubtitle) els.reportYearMonthDataSubtitle.textContent = "暂无股票";
     els.reportYearMonths.innerHTML = "";
     return;
   }
@@ -13904,6 +14524,8 @@ function renderReportYear() {
   const yearMatchRate = assets > 0 ? (yearSummary.matched / assets) * 100 : 0;
 
   els.reportYearTitle.textContent = `${names.get(selected) || selected} ${yearKey} 年度表现`;
+  if (els.reportYearMonthDataTitle) els.reportYearMonthDataTitle.textContent = `${names.get(selected) || selected} ${yearKey} 月度数据`;
+  if (els.reportYearMonthDataSubtitle) els.reportYearMonthDataSubtitle.textContent = "按月查看盈亏、收益率、匹配实现和成交额";
   els.reportYearSummary.innerHTML = [
     { label: "全历史总盈亏", value: money(allSummary.totalPnl), tone: classByValue(allSummary.totalPnl) },
     { label: "全历史总匹配实现", value: money(allSummary.matched), tone: classByValue(allSummary.matched) },
@@ -13924,14 +14546,30 @@ function renderReportYear() {
     </article>
   `).join("");
 
-  const monthCards = [];
+  const monthSummaries = [];
   for (let month = 1; month <= 12; month += 1) {
     const monthKey = `${yearKey}-${String(month).padStart(2, "0")}`;
     const rows = stockReportRows(selected, monthStartDate(monthKey), monthEndDate(monthKey));
     if (!rows.length) continue;
     const summary = sumStockReportRows(rows);
     const stockReturn = compoundStockReportReturn(rows);
-    monthCards.push(`
+    monthSummaries.push({ monthKey, rows, summary, stockReturn });
+  }
+
+  if (els.reportYearBarCharts) {
+    const chartRows = monthSummaries.map((item) => ({
+      date: item.monthKey,
+      totalPnl: item.summary.totalPnl,
+      matched: item.summary.matched,
+      returnRate: item.stockReturn.valid ? item.stockReturn.rate : null,
+    }));
+    els.reportYearBarCharts.innerHTML = [
+      renderReportBarChart(`${yearKey} 月度盈亏`, chartRows, "totalPnl", `${yearKey} 年没有盈亏数据`, { rateKey: "returnRate" }),
+      renderReportBarChart(`${yearKey} 月度匹配实现`, chartRows, "matched", `${yearKey} 年没有匹配实现数据`),
+    ].join("");
+  }
+
+  const monthCards = monthSummaries.map(({ monthKey, rows, summary, stockReturn }) => `
       <article class="mobile-card">
         <div class="mobile-card-head">
           <strong>${monthKey}</strong>
@@ -13945,8 +14583,8 @@ function renderReportYear() {
         </dl>
       </article>
     `);
-  }
   els.reportYearMonths.innerHTML = monthCards.length ? monthCards.join("") : `<div class="empty-state">${yearKey} 年没有个股记录</div>`;
+  if (els.openReportYearMonthData) els.openReportYearMonthData.disabled = !monthCards.length;
 }
 
 function renderStockReportCalendar(rows, monthKey) {
@@ -13995,6 +14633,79 @@ function renderStockReportCalendar(rows, monthKey) {
       ${cells.join("")}
     </div>
   `;
+}
+
+function renderReportBarChart(title, rows, valueKey, emptyText, options = {}) {
+  const rateKey = options.rateKey || "";
+  const validRows = rows
+    .map((row) => ({ date: row.date, value: Number(row[valueKey]) || 0, rate: rateKey ? Number(row[rateKey]) : null }))
+    .filter((row) => Math.abs(row.value) > 0.000001);
+  const total = validRows.reduce((sum, row) => sum + row.value, 0);
+  if (!validRows.length) {
+    return `
+      <article class="report-bar-card">
+        <div class="report-bar-head"><strong>${title}</strong><span>0 天</span></div>
+        <div class="empty-state">${emptyText}</div>
+      </article>
+    `;
+  }
+
+  const width = 720;
+  const height = 220;
+  const pad = { left: 68, right: 18, top: 22, bottom: 36 };
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+  const maxAbs = Math.max(1, ...validRows.map((row) => Math.abs(row.value)));
+  const zeroY = pad.top + plotH / 2;
+  const barGap = 4;
+  const barW = Math.max(6, Math.min(22, (plotW / validRows.length) - barGap));
+  const xFor = (index) => pad.left + (validRows.length <= 1 ? plotW / 2 : (index / (validRows.length - 1)) * plotW);
+  const bars = validRows.map((row, index) => {
+    const h = Math.max(2, (Math.abs(row.value) / maxAbs) * (plotH / 2 - 8));
+    const x = xFor(index) - barW / 2;
+    const y = row.value >= 0 ? zeroY - h : zeroY;
+    const fill = row.value >= 0 ? "rgba(255, 55, 86, 0.92)" : "rgba(35, 220, 126, 0.92)";
+    const stroke = row.value >= 0 ? "rgba(255, 118, 138, 1)" : "rgba(102, 255, 178, 1)";
+    const rateLabel = Number.isFinite(row.rate)
+      ? `<text class="report-bar-rate-label" x="${xFor(index)}" y="${row.value >= 0 ? Math.max(pad.top + 12, y - 6) : Math.min(height - pad.bottom - 4, y + h + 16)}" text-anchor="middle" fill="${row.rate >= 0 ? "#ff4d62" : "#35d07f"}">${row.rate >= 0 ? "+" : ""}${number(row.rate, 2)}%</text>`
+      : "";
+    return `
+      <g>
+        <title>${row.date} ${money(row.value)}${Number.isFinite(row.rate) ? `，月收益率 ${number(row.rate, 2)}%` : ""}</title>
+        <rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${fill}" stroke="${stroke}" stroke-width="1.2" />
+        ${rateLabel}
+      </g>
+    `;
+  }).join("");
+  const first = validRows[0].date.slice(5);
+  const last = validRows.at(-1).date.slice(5);
+  return `
+    <article class="report-bar-card">
+      <div class="report-bar-head">
+        <strong>${title}</strong>
+        <span class="${classByValue(total)}">${money(total)}</span>
+      </div>
+      <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${title}柱状图">
+        <rect x="0" y="0" width="${width}" height="${height}" rx="8" fill="rgba(9,18,32,.64)" />
+        <line x1="${pad.left}" y1="${zeroY}" x2="${width - pad.right}" y2="${zeroY}" stroke="rgba(255,255,255,.28)" />
+        <line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${height - pad.bottom}" stroke="rgba(255,255,255,.18)" />
+        <text class="report-bar-label" x="8" y="${pad.top + 4}">${moneyInt(maxAbs)}</text>
+        <text class="report-bar-label" x="8" y="${height - pad.bottom + 4}">-${moneyInt(maxAbs).replace(/^¥/, "")}</text>
+        ${bars}
+        <text class="report-bar-label" x="${pad.left}" y="${height - 10}">${first}</text>
+        <text class="report-bar-label" x="${width - pad.right - 34}" y="${height - 10}">${last}</text>
+      </svg>
+    </article>
+  `;
+}
+
+function renderStockReportBars(rows, monthKey) {
+  if (!els.reportBarCharts) return;
+  const sortedRows = [...rows].sort((a, b) => a.date.localeCompare(b.date));
+  els.reportBarCharts.innerHTML = [
+    renderReportBarChart(`${monthKey} 当日盈亏`, sortedRows, "totalPnl", "本月没有当日盈亏数据"),
+    renderReportBarChart(`${monthKey} 匹配盈亏`, sortedRows, "matched", "本月没有匹配盈亏数据"),
+  ].join("");
 }
 
 function renderStockReportUnmatched(symbol) {
@@ -16011,11 +16722,116 @@ function renderBrokerDuplicatePreview(duplicates = []) {
   }
 }
 
+function brokerImportPositionAnomalies(importRows = []) {
+  const anomalies = [];
+  const quantities = new Map();
+  state.initialPositions.forEach((item) => {
+    const symbol = normalizeSymbol(item.symbol);
+    quantities.set(symbol, (quantities.get(symbol) || 0) + (Number(item.quantity) || 0));
+  });
+  const importIds = new Set(importRows.map((trade) => trade.id));
+  sortedTrades([...state.trades, ...importRows]).forEach((trade) => {
+    const symbol = normalizeSymbol(trade.symbol);
+    const before = quantities.get(symbol) || 0;
+    const qty = Number(trade.quantity) || 0;
+    if (trade.side === "buy") {
+      quantities.set(symbol, before + qty);
+      return;
+    }
+    if (importIds.has(trade.id) && qty > before + 0.000001) {
+      anomalies.push({
+        severity: "danger",
+        title: "卖出超过导入前可用持仓",
+        text: `${trade.date} ${trade.name || symbol} ${symbol} 卖出 ${number(qty, 0)} 股，导入前推算仅有 ${number(before, 0)} 股。`,
+        trade,
+      });
+    }
+    quantities.set(symbol, before - qty);
+  });
+  return anomalies;
+}
+
+function brokerImportAnomalies(summary = {}) {
+  const anomalies = [];
+  pendingBrokerTrades.forEach((trade) => {
+    if (trade.date > today()) {
+      anomalies.push({
+        severity: "danger",
+        title: "未来日期成交",
+        text: `${trade.date} ${trade.name || trade.symbol} ${trade.symbol} 是未来日期，请确认券商文件日期。`,
+        trade,
+      });
+    }
+    if ((Number(trade.price) || 0) <= 0 || (Number(trade.quantity) || 0) <= 0) {
+      anomalies.push({
+        severity: "danger",
+        title: "价格或数量异常",
+        text: `${trade.date || "-"} ${trade.name || trade.symbol} ${trade.symbol} 价格 ${number(trade.price, 3)}，数量 ${number(trade.quantity, 0)}。`,
+        trade,
+      });
+    }
+  });
+  anomalies.push(...brokerImportPositionAnomalies(pendingBrokerTrades));
+  (summary.duplicateRows || []).forEach((trade) => {
+    anomalies.push({
+      severity: trade.duplicateReason?.includes("疑似") ? "warning" : "info",
+      title: trade.duplicateReason || "重复成交",
+      text: `${trade.date} ${trade.name || trade.symbol} ${trade.symbol} ${trade.side === "buy" ? "买入" : "卖出"} ${number(trade.quantity, 0)} 股 @${number(trade.price, 3)}。`,
+      trade,
+    });
+  });
+  if (summary.skipped) {
+    anomalies.push({
+      severity: "info",
+      title: "有项目被忽略",
+      text: `本次解析忽略 ${summary.skipped} 行，通常包含非买卖、逆回购、申购、分红或格式无效行。`,
+    });
+  }
+  return anomalies;
+}
+
+function renderBrokerImportAnomalies(summary = {}) {
+  if (!els.brokerImportAnomalies) return;
+  const anomalies = brokerImportAnomalies(summary);
+  if (!anomalies.length) {
+    els.brokerImportAnomalies.innerHTML = "";
+    return;
+  }
+  const severityTone = { danger: "negative", warning: "warning", info: "" };
+  const rows = anomalies.slice(0, 12);
+  els.brokerImportAnomalies.innerHTML = `
+    <article class="mobile-card">
+      <div class="card-title">
+        <strong>导入异常报告</strong>
+        <span>${anomalies.length} 项</span>
+      </div>
+      <dl>
+        ${[
+          { label: "严重", value: anomalies.filter((item) => item.severity === "danger").length, tone: "negative" },
+          { label: "警告", value: anomalies.filter((item) => item.severity === "warning").length, tone: "warning" },
+          { label: "提示", value: anomalies.filter((item) => item.severity === "info").length, tone: "" },
+        ].map((item) => `<div><dt>${item.label}</dt><dd class="${item.tone}">${item.value}</dd></div>`).join("")}
+      </dl>
+    </article>
+    ${rows.map((item) => `
+      <article class="mobile-card">
+        <div class="card-title">
+          <strong class="${severityTone[item.severity] || ""}">${escapeHtml(item.title)}</strong>
+          <span>${item.severity === "danger" ? "严重" : item.severity === "warning" ? "警告" : "提示"}</span>
+        </div>
+        <p class="history-note">${escapeHtml(item.text)}</p>
+      </article>
+    `).join("")}
+    ${anomalies.length > rows.length ? `<p class="history-note">还有 ${anomalies.length - rows.length} 项异常未显示，请优先处理严重项。</p>` : ""}
+  `;
+}
+
 function renderBrokerImportPreview(summary = {}) {
   const rows = pendingBrokerTrades;
   els.confirmBrokerImport.disabled = rows.length === 0;
   renderBrokerMappingPreview(summary);
   renderBrokerDuplicatePreview(summary.duplicateRows || []);
+  renderBrokerImportAnomalies(summary);
   els.brokerImportSummary.innerHTML = [
     { label: "可导入", value: `${rows.length} 笔`, tone: rows.length ? "positive" : "" },
     { label: "重复跳过", value: `${summary.duplicates || 0} 笔`, tone: "" },
@@ -16746,6 +17562,7 @@ function openModal(id) {
     "dividend-modal": () => renderDividendDetails(dividendModalSymbolFilter, dividendModalYearFilter),
     "cash-flow-modal": renderCashFlowDetails,
     "report-year-modal": renderReportYear,
+    "report-year-month-data-modal": renderReportYear,
   };
   const render = lazyRenderers[id];
   if (render) window.requestAnimationFrame(render);
@@ -17048,6 +17865,13 @@ els.autoFillCloseSnapshots.addEventListener("click", autoFillHistoricalCloseSnap
 els.auditDayPnl?.addEventListener("click", renderDayPnlAuditReport);
 els.fixDayPnlAudit?.addEventListener("click", fixDayPnlAuditDiffs);
 els.clearDayPnlAudit?.addEventListener("click", clearDayPnlAuditReport);
+els.dayPnlAuditList?.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-audit-manual-date]");
+  if (!button) return;
+  const date = button.dataset.auditManualDate;
+  const missingSymbols = (button.dataset.auditManualSymbols || "").split(",").map(normalizeSymbol).filter(Boolean);
+  openManualCloseModal({ date, missingSymbols });
+});
 els.closeSnapshotBody.addEventListener("click", (event) => {
   const id = event.target.dataset.deleteClose;
   if (id) deleteCloseSnapshot(id);
@@ -17087,6 +17911,7 @@ els.reportNextYear?.addEventListener("click", () => {
   els.reportYear.value = String((Number(els.reportYear.value) || Number((els.reportMonth.value || currentMonthKey()).slice(0, 4))) + 1);
   renderReportYear();
 });
+els.openReportYearMonthData?.addEventListener("click", () => openModal("report-year-month-data-modal"));
 els.reportCalendar.addEventListener("click", (event) => {
   const cell = event.target.closest("[data-report-match-date]");
   if (!cell) return;
@@ -17252,6 +18077,12 @@ els.stockKlineAll.addEventListener("click", () => {
   renderStockKline();
 });
 els.stockKlineFullTrades.addEventListener("click", openStockKlineFullTrades);
+els.openLocalStockReview?.addEventListener("click", openLocalStockReviewModal);
+els.applyLocalStockReviewRange?.addEventListener("click", applyLocalStockReviewRange);
+els.resetLocalStockReviewRange?.addEventListener("click", resetLocalStockReviewRange);
+els.localStockReviewStart?.addEventListener("change", applyLocalStockReviewRange);
+els.localStockReviewEnd?.addEventListener("change", applyLocalStockReviewRange);
+els.localStockReviewWindow?.addEventListener("input", () => renderLocalStockReviewModal(currentLocalStockReviewData));
 els.stockKlineChart?.addEventListener("click", (event) => {
   const filterButton = event.target.closest("[data-kline-review-filter]");
   if (filterButton) {
@@ -17313,6 +18144,23 @@ els.stockKlineChart?.addEventListener("keydown", (event) => {
   event.preventDefault();
   renderStockKlinePointDetail(point.dataset.klinePointSide, point.dataset.klinePointDate, point.dataset.klinePointPrice);
 });
+els.localStockReviewChart?.addEventListener("pointermove", (event) => {
+  const chart = event.target.closest("[data-stock-kline-tooltip-chart]");
+  if (!chart) return;
+  updateStockKlineTooltipFromClientX(chart, event.clientX);
+});
+els.localStockReviewChart?.addEventListener("pointerdown", (event) => {
+  const chart = event.target.closest("[data-stock-kline-tooltip-chart]");
+  if (!chart) return;
+  updateStockKlineTooltipFromClientX(chart, event.clientX);
+});
+els.localStockReviewChart?.addEventListener("touchmove", (event) => {
+  const touch = event.touches?.[0];
+  const chart = event.target.closest("[data-stock-kline-tooltip-chart]");
+  if (!touch || !chart) return;
+  updateStockKlineTooltipFromClientX(chart, touch.clientX);
+  event.preventDefault();
+}, { passive: false });
 document.addEventListener("click", (event) => {
   const button = event.target.closest("[data-open-kline-symbol]");
   if (!button) return;
