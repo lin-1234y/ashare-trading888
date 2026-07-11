@@ -4401,6 +4401,932 @@ details[open] > summary .expand-hint::after {
   }
 }
 
+/* Obsidian Gold Ledger: visual layer only, preserving all data and workflows. */
+:root {
+  --obsidian: #070706;
+  --obsidian-raised: #0e0d0b;
+  --ledger-gold: #d8b46a;
+  --ledger-gold-bright: #f2d48a;
+  --ledger-gold-line: rgba(216, 180, 106, 0.32);
+  --ledger-gold-soft: rgba(216, 180, 106, 0.13);
+}
+
+body {
+  background: #070706;
+  font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, #0f0e0b 0%, #090907 52%, #060605 100%);
+  border-right: 1px solid var(--ledger-gold-line);
+}
+
+.brand h1,
+.topbar h2,
+.panel-header h3,
+.form-title h3 {
+  font-family: "Iowan Old Style", "Songti SC", STSong, Georgia, serif;
+  font-weight: 700;
+}
+
+.brand-mark {
+  border: 1px solid rgba(242, 212, 138, 0.78);
+  box-shadow: 0 0 0 1px rgba(83, 65, 30, 0.72), 0 0 22px rgba(216, 180, 106, 0.16);
+}
+
+.content {
+  background: linear-gradient(180deg, rgba(216, 180, 106, 0.045), transparent 210px);
+}
+
+.topbar {
+  border-color: var(--ledger-gold-line) !important;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(20, 18, 14, 0.98), rgba(10, 9, 7, 0.98));
+  box-shadow: inset 0 1px 0 rgba(242, 212, 138, 0.09), 0 14px 38px rgba(0, 0, 0, 0.26);
+}
+
+.eyebrow {
+  color: var(--ledger-gold-bright) !important;
+  letter-spacing: 0.08em;
+}
+
+.panel,
+.form-panel,
+.metric,
+.mobile-card,
+.compare-card,
+.timeline-item {
+  border-color: var(--ledger-gold-line) !important;
+  border-radius: 8px !important;
+  background: linear-gradient(180deg, rgba(20, 19, 17, 0.97), rgba(10, 10, 9, 0.98)) !important;
+  box-shadow: inset 0 1px 0 rgba(242, 212, 138, 0.07), 0 12px 30px rgba(0, 0, 0, 0.24) !important;
+}
+
+.metric {
+  border-top-color: rgba(242, 212, 138, 0.6) !important;
+}
+
+.metric::after {
+  background: linear-gradient(118deg, rgba(242, 212, 138, 0.08), transparent 38%) !important;
+}
+
+.metric span,
+.mobile-card dt {
+  color: #a9a394 !important;
+}
+
+.metric strong,
+.mobile-card dd {
+  color: #f5ead0;
+}
+
+#dashboard > .metric-grid.six .metric:first-child {
+  background: linear-gradient(142deg, #282113, #14110b 58%, #0a0907) !important;
+  border-color: rgba(242, 212, 138, 0.72) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 231, 166, 0.18), 0 0 0 1px rgba(107, 80, 31, 0.38), 0 16px 34px rgba(0, 0, 0, 0.32) !important;
+}
+
+#dashboard > .metric-grid.six .metric:first-child strong {
+  color: var(--ledger-gold-bright) !important;
+  text-shadow: 0 0 15px rgba(216, 180, 106, 0.26) !important;
+}
+
+#dashboard > .metric-grid.six .metric:first-child span {
+  color: #d4c49d !important;
+}
+
+.position-contribution-card {
+  border-left: 3px solid var(--ledger-gold) !important;
+  background: linear-gradient(105deg, rgba(63, 49, 20, 0.42), rgba(16, 15, 13, 0.98) 42%) !important;
+}
+
+.primary-button {
+  border: 1px solid rgba(242, 212, 138, 0.82);
+  border-radius: 7px;
+  background: linear-gradient(180deg, #f1d487, #c9973e) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 246, 210, 0.58), 0 8px 18px rgba(163, 116, 34, 0.18);
+}
+
+.ghost-button,
+.file-button {
+  border-color: var(--ledger-gold-line) !important;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #1b1914, #10100e) !important;
+}
+
+.primary-button,
+.ghost-button,
+.danger-button,
+.file-button,
+.nav-button {
+  transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+}
+
+.primary-button:active,
+.ghost-button:active,
+.danger-button:active,
+.file-button:active,
+.nav-button:active {
+  transform: translateY(1px);
+}
+
+.nav {
+  gap: 7px;
+}
+
+.nav-button {
+  position: relative;
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: #aaa393;
+  background: transparent !important;
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 9px;
+  color: #a99b79;
+}
+
+.nav-icon svg {
+  width: 19px;
+  height: 19px;
+  stroke-width: 1.7;
+}
+
+.nav-label {
+  line-height: 1;
+}
+
+.nav-button:hover,
+.nav-button.active {
+  border-color: rgba(216, 180, 106, 0.48);
+  color: #f3e3ba;
+  background: linear-gradient(90deg, rgba(106, 77, 27, 0.32), rgba(20, 17, 11, 0.58)) !important;
+  box-shadow: inset 0 1px 0 rgba(242, 212, 138, 0.11), 0 0 18px rgba(216, 180, 106, 0.09);
+}
+
+.nav-button.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  bottom: 9px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--ledger-gold-bright);
+  box-shadow: 0 0 10px rgba(242, 212, 138, 0.58);
+}
+
+.nav-button.active .nav-icon {
+  color: var(--ledger-gold-bright);
+}
+
+@media (max-width: 620px) {
+  .content {
+    padding-bottom: calc(156px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .topbar {
+    border-radius: 8px !important;
+  }
+
+  .topbar h2 {
+    font-size: 21px;
+  }
+
+  #dashboard > .metric-grid.six .metric:first-child {
+    min-height: 108px !important;
+  }
+
+  #dashboard > .metric-grid.six .metric:first-child strong {
+    font-size: 27px !important;
+  }
+
+  .nav {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+    border-top: 1px solid rgba(216, 180, 106, 0.42);
+    background: linear-gradient(180deg, rgba(17, 15, 11, 0.96), rgba(5, 5, 4, 0.99)) !important;
+    box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.3);
+  }
+
+  .nav-button {
+    min-height: 55px;
+    padding: 5px 2px 4px;
+    display: grid;
+    grid-template-rows: 22px 14px;
+    justify-items: center;
+    align-content: center;
+    gap: 4px;
+    font-size: 11px;
+  }
+
+  .nav-icon {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+  }
+
+  .nav-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .nav-button.active::before {
+    top: auto;
+    bottom: 2px;
+    left: 50%;
+    width: 22px;
+    height: 2px;
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary-button,
+  .ghost-button,
+  .danger-button,
+  .file-button,
+  .nav-button {
+    transition: none;
+  }
+}
+
+/* Dashboard command center: regroup existing figures without changing calculations. */
+.dashboard-command-center {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.laser-frame {
+  border: 1px solid rgba(216, 180, 106, 0.52) !important;
+  box-shadow: 0 0 0 1px rgba(41, 218, 230, 0.06), 0 0 16px rgba(216, 180, 106, 0.08), inset 0 1px 0 rgba(242, 212, 138, 0.1) !important;
+}
+
+.dashboard-hero-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(124px, 0.85fr);
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.dashboard-hero-row .metric,
+.dashboard-pnl-surface .metric,
+.dashboard-account-values .metric {
+  min-height: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.dashboard-hero-row .metric::after,
+.dashboard-pnl-surface .metric::after,
+.dashboard-account-values .metric::after {
+  display: none;
+}
+
+.dashboard-hero-asset {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 22px 20px !important;
+}
+
+.dashboard-hero-asset span,
+.dashboard-hero-return span,
+.dashboard-analysis-surface span,
+.dashboard-allocation > span {
+  color: #d7c79e !important;
+  font-family: "Iowan Old Style", "Songti SC", STSong, Georgia, serif;
+  font-size: 16px !important;
+}
+
+.dashboard-hero-asset strong {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin-top: 10px;
+  color: var(--ledger-gold-bright) !important;
+  font-family: "Iowan Old Style", "Songti SC", STSong, Georgia, serif;
+  font-size: clamp(29px, 8vw, 48px) !important;
+  line-height: 1;
+  text-shadow: 0 0 18px rgba(216, 180, 106, 0.25);
+}
+
+.dashboard-hero-asset > span {
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-dragon-art {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  width: min(68%, 340px);
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  pointer-events: none;
+  opacity: 0.9;
+  mix-blend-mode: normal;
+  filter: brightness(1.45) saturate(1.28) contrast(1.1) drop-shadow(0 0 14px rgba(255, 198, 67, 0.46));
+  animation: dashboard-dragon-glow 5.5s ease-in-out infinite;
+}
+
+@keyframes dashboard-dragon-glow {
+  0%, 100% {
+    opacity: 0.84;
+    filter: brightness(1.28) saturate(1.16) contrast(1.08) drop-shadow(0 0 9px rgba(255, 198, 67, 0.36));
+  }
+  48% {
+    opacity: 0.98;
+    filter: brightness(1.72) saturate(1.42) contrast(1.14) drop-shadow(0 0 22px rgba(255, 210, 101, 0.7));
+  }
+}
+
+.dashboard-hero-return {
+  display: grid;
+  align-content: center;
+  gap: 9px;
+  padding: 20px 15px !important;
+  border-left: 1px solid rgba(216, 180, 106, 0.38) !important;
+  background: rgba(11, 15, 14, 0.66) !important;
+}
+
+.dashboard-hero-return strong {
+  font-size: clamp(26px, 7vw, 38px) !important;
+  line-height: 1;
+}
+
+.dashboard-account-surface {
+  padding: 16px !important;
+}
+
+.dashboard-section-heading {
+  margin-bottom: 14px;
+  color: var(--ledger-gold-bright);
+  font-family: "Iowan Old Style", "Songti SC", STSong, Georgia, serif;
+  font-size: 18px;
+}
+
+.dashboard-section-heading::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 18px;
+  margin-right: 8px;
+  border-radius: 2px;
+  vertical-align: -3px;
+  background: var(--ledger-gold-bright);
+  box-shadow: 0 0 10px rgba(242, 212, 138, 0.5);
+}
+
+.dashboard-account-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.dashboard-account-values {
+  display: grid;
+  gap: 8px;
+  padding-right: 14px;
+  border-right: 1px solid rgba(216, 180, 106, 0.35);
+}
+
+.dashboard-account-values .metric {
+  padding: 3px 0 !important;
+  background: transparent !important;
+}
+
+.dashboard-account-values .metric span {
+  margin-bottom: 5px;
+}
+
+.dashboard-account-values .metric strong {
+  color: #f1d58f !important;
+  font-family: "Iowan Old Style", "Songti SC", STSong, Georgia, serif;
+  font-size: clamp(17px, 4.8vw, 23px) !important;
+}
+
+.dashboard-allocation {
+  display: grid;
+  align-content: center;
+  gap: 10px;
+}
+
+.dashboard-allocation-bar {
+  display: flex;
+  height: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(216, 180, 106, 0.42);
+  border-radius: 3px;
+  background: #0a0a09;
+}
+
+.dashboard-allocation-bar i {
+  display: block;
+  min-width: 0;
+  transition: width 220ms ease;
+}
+
+#dashboard-market-allocation {
+  width: 0;
+  background: #d8b46a;
+  box-shadow: 0 0 11px rgba(216, 180, 106, 0.48);
+}
+
+#dashboard-cash-allocation {
+  width: 0;
+  background: #ff4d62;
+  box-shadow: 0 0 11px rgba(255, 77, 98, 0.45);
+}
+
+.dashboard-allocation-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: #aaa393;
+  font-size: 11px;
+}
+
+.dashboard-allocation-labels strong {
+  color: #eee0ba;
+  font-size: inherit;
+}
+
+.dashboard-pnl-surface {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.dashboard-pnl-surface .metric {
+  padding: 15px 12px !important;
+}
+
+.dashboard-pnl-surface .metric + .metric {
+  border-left: 1px solid rgba(216, 180, 106, 0.35) !important;
+}
+
+.dashboard-pnl-surface .metric span {
+  font-size: 12px !important;
+}
+
+.dashboard-pnl-surface .metric strong {
+  font-size: clamp(16px, 4.4vw, 22px) !important;
+  overflow-wrap: anywhere;
+}
+
+.dashboard-analysis-surface {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: 16px;
+  align-items: center;
+  padding: 17px 18px !important;
+}
+
+.dashboard-analysis-surface strong {
+  display: block;
+  margin-top: 8px;
+  font-size: clamp(28px, 8vw, 42px) !important;
+  line-height: 1;
+}
+
+.dashboard-analysis-surface p {
+  margin: 0;
+  padding-left: 16px;
+  border-left: 1px solid rgba(216, 180, 106, 0.35);
+  color: #a9a394;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.dashboard-accounting {
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(15, 14, 12, 0.94);
+}
+
+.dashboard-accounting summary {
+  min-height: 52px;
+  padding: 16px 18px;
+  color: var(--ledger-gold-bright);
+  font-family: "Iowan Old Style", "Songti SC", STSong, Georgia, serif;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.dashboard-accounting summary::marker {
+  color: var(--ledger-gold-bright);
+}
+
+.dashboard-accounting-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0 12px 12px;
+  border-top: 1px solid rgba(216, 180, 106, 0.26);
+}
+
+.dashboard-accounting-grid .metric {
+  min-height: 0 !important;
+  padding: 13px !important;
+}
+
+@keyframes dashboard-laser-border {
+  0%, 100% {
+    border-color: rgba(216, 180, 106, 0.56);
+    box-shadow: 0 0 0 1px rgba(41, 218, 230, 0.06), 0 0 15px rgba(216, 180, 106, 0.09), inset 0 1px 0 rgba(242, 212, 138, 0.1);
+  }
+  38% {
+    border-color: rgba(255, 77, 181, 0.58);
+    box-shadow: 0 0 0 1px rgba(255, 77, 181, 0.16), 0 0 18px rgba(255, 77, 181, 0.13), inset 0 1px 0 rgba(255, 176, 223, 0.12);
+  }
+  72% {
+    border-color: rgba(41, 218, 230, 0.54);
+    box-shadow: 0 0 0 1px rgba(41, 218, 230, 0.16), 0 0 18px rgba(41, 218, 230, 0.11), inset 0 1px 0 rgba(177, 248, 255, 0.1);
+  }
+}
+
+.dashboard-command-center .laser-frame {
+  animation: dashboard-laser-border 8s ease-in-out infinite;
+}
+
+@media (max-width: 620px) {
+  .dashboard-command-center {
+    gap: 10px;
+  }
+
+  .dashboard-hero-asset {
+    padding: 18px 15px !important;
+  }
+
+  .dashboard-dragon-art {
+    width: 62%;
+    opacity: 0.8;
+  }
+
+  .dashboard-hero-return {
+    padding: 16px 12px !important;
+  }
+
+  .dashboard-account-surface {
+    padding: 14px !important;
+  }
+
+  .dashboard-account-layout {
+    gap: 12px;
+  }
+
+  .dashboard-pnl-surface {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-pnl-surface .metric:nth-child(3) {
+    border-left: 0 !important;
+    border-top: 1px solid rgba(216, 180, 106, 0.35) !important;
+  }
+
+  .dashboard-pnl-surface .metric:nth-child(4) {
+    border-top: 1px solid rgba(216, 180, 106, 0.35) !important;
+  }
+
+  .dashboard-analysis-surface {
+    gap: 12px;
+    padding: 15px !important;
+  }
+
+  .dashboard-analysis-surface p {
+    padding-left: 12px;
+    font-size: 12px;
+  }
+
+  .dashboard-accounting-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 0 9px 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-command-center .laser-frame {
+    animation: none;
+  }
+
+  .dashboard-dragon-art {
+    animation: none;
+    opacity: 0.92;
+    filter: brightness(1.5) saturate(1.3) contrast(1.12) drop-shadow(0 0 16px rgba(255, 210, 101, 0.56));
+  }
+}
+
+/* Close-snapshot workflow: regroup existing actions without changing snapshot logic. */
+.close-workflow-shell {
+  display: grid;
+  gap: 14px;
+}
+
+.close-workflow-status {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.close-workflow-status .metric {
+  min-height: 0 !important;
+  padding: 13px !important;
+}
+
+.close-workflow-status .metric strong {
+  font-size: 18px !important;
+  overflow-wrap: anywhere;
+}
+
+.close-workflow-message {
+  min-height: 0;
+  margin: -4px 0 0;
+  color: #bdb39b;
+}
+
+.close-workflow-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  padding: 4px;
+  border: 1px solid rgba(216, 180, 106, 0.42);
+  border-radius: 8px;
+  background: rgba(10, 10, 8, 0.72);
+}
+
+.close-workflow-tab {
+  min-height: 40px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: #aaa393;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.close-workflow-tab.active {
+  border-color: rgba(242, 212, 138, 0.64);
+  background: rgba(154, 112, 31, 0.32);
+  color: #f7e3ac;
+  box-shadow: inset 0 1px 0 rgba(255, 244, 205, 0.16), 0 0 12px rgba(216, 180, 106, 0.12);
+}
+
+.close-workflow-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.close-workflow-panel[hidden] {
+  display: none !important;
+}
+
+.close-record-command,
+.close-history-settings {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.85fr) repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  align-items: end;
+}
+
+.close-record-command label,
+.close-history-settings label,
+.close-history-filter label {
+  display: grid;
+  gap: 5px;
+  color: #bdb39b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.close-record-command input,
+.close-history-settings input,
+.close-history-settings select,
+.close-history-filter input {
+  width: 100%;
+}
+
+.close-record-history,
+.close-history-settings,
+.close-history-actions,
+.close-audit-actions {
+  padding-top: 13px;
+  border-top: 1px solid rgba(216, 180, 106, 0.23);
+}
+
+.close-section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: end;
+  margin-bottom: 11px;
+}
+
+.close-section-head h4 {
+  margin: 0 0 4px;
+  color: #f2d48a;
+  font-family: "Iowan Old Style", "Songti SC", STSong, Georgia, serif;
+  font-size: 18px;
+}
+
+.close-section-head span {
+  color: #aaa393;
+  font-size: 12px;
+}
+
+.close-history-filter,
+.close-range-controls {
+  display: flex;
+  gap: 8px;
+  align-items: end;
+}
+
+.close-history-filter label,
+.close-range-controls label {
+  min-width: 128px;
+}
+
+.close-history-range-slot {
+  display: contents;
+}
+
+.close-history-range-slot .close-range-controls {
+  display: contents;
+}
+
+.close-history-range-summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid rgba(216, 180, 106, 0.32);
+  border-radius: 7px;
+  background: rgba(11, 11, 9, 0.72);
+}
+
+.close-history-range-summary > span {
+  color: #aaa393;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.close-history-range-summary strong,
+.close-range-display {
+  min-width: 0;
+  color: #f0dfb5;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.close-range-modal-card {
+  width: min(100%, 430px);
+}
+
+.close-range-modal-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.close-range-modal-inputs label {
+  display: grid;
+  gap: 7px;
+  color: #c7bda4;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.close-range-modal-inputs input {
+  min-height: 46px;
+  width: 100%;
+}
+
+.close-range-modal-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.close-history-actions,
+.close-audit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  align-items: center;
+}
+
+.close-continuous-toggle {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 7px;
+  color: #d7c79e;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.close-audit-empty {
+  margin: 0;
+}
+
+@media (max-width: 620px) {
+  .close-workflow-shell {
+    gap: 11px;
+  }
+
+  .close-workflow-status {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .close-workflow-status .metric:first-child {
+    grid-column: span 2;
+  }
+
+  .close-workflow-status .metric strong {
+    font-size: 17px !important;
+  }
+
+  .close-record-command,
+  .close-history-settings {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .close-record-command label,
+  .close-history-settings .close-history-range-slot {
+    grid-column: span 2;
+  }
+
+  .close-history-range-summary {
+    grid-column: span 2;
+  }
+
+  .close-history-range-slot .close-range-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .close-section-head {
+    display: grid;
+    gap: 8px;
+  }
+
+  .close-history-filter,
+  .close-range-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .close-history-filter label,
+  .close-range-controls label {
+    min-width: 0;
+  }
+
+  .close-history-actions,
+  .close-audit-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .close-history-actions .close-continuous-toggle {
+    grid-column: span 2;
+  }
+
+  .close-history-actions button,
+  .close-audit-actions button {
+    width: 100%;
+  }
+
+  .close-history-range-summary {
+    grid-template-columns: 1fr auto;
+  }
+
+  .close-history-range-summary strong {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
 </style>
   </head>
   <body>
@@ -4414,15 +5340,15 @@ details[open] > summary .expand-hint::after {
           </div>
         </div>
 
-        <nav class="nav">
-          <button class="nav-button active" data-view="dashboard"><span class="nav-icon">◆</span>总览</button>
-          <button class="nav-button" data-view="close-snapshots"><span class="nav-icon">●</span>收盘</button>
-          <button class="nav-button" data-view="trade-form"><span class="nav-icon">＋</span>交易</button>
-          <button class="nav-button" data-view="positions"><span class="nav-icon">▲</span>持仓</button>
-          <button class="nav-button" data-view="records"><span class="nav-icon">≡</span>流水</button>
-          <button class="nav-button" data-view="performance-summary"><span class="nav-icon">★</span>总结</button>
-          <button class="nav-button" data-view="reports"><span class="nav-icon">▦</span>复盘</button>
-          <button class="nav-button" data-view="settings"><span class="nav-icon">⚙</span>设置</button>
+        <nav class="nav" aria-label="主导航">
+          <button class="nav-button active" data-view="dashboard"><span class="nav-icon"><i data-lucide="layout-dashboard"></i></span><span class="nav-label">总览</span></button>
+          <button class="nav-button" data-view="close-snapshots"><span class="nav-icon"><i data-lucide="calendar-check"></i></span><span class="nav-label">收盘</span></button>
+          <button class="nav-button" data-view="trade-form"><span class="nav-icon"><i data-lucide="plus"></i></span><span class="nav-label">交易</span></button>
+          <button class="nav-button" data-view="positions"><span class="nav-icon"><i data-lucide="briefcase-business"></i></span><span class="nav-label">持仓</span></button>
+          <button class="nav-button" data-view="records"><span class="nav-icon"><i data-lucide="list"></i></span><span class="nav-label">流水</span></button>
+          <button class="nav-button" data-view="performance-summary"><span class="nav-icon"><i data-lucide="chart-column"></i></span><span class="nav-label">总结</span></button>
+          <button class="nav-button" data-view="reports"><span class="nav-icon"><i data-lucide="notebook-pen"></i></span><span class="nav-label">复盘</span></button>
+          <button class="nav-button" data-view="settings"><span class="nav-icon"><i data-lucide="settings"></i></span><span class="nav-label">设置</span></button>
         </nav>
 
         <div class="sidebar-card">
@@ -4450,67 +5376,102 @@ details[open] > summary .expand-hint::after {
             <button class="ghost-button small" data-jump="settings" type="button">去备份</button>
           </section>
 
-          <div class="metric-grid six">
-            <article class="metric">
-              <span>总资产</span>
-              <strong id="metric-assets">¥0.00</strong>
-            </article>
-            <article class="metric">
-              <span>总收益率</span>
-              <strong id="metric-total-return">0.00%</strong>
-            </article>
-            <article class="metric">
-              <span>时间加权收益率</span>
-              <strong id="metric-time-weighted-return">-</strong>
-            </article>
-            <article class="metric">
-              <span>现金</span>
-              <strong id="metric-cash">¥0.00</strong>
-            </article>
-            <article class="metric">
-              <span>持仓市值</span>
-              <strong id="metric-market-value">¥0.00</strong>
-            </article>
-            <article class="metric">
-              <span>原始资产</span>
-              <strong id="metric-cost">¥0.00</strong>
-            </article>
-            <article class="metric">
-              <span>总盈亏</span>
-              <strong id="metric-floating">¥0.00</strong>
-            </article>
-            <article class="metric">
-              <span>当日盈亏</span>
-              <strong id="metric-day-pnl">¥0.00</strong>
-            </article>
-            <article class="metric">
-              <span>本月盈亏</span>
-              <strong id="metric-month-pnl">¥0.00</strong>
-            </article>
-            <article class="metric">
-              <span>本年盈亏</span>
-              <strong id="metric-year-pnl">¥0.00</strong>
-            </article>
-            <article class="metric">
-              <span>匹配实现盈亏</span>
-              <strong id="metric-matched-realized">¥0.00</strong>
-              <button class="icon-action metric-action" type="button" data-modal-open="match-range-modal">阶段</button>
-            </article>
-            <article class="metric">
-              <span>手续总费</span>
-              <strong id="metric-total-fees">¥0.00</strong>
-              <span class="metric-note" id="metric-total-turnover">总成交 ¥0.00</span>
-            </article>
-            <article class="metric">
-              <span>资金出入</span>
-              <strong id="metric-cash-flow">¥0.00</strong>
-              <button class="icon-action metric-action" type="button" data-modal-open="cash-flow-modal">明细</button>
-            </article>
-            <article class="metric">
-              <span>累计净分红</span>
-              <strong id="metric-dividends">¥0.00</strong>
-              <button class="icon-action metric-action" type="button" data-modal-open="dividend-modal">明细</button>
-            </article>
+          <div class="dashboard-command-center">
+            <section class="dashboard-hero-row laser-frame">
+              <article class="metric dashboard-hero-asset">
+                <span>总资产</span>
+                <strong id="metric-assets">0.00</strong>
+                <img class="dashboard-dragon-art" src="./dashboard-dragon-gold.png" alt="" />
+              </article>
+              <article class="metric dashboard-hero-return">
+                <span>总收益率</span>
+                <strong id="metric-total-return">0.00%</strong>
+              </article>
+            </section>
+
+            <section class="panel dashboard-account-surface laser-frame">
+              <div class="dashboard-section-heading">今日账户</div>
+              <div class="dashboard-account-layout">
+                <div class="dashboard-account-values">
+                  <article class="metric">
+                    <span>持仓市值</span>
+                    <strong id="metric-market-value">0.00</strong>
+                  </article>
+                  <article class="metric">
+                    <span>现金</span>
+                    <strong id="metric-cash">0.00</strong>
+                  </article>
+                </div>
+                <div class="dashboard-allocation">
+                  <span>资产构成</span>
+                  <div class="dashboard-allocation-bar" aria-label="资产构成">
+                    <i id="dashboard-market-allocation"></i>
+                    <i id="dashboard-cash-allocation"></i>
+                  </div>
+                  <div class="dashboard-allocation-labels">
+                    <span>持仓 <strong id="dashboard-market-allocation-text">0.00%</strong></span>
+                    <span>现金 <strong id="dashboard-cash-allocation-text">0.00%</strong></span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel dashboard-pnl-surface laser-frame">
+              <article class="metric">
+                <span>总盈亏</span>
+                <strong id="metric-floating">0.00</strong>
+              </article>
+              <article class="metric">
+                <span>当日盈亏</span>
+                <strong id="metric-day-pnl">0.00</strong>
+              </article>
+              <article class="metric">
+                <span>本月盈亏</span>
+                <strong id="metric-month-pnl">0.00</strong>
+              </article>
+              <article class="metric">
+                <span>本年盈亏</span>
+                <strong id="metric-year-pnl">0.00</strong>
+              </article>
+            </section>
+
+            <section class="panel dashboard-analysis-surface laser-frame">
+              <div>
+                <span>时间加权收益率</span>
+                <strong id="metric-time-weighted-return">-</strong>
+              </div>
+              <p>用于剔除资金出入影响，衡量账户的投资表现。</p>
+            </section>
+
+            <details class="dashboard-accounting laser-frame">
+              <summary>更多账务数据</summary>
+              <div class="dashboard-accounting-grid">
+                <article class="metric">
+                  <span>累计本金</span>
+                  <strong id="metric-cost">0.00</strong>
+                </article>
+                <article class="metric">
+                  <span>匹配实现盈亏</span>
+                  <strong id="metric-matched-realized">0.00</strong>
+                  <button class="icon-action metric-action" type="button" data-modal-open="match-range-modal">阶段</button>
+                </article>
+                <article class="metric">
+                  <span>手续总费</span>
+                  <strong id="metric-total-fees">0.00</strong>
+                  <span class="metric-note" id="metric-total-turnover">总成交 0.00</span>
+                </article>
+                <article class="metric">
+                  <span>资金出入</span>
+                  <strong id="metric-cash-flow">0.00</strong>
+                  <button class="icon-action metric-action" type="button" data-modal-open="cash-flow-modal">明细</button>
+                </article>
+                <article class="metric">
+                  <span>累计净分红</span>
+                  <strong id="metric-dividends">0.00</strong>
+                  <button class="icon-action metric-action" type="button" data-modal-open="dividend-modal">明细</button>
+                </article>
+              </div>
+            </details>
           </div>
 
           <section class="panel position-contribution-card">
@@ -4542,7 +5503,7 @@ details[open] > summary .expand-hint::after {
               <div class="calendar-total">
                 <div>
                   <span>当月收益</span>
-                  <strong id="calendar-month-total">¥0</strong>
+                  <strong id="calendar-month-total">0</strong>
                 </div>
                 <div>
                   <span>收益率</span>
@@ -4550,7 +5511,7 @@ details[open] > summary .expand-hint::after {
                 </div>
                 <div>
                   <span>本月匹配</span>
-                  <strong id="calendar-month-matched">¥0</strong>
+                  <strong id="calendar-month-matched">0</strong>
                 </div>
               </div>
             </section>
@@ -4833,75 +5794,109 @@ details[open] > summary .expand-hint::after {
         </section>
 
         <section class="view" id="close-snapshots">
-          <section class="panel">
+          <section class="panel close-workflow-shell">
             <div class="panel-header">
               <div>
                 <h3>每日收盘记录</h3>
                 <span>收盘后保存当天资产快照，之后回看历史不受当前股价变化影响</span>
               </div>
-              <div class="date-filter">
+            </div>
+
+            <div class="range-summary close-workflow-status" id="close-snapshot-summary"></div>
+            <p class="save-status close-workflow-message" id="close-snapshot-status"></p>
+
+            <div class="close-workflow-tabs" id="close-snapshot-workflow-tabs" role="tablist" aria-label="收盘记录工作流">
+              <button class="close-workflow-tab active" type="button" role="tab" aria-selected="true" aria-controls="close-workflow-record" data-close-workflow-tab="record">记录收盘</button>
+              <button class="close-workflow-tab" type="button" role="tab" aria-selected="false" aria-controls="close-workflow-history" data-close-workflow-tab="history">补历史</button>
+              <button class="close-workflow-tab" type="button" role="tab" aria-selected="false" aria-controls="close-workflow-audit" data-close-workflow-tab="audit">核验</button>
+            </div>
+
+            <section class="close-workflow-panel active" id="close-workflow-record" role="tabpanel" data-close-workflow-panel="record">
+              <div class="close-record-command">
                 <label>
                   记录日期
                   <input type="date" id="close-snapshot-date" />
                 </label>
-                <button class="primary-button small" id="save-close-snapshot" type="button">记录今日收盘</button>
-                <button class="ghost-button small" id="delete-selected-close-snapshot" type="button">删除所选收盘</button>
-                <button class="ghost-button small" id="open-manual-close-modal" type="button">手动补收盘价</button>
-                <label>
-                  查询开始
-                  <input type="date" id="close-snapshot-start-date" />
-                </label>
-                <label>
-                  查询结束
-                  <input type="date" id="close-snapshot-end-date" />
-                </label>
-                <label>
-                  价格来源
-                  <select id="auto-close-source">
-                    <option value="auto">自动：腾讯/东方/新浪</option>
-                    <option value="tencent">腾讯</option>
-                    <option value="eastmoney">东方财富</option>
-                    <option value="sina">新浪财经</option>
-                  </select>
-                </label>
-                <label>
-                  每次补
-                  <input type="number" id="auto-close-batch-size" min="1" max="60" step="1" value="5" />
-                </label>
-                <label><input type="checkbox" id="auto-close-continuous" /> 连续补完</label><button class="ghost-button small" id="auto-fill-close-snapshots" type="button">自动补历史收盘</button><button class="danger-button small" id="stop-auto-close-fill" type="button" disabled>停止自动补</button>
+                <button class="primary-button" id="save-close-snapshot" type="button">记录今日收盘</button>
+                <button class="ghost-button" id="open-manual-close-modal" type="button">手动补收盘价</button>
+                <button class="ghost-button" id="delete-selected-close-snapshot" type="button">删除所选收盘</button>
               </div>
-            </div>
-            <div class="range-summary" id="close-snapshot-summary"></div>
-            <div class="metric-grid three spacing-top" id="auto-close-summary"></div>
-            <div class="form-actions spacing-top">
-              <button class="ghost-button small" id="audit-day-pnl" type="button">校验历史当日盈亏</button>
-              <button class="primary-button small" id="fix-day-pnl-audit" type="button" disabled>修正差异</button>
-              <button class="ghost-button small" id="clear-day-pnl-audit" type="button" disabled>清除报告</button>
-            </div>
-            <div class="range-summary spacing-top" id="day-pnl-audit-summary"></div>
-            <div class="mobile-list spacing-top" id="day-pnl-audit-list"></div>
-            <p class="save-status" id="close-snapshot-status"></p>
-            <div class="table-wrap compact-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>日期</th>
-                    <th>总资产</th>
-                    <th>当日盈亏</th>
-                    <th>现金</th>
-                    <th>持仓市值</th>
-                    <th>总盈亏</th>
-                    <th>持仓数</th>
-                    <th>操作</th>
-                  </tr>
-                </thead>
-                <tbody id="close-snapshot-body"></tbody>
-              </table>
-            </div>
-            <div class="mobile-list" id="close-snapshot-cards"></div>
+
+              <div class="close-record-history">
+                <div class="close-section-head">
+                  <div>
+                    <h4>收盘记录</h4>
+                    <span>默认显示最近记录；填写完整日期段可查询历史。</span>
+                  </div>
+                  <div class="close-history-filter">
+                    <span class="close-range-display">未设置日期范围</span>
+                    <button class="ghost-button small" type="button" data-modal-open="close-snapshot-range-modal">选择日期段</button>
+                  </div>
+                </div>
+                <div class="table-wrap compact-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>日期</th>
+                        <th>总资产</th>
+                        <th>当日盈亏</th>
+                        <th>现金</th>
+                        <th>持仓市值</th>
+                        <th>总盈亏</th>
+                        <th>持仓数</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody id="close-snapshot-body"></tbody>
+                  </table>
+                </div>
+                <div class="mobile-list" id="close-snapshot-cards"></div>
+              </div>
+            </section>
+
+            <section class="close-workflow-panel" id="close-workflow-history" role="tabpanel" data-close-workflow-panel="history" hidden>
+              <div class="close-section-head">
+                <div>
+                  <h4>补历史收盘</h4>
+                  <span>按选定日期段查询收盘价；缺价时会转到手动补录。</span>
+                </div>
+              </div>
+              <div class="close-history-settings">
+                <div class="close-history-range-summary">
+                  <span>补齐范围</span>
+                  <strong class="close-range-display">未设置日期范围</strong>
+                  <button class="ghost-button small" type="button" data-modal-open="close-snapshot-range-modal">选择日期段</button>
+                </div>
+                <label>价格来源<select id="auto-close-source"><option value="auto">自动：腾讯/东方/新浪</option><option value="tencent">腾讯</option><option value="eastmoney">东方财富</option><option value="sina">新浪财经</option></select></label>
+                <label>每次补<input type="number" id="auto-close-batch-size" min="1" max="60" step="1" value="5" /></label>
+              </div>
+              <div class="close-history-actions">
+                <label class="close-continuous-toggle"><input type="checkbox" id="auto-close-continuous" /> 连续补完</label>
+                <button class="primary-button" id="auto-fill-close-snapshots" type="button">自动补历史收盘</button>
+                <button class="danger-button" id="stop-auto-close-fill" type="button" disabled>停止自动补</button>
+              </div>
+              <div class="metric-grid three" id="auto-close-summary"></div>
+            </section>
+
+            <section class="close-workflow-panel" id="close-workflow-audit" role="tabpanel" data-close-workflow-panel="audit" hidden>
+              <div class="close-section-head">
+                <div>
+                  <h4>核验历史当日盈亏</h4>
+                  <span>对照收盘记录重算当日盈亏；修正前会自动创建版本快照。</span>
+                </div>
+              </div>
+              <div class="close-audit-actions">
+                <button class="ghost-button" id="audit-day-pnl" type="button">开始校验</button>
+                <button class="primary-button" id="fix-day-pnl-audit" type="button" disabled>修正差异</button>
+                <button class="ghost-button" id="clear-day-pnl-audit" type="button" disabled>清除报告</button>
+              </div>
+              <div class="empty-state close-audit-empty" id="day-pnl-audit-empty">尚未运行核验。开始校验后会在这里显示差异与可修正项。</div>
+              <div class="range-summary" id="day-pnl-audit-summary"></div>
+              <div class="mobile-list" id="day-pnl-audit-list"></div>
+            </section>
           </section>
 
-          <section class="app-modal" id="manual-close-modal" hidden>
+            <section class="app-modal" id="manual-close-modal" hidden>
             <div class="modal-card">
               <div class="modal-head">
                 <div>
@@ -4915,6 +5910,26 @@ details[open] > summary .expand-hint::after {
               <div class="form-actions spacing-top">
                 <button class="primary-button" type="button" id="save-manual-close">保存所选日期收盘</button>
                 <button class="ghost-button" type="button" data-modal-close>取消</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="app-modal" id="close-snapshot-range-modal" hidden>
+            <div class="modal-card close-range-modal-card">
+              <div class="modal-head">
+                <div>
+                  <h3>选择日期段</h3>
+                  <span>用于查询收盘记录和自动补历史收盘。</span>
+                </div>
+                <button class="icon-action" type="button" data-modal-close>关闭</button>
+              </div>
+              <div class="close-range-modal-inputs">
+                <label>开始日期<input type="date" id="close-snapshot-start-date" /></label>
+                <label>结束日期<input type="date" id="close-snapshot-end-date" /></label>
+              </div>
+              <div class="close-range-modal-actions">
+                <button class="ghost-button" type="button" id="clear-close-snapshot-range">清除范围</button>
+                <button class="primary-button" type="button" id="apply-close-snapshot-range">应用日期段</button>
               </div>
             </div>
           </section>
@@ -5159,9 +6174,9 @@ details[open] > summary .expand-hint::after {
             </div>
 
             <div class="quote-box">
-              <span>成交金额 <strong id="preview-amount">¥0.00</strong></span>
-              <span>总费用 <strong id="preview-fee">¥0.00</strong></span>
-              <span>现金变化 <strong id="preview-net">¥0.00</strong></span>
+              <span>成交金额 <strong id="preview-amount">0.00</strong></span>
+              <span>总费用 <strong id="preview-fee">0.00</strong></span>
+              <span>现金变化 <strong id="preview-net">0.00</strong></span>
             </div>
           </form>
 
@@ -5745,10 +6760,14 @@ details[open] > summary .expand-hint::after {
 
             <section class="panel">
               <div class="panel-header">
-                <h3>费用设置</h3>
-                <span>费率按成交金额计算，例如万2.5填 0.00025</span>
+                <h3>费率历史</h3>
+                <span>按成交日选取最近生效费率；旧交易没有对应档案时标记为缺费率。</span>
               </div>
               <div class="form-grid compact">
+                <label>
+                  起始日期
+                  <input type="date" id="fee-effective-from" />
+                </label>
                 <label>
                   佣金费率
                   <input type="number" id="commission-rate" min="0" step="0.00001" />
@@ -5771,8 +6790,10 @@ details[open] > summary .expand-hint::after {
                 </label>
               </div>
               <div class="form-actions">
-                <button class="primary-button" id="save-fees" type="button">保存费用设置</button>
+                <button class="primary-button" id="save-fees" type="button">保存此日期费率</button>
               </div>
+              <div class="range-summary spacing-top" id="fee-history-status"></div>
+              <div class="mobile-list spacing-top" id="fee-history-list"></div>
             </section>
           </div>
 
@@ -5824,6 +6845,15 @@ details[open] > summary .expand-hint::after {
               <button class="primary-button" id="update-holiday-calendar" type="button">从交易所更新本年</button>
               <a class="ghost-button" href="https://www.sse.com.cn/disclosure/announcement/general/" target="_blank" rel="noreferrer">上交所公告</a>
               <a class="ghost-button" href="https://www.szse.cn/disclosure/notice/general/" target="_blank" rel="noreferrer">深交所公告</a>
+            </div>
+            <div class="form-grid compact spacing-top">
+              <label>
+                指定年份
+                <input type="number" id="holiday-calendar-year" min="2000" max="2100" step="1" placeholder="例如 2025" />
+              </label>
+              <div class="form-save-cell">
+                <button class="ghost-button" id="update-holiday-calendar-year" type="button">更新指定年份</button>
+              </div>
             </div>
             <div class="form-grid compact spacing-top">
               <label>
@@ -6076,6 +7106,7 @@ details[open] > summary .expand-hint::after {
         </section>
       </main>
     </div>
+    <script src="./lucide.min.js"></script>
     <script>
 const STORAGE_KEY = "ashare-trading-journal";
 const BACKUP_META_KEY = "ashare-trading-journal-backup-meta";
@@ -6102,6 +7133,7 @@ const defaultSettings = {
   stampRate: 0.0005,
   transferRate: 0.00001,
   etfNoStampTax: true,
+  feeHistory: [],
   lastBackupAt: "",
   autoCloseSource: "auto",
   autoCloseBatchSize: 5,
@@ -6353,6 +7385,8 @@ const els = {
   stopAutoCloseFill: optionalElement("#stop-auto-close-fill"),
   autoCloseSummary: optionalElement("#auto-close-summary"),
   updateHolidayCalendar: optionalElement("#update-holiday-calendar"),
+  holidayCalendarYear: optionalElement("#holiday-calendar-year"),
+  updateHolidayCalendarYear: optionalElement("#update-holiday-calendar-year"),
   holidayCalendarStatus: optionalElement("#holiday-calendar-status"),
   manualHolidayDate: optionalElement("#manual-holiday-date"),
   manualHolidayReason: optionalElement("#manual-holiday-reason"),
@@ -6367,6 +7401,10 @@ const els = {
   closeSnapshotStatus: optionalElement("#close-snapshot-status"),
   closeSnapshotBody: optionalElement("#close-snapshot-body"),
   closeSnapshotCards: optionalElement("#close-snapshot-cards"),
+  closeWorkflowTabs: optionalElement("#close-snapshot-workflow-tabs"),
+  applyCloseSnapshotRange: optionalElement("#apply-close-snapshot-range"),
+  clearCloseSnapshotRange: optionalElement("#clear-close-snapshot-range"),
+  dayPnlAuditEmpty: optionalElement("#day-pnl-audit-empty"),
   backupReminder: optionalElement("#backup-reminder"),
   backupReminderText: optionalElement("#backup-reminder-text"),
   assets: document.querySelector("#metric-assets"),
@@ -6374,6 +7412,10 @@ const els = {
   timeWeightedReturn: optionalElement("#metric-time-weighted-return"),
   cash: document.querySelector("#metric-cash"),
   marketValue: document.querySelector("#metric-market-value"),
+  dashboardMarketAllocation: optionalElement("#dashboard-market-allocation"),
+  dashboardCashAllocation: optionalElement("#dashboard-cash-allocation"),
+  dashboardMarketAllocationText: optionalElement("#dashboard-market-allocation-text"),
+  dashboardCashAllocationText: optionalElement("#dashboard-cash-allocation-text"),
   cost: document.querySelector("#metric-cost"),
   unrealized: optionalElement("#metric-unrealized"),
   floating: document.querySelector("#metric-floating"),
@@ -6528,6 +7570,9 @@ const els = {
   stampRate: document.querySelector("#stamp-rate"),
   transferRate: document.querySelector("#transfer-rate"),
   etfNoStampTax: document.querySelector("#etf-no-stamp-tax"),
+  feeEffectiveFrom: optionalElement("#fee-effective-from"),
+  feeHistoryStatus: optionalElement("#fee-history-status"),
+  feeHistoryList: optionalElement("#fee-history-list"),
   editingCashTransferId: optionalElement("#editing-cash-transfer-id"),
   cashTransferDate: optionalElement("#cash-transfer-date"),
   cashTransferType: optionalElement("#cash-transfer-type"),
@@ -6596,11 +7641,7 @@ const titles = {
 };
 
 function money(value) {
-  return new Intl.NumberFormat("zh-CN", {
-    style: "currency",
-    currency: "CNY",
-    minimumFractionDigits: 2,
-  }).format(Number(value) || 0);
+  return (Number(value) || 0).toFixed(2);
 }
 
 function dayPnlMoney(value) {
@@ -6608,11 +7649,7 @@ function dayPnlMoney(value) {
 }
 
 function moneyInt(value) {
-  return new Intl.NumberFormat("zh-CN", {
-    style: "currency",
-    currency: "CNY",
-    maximumFractionDigits: 0,
-  }).format(Math.round(Number(value) || 0));
+  return String(Math.round(Number(value) || 0));
 }
 
 function calendarMoney(value) {
@@ -6622,10 +7659,11 @@ function calendarMoney(value) {
 }
 
 function number(value, digits = 2) {
-  return new Intl.NumberFormat("zh-CN", {
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
-  }).format(Number(value) || 0);
+  return (Number(value) || 0).toFixed(digits);
+}
+
+function formatPrice(value) {
+  return number(value, 3);
 }
 
 function escapeHtml(value) {
@@ -6865,6 +7903,7 @@ function applyLoadedState(saved) {
   state.closeSnapshots = Array.isArray(saved.closeSnapshots) ? saved.closeSnapshots : [];
   state.stockPlans = saved.stockPlans && typeof saved.stockPlans === "object" ? saved.stockPlans : {};
   state.settings = { ...defaultSettings, ...(saved.settings || {}) };
+  ensureFeeHistory(state.settings, state.trades);
   state.historicalRebuild = saved.historicalRebuild && typeof saved.historicalRebuild === "object"
     ? {
         snapshotDate: saved.historicalRebuild.snapshotDate || "",
@@ -7045,17 +8084,93 @@ function tradeAmount(trade) {
   return trade.price * trade.quantity;
 }
 
+function feeProfileId(profile) {
+  return String(profile?.id || profile?.startDate || "");
+}
+
+function firstTradeDate(trades = state.trades) {
+  return [...new Set((trades || []).map((trade) => trade?.date).filter(validDateString))]
+    .sort((a, b) => a.localeCompare(b))[0] || "";
+}
+
+function normalizeFeeProfile(profile, fallback = {}) {
+  const startDate = validDateString(profile?.startDate) ? profile.startDate : "";
+  if (!startDate) return null;
+  return {
+    id: feeProfileId(profile) || `fee-${startDate}`,
+    startDate,
+    commissionRate: Math.max(0, Number(profile?.commissionRate ?? fallback.commissionRate) || 0),
+    minCommission: Math.max(0, Number(profile?.minCommission ?? fallback.minCommission) || 0),
+    stampRate: Math.max(0, Number(profile?.stampRate ?? fallback.stampRate) || 0),
+    transferRate: Math.max(0, Number(profile?.transferRate ?? fallback.transferRate) || 0),
+    etfNoStampTax: profile?.etfNoStampTax !== false,
+  };
+}
+
+function ensureFeeHistory(settings = state.settings, trades = state.trades) {
+  const fallback = {
+    commissionRate: settings.commissionRate,
+    minCommission: settings.minCommission,
+    stampRate: settings.stampRate,
+    transferRate: settings.transferRate,
+    etfNoStampTax: settings.etfNoStampTax,
+  };
+  const byDate = new Map();
+  (Array.isArray(settings.feeHistory) ? settings.feeHistory : []).forEach((profile) => {
+    const normalized = normalizeFeeProfile(profile, fallback);
+    if (normalized) byDate.set(normalized.startDate, normalized);
+  });
+  if (!byDate.size) {
+    const startDate = firstTradeDate(trades) || today();
+    byDate.set(startDate, normalizeFeeProfile({ id: `fee-${startDate}`, startDate, ...fallback }, fallback));
+  }
+  settings.feeHistory = [...byDate.values()].sort((a, b) => a.startDate.localeCompare(b.startDate));
+  const latest = settings.feeHistory.at(-1);
+  if (latest) {
+    settings.commissionRate = latest.commissionRate;
+    settings.minCommission = latest.minCommission;
+    settings.stampRate = latest.stampRate;
+    settings.transferRate = latest.transferRate;
+    settings.etfNoStampTax = latest.etfNoStampTax;
+  }
+  return settings.feeHistory;
+}
+
+function feeProfileForDate(date) {
+  if (!validDateString(date)) return null;
+  const profiles = ensureFeeHistory();
+  return profiles.filter((profile) => profile.startDate <= date).at(-1) || null;
+}
+
+function hasMissingFeeProfile(trade) {
+  return !feeProfileForDate(trade?.date);
+}
+
+function missingFeeTrades(trades = state.trades) {
+  return (trades || []).filter((trade) => hasMissingFeeProfile(trade));
+}
+
+function feeDisplay(trade) {
+  return hasMissingFeeProfile(trade) ? "<span class=\"warning\">缺费率</span>" : money(totalFee(trade));
+}
+
 function calcFees(input) {
+  const profile = feeProfileForDate(input?.date);
+  if (!profile) {
+    return { commission: 0, stampTax: 0, transferFee: 0, profile: null, missingProfile: true };
+  }
   const amount = tradeAmount(input);
-  const commission = amount > 0 ? Math.max(amount * state.settings.commissionRate, state.settings.minCommission) : 0;
-  const skipStampTax = state.settings.etfNoStampTax !== false && isEtfSymbol(input.symbol, input.name);
-  const stampTax = input.side === "sell" && !skipStampTax ? amount * state.settings.stampRate : 0;
-  const transferFee = amount * state.settings.transferRate;
+  const commission = amount > 0 ? Math.max(amount * profile.commissionRate, profile.minCommission) : 0;
+  const skipStampTax = profile.etfNoStampTax !== false && isEtfSymbol(input.symbol, input.name);
+  const stampTax = input.side === "sell" && !skipStampTax ? amount * profile.stampRate : 0;
+  const transferFee = amount * profile.transferRate;
 
   return {
     commission: roundMoney(commission),
     stampTax: roundMoney(stampTax),
     transferFee: roundMoney(transferFee),
+    profile,
+    missingProfile: false,
   };
 }
 
@@ -8685,7 +9800,7 @@ async function fetchEastmoneyKlineRange(symbol, startDate, endDate) {
   return normalized;
 }
 
-async function fetchTencentKlineRange(symbol, startDate, endDate) {
+async function fetchTencentKlineChunk(symbol, startDate, endDate) {
   const code = tencentMarketSymbol(symbol);
   const varName = `tencent_k_range_${normalizeSymbol(symbol)}_${Date.now()}_${Math.random().toString(16).slice(2)}`.replace(/\W/g, "_");
   const url = `https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=${varName}&param=${code},day,${startDate},${endDate},320,bfq`;
@@ -8702,6 +9817,31 @@ async function fetchTencentKlineRange(symbol, startDate, endDate) {
   const normalized = normalizeKlineRows(rows, "腾讯");
   if (!normalized.length) throw new Error("腾讯K线为空");
   return normalized;
+}
+
+async function fetchTencentKlineRange(symbol, startDate, endDate) {
+  const daySpan = klineRequestedDaySpan(startDate, endDate);
+  if (daySpan <= 430) return fetchTencentKlineChunk(symbol, startDate, endDate);
+
+  const chunks = [];
+  let cursor = startDate;
+  while (cursor <= endDate) {
+    const candidateEnd = addDays(cursor, 429);
+    const chunkEnd = candidateEnd < endDate ? candidateEnd : endDate;
+    chunks.push([cursor, chunkEnd]);
+    cursor = addDays(chunkEnd, 1);
+  }
+
+  const byDate = new Map();
+  for (const [chunkStart, chunkEnd] of chunks) {
+    const rows = await fetchTencentKlineChunk(symbol, chunkStart, chunkEnd);
+    rows.forEach((row) => byDate.set(row.date, row));
+  }
+  const merged = Array.from(byDate.values())
+    .filter((row) => dateInRange(row.date, startDate, endDate))
+    .sort((a, b) => a.date.localeCompare(b.date));
+  if (!merged.length) throw new Error("腾讯K线为空");
+  return merged;
 }
 
 async function fetchSinaKlineRange(symbol, startDate, endDate) {
@@ -9165,6 +10305,7 @@ function setView(viewId) {
   els.views.forEach((view) => view.classList.toggle("active", view.id === viewId));
   els.navButtons.forEach((button) => button.classList.toggle("active", button.dataset.view === viewId));
   els.pageTitle.textContent = titles[viewId] || "总览";
+  if (viewId === "close-snapshots") setCloseWorkflowTab("record");
   scheduleViewRender(viewId);
 }
 
@@ -9220,6 +10361,9 @@ function readTradeForm() {
 
 function updatePreview() {
   const trade = {
+    date: els.tradeDate.value,
+    symbol: normalizeSymbol(els.symbol.value),
+    name: els.name.value.trim(),
     side: els.side.value,
     price: Number(els.price.value) || 0,
     quantity: Number(els.quantity.value) || 0,
@@ -9229,12 +10373,12 @@ function updatePreview() {
   const fee = fees.commission + fees.stampTax + fees.transferFee;
   const net = trade.side === "sell" ? amount - fee : -(amount + fee);
 
-  els.commission.value = fees.commission.toFixed(2);
-  els.stampTax.value = fees.stampTax.toFixed(2);
-  els.transferFee.value = fees.transferFee.toFixed(2);
+  els.commission.value = fees.missingProfile ? "" : fees.commission.toFixed(2);
+  els.stampTax.value = fees.missingProfile ? "" : fees.stampTax.toFixed(2);
+  els.transferFee.value = fees.missingProfile ? "" : fees.transferFee.toFixed(2);
   els.previewAmount.textContent = money(amount);
-  els.previewFee.textContent = money(fee);
-  els.previewNet.textContent = money(net);
+  els.previewFee.textContent = fees.missingProfile ? "缺费率" : money(fee);
+  els.previewNet.textContent = fees.missingProfile ? "缺费率" : money(net);
 }
 
 function buildFlowRecords() {
@@ -9249,13 +10393,14 @@ function buildFlowRecords() {
       name: trade.name,
       type: trade.side === "buy" ? "买入" : "卖出",
       tone: trade.side,
-      price: number(trade.price, 3),
+      price: formatPrice(trade.price),
       quantity: number(trade.quantity, 0),
       amount: money(tradeAmount(trade)),
-      commission: money(fees.commission),
-      stampTax: money(fees.stampTax),
-      transferFee: money(fees.transferFee),
+      commission: fees.missingProfile ? "<span class=\"warning\">缺费率</span>" : money(fees.commission),
+      stampTax: fees.missingProfile ? "<span class=\"warning\">缺费率</span>" : money(fees.stampTax),
+      transferFee: fees.missingProfile ? "<span class=\"warning\">缺费率</span>" : money(fees.transferFee),
       fee,
+      feeText: fees.missingProfile ? "<span class=\"warning\">缺费率</span>" : money(fee),
       note: trade.note || "",
       order: trade.createdAt || 0,
     };
@@ -9277,6 +10422,7 @@ function buildFlowRecords() {
       stampTax: "-",
       transferFee: "-",
       fee: isDividend ? Number(action.tax) || 0 : 0,
+      feeText: isDividend ? money(Number(action.tax) || 0) : "-",
       note: action.note || "",
       order: 0,
     };
@@ -9296,6 +10442,7 @@ function buildFlowRecords() {
     stampTax: "-",
     transferFee: "-",
     fee: 0,
+    feeText: "-",
     note: item.note || "",
     order: item.createdAt || 0,
   }));
@@ -9313,7 +10460,7 @@ function stockEvents(symbol) {
         date: trade.date,
         type: trade.side === "buy" ? "买入" : "卖出",
         tone: trade.side,
-        detail: `${number(trade.quantity, 0)}股 × ¥${number(trade.price, 3)}，金额 ${money(tradeAmount(trade))}，费用 ${money(fee)}`,
+        detail: `${number(trade.quantity, 0)}股 × ${formatPrice(trade.price)}，金额 ${money(tradeAmount(trade))}，费用 ${hasMissingFeeProfile(trade) ? "缺费率" : money(fee)}`,
         note: trade.note,
         order: trade.createdAt || 0,
       };
@@ -9703,7 +10850,7 @@ function renderRecords() {
             <div><dt>价格</dt><dd class="flow-price">${row.price}</dd></div>
             <div><dt>数量</dt><dd class="flow-quantity">${row.quantity}</dd></div>
             <div><dt>金额</dt><dd>${row.amount}</dd></div>
-            <div><dt>费用</dt><dd>${row.fee ? money(row.fee) : "-"}</dd></div>
+            <div><dt>费用</dt><dd>${row.feeText || (row.fee ? money(row.fee) : "-")}</dd></div>
           </dl>
           <p>${row.note || "无备注"}</p>
           <div class="row-actions">
@@ -9829,8 +10976,8 @@ function renderPositions() {
           <td>${position.symbol}</td>
           <td><span class="stock-name-chip">${position.name}</span></td>
           <td>${number(position.quantity, 0)}</td>
-          <td>${money(position.initialAverageCost)}</td>
-          <td>${money(position.averageCost)}</td>
+          <td>${formatPrice(position.initialAverageCost)}</td>
+          <td>${formatPrice(position.averageCost)}</td>
           <td><input class="current-price-input" type="number" min="0" step="0.001" value="${position.currentPrice}" data-price-symbol="${position.symbol}" /></td>
           <td>${money(position.marketValue)}</td>
           <td class="${classByValue(position.dayPnl)}">${dayPnlMoney(position.dayPnl)}</td>
@@ -9854,7 +11001,7 @@ function renderPositions() {
             <div><dt>总盈亏</dt><dd class="${classByValue(position.totalPnl)}">${money(position.totalPnl)}</dd></div>
             <div><dt>时间加权</dt><dd class="${twr.valid ? classByValue(twr.rate) : ""}">${twr.valid ? `${number(twr.rate, 2)}%` : "-"}</dd></div>
           </div>
-          <details class="position-extra"><summary>成本与匹配</summary><dl><div><dt>原始成本</dt><dd>${money(position.initialAverageCost)}</dd></div><div><dt>现在成本</dt><dd>${money(position.averageCost)}</dd></div><div><dt>匹配实现</dt><dd class="${classByValue(matchedRealized)}">${money(matchedRealized)}</dd></div></dl></details>
+          <details class="position-extra"><summary>成本与匹配</summary><dl><div><dt>原始成本</dt><dd>${formatPrice(position.initialAverageCost)}</dd></div><div><dt>现在成本</dt><dd>${formatPrice(position.averageCost)}</dd></div><div><dt>匹配实现</dt><dd class="${classByValue(matchedRealized)}">${money(matchedRealized)}</dd></div></dl></details>
         </article>`;
     }).join("");
   }
@@ -9865,6 +11012,7 @@ function renderDashboard() {
   const totals = portfolioTotals();
   const snapshotRows = currentSnapshotCalendarRows();
   const totalFees = state.trades.reduce((sum, trade) => sum + totalFee(trade), 0);
+  const missingFees = missingFeeTrades();
   const totalTurnover = state.trades.reduce((sum, trade) => sum + Math.abs(Number(trade.price) || 0) * (Number(trade.quantity) || 0), 0);
   const netCashFlow = cashTransferTotal();
   const assets = totals.assets;
@@ -9882,6 +11030,13 @@ function renderDashboard() {
   els.timeWeightedReturn.className = twr.valid ? classByValue(twr.rate) : "";
   els.cash.textContent = money(totals.cash);
   els.marketValue.textContent = money(totals.marketValue);
+  const allocationBase = assets > 0 ? assets : 0;
+  const marketAllocation = allocationBase ? Math.max(0, Math.min(100, (totals.marketValue / allocationBase) * 100)) : 0;
+  const cashAllocation = allocationBase ? Math.max(0, Math.min(100, (totals.cash / allocationBase) * 100)) : 0;
+  if (els.dashboardMarketAllocation) els.dashboardMarketAllocation.style.width = `${number(marketAllocation, 4)}%`;
+  if (els.dashboardCashAllocation) els.dashboardCashAllocation.style.width = `${number(cashAllocation, 4)}%`;
+  if (els.dashboardMarketAllocationText) els.dashboardMarketAllocationText.textContent = `${number(marketAllocation, 2)}%`;
+  if (els.dashboardCashAllocationText) els.dashboardCashAllocationText.textContent = `${number(cashAllocation, 2)}%`;
   els.cost.textContent = money(initialAssets);
   if (els.unrealized) els.unrealized.textContent = money(totals.floating);
   els.floating.textContent = money(totalPnl);
@@ -9889,15 +11044,16 @@ function renderDashboard() {
   els.monthPnl.textContent = dayPnlMoney(periodSummary.month);
   els.yearPnl.textContent = dayPnlMoney(periodSummary.year);
   if (els.realized) els.realized.textContent = money(assetRealizedPnl);
-  els.totalFees.textContent = money(totalFees);
-  if (els.totalTurnover) els.totalTurnover.textContent = `总成交 ${money(totalTurnover)}`;
+  els.totalFees.textContent = missingFees.length ? "缺费率" : money(totalFees);
+  els.totalFees.className = missingFees.length ? "warning" : "";
+  if (els.totalTurnover) els.totalTurnover.textContent = `总成交 ${money(totalTurnover)}${missingFees.length ? ` · ${missingFees.length}笔缺费率` : ""}`;
   if (els.cashFlow) {
     els.cashFlow.textContent = money(netCashFlow);
     els.cashFlow.className = classByValue(netCashFlow);
   }
   els.dividends.textContent = money(dividendTotal());
   els.totalReturn.className = classByValue(totalReturnRate);
-  els.cash.className = classByValue(totals.cash);
+  els.cash.className = "asset-value";
   if (els.unrealized) els.unrealized.className = classByValue(totals.floating);
   els.floating.className = classByValue(totalPnl);
   els.dayPnl.className = classByValue(dayPnl);
@@ -10240,12 +11396,12 @@ function renderMatchDetailCard(match) {
         <div class="match-side-card">
           <span class="match-role">卖出</span>
           <strong class="match-date">${escapeHtml(match.sellDate || "-")}</strong>
-          <strong class="match-price">¥${number(sellPrice, 2)}</strong>
+          <strong class="match-price">${formatPrice(sellPrice)}</strong>
         </div>
         <div class="match-side-card">
           <span class="match-role">买入</span>
           <strong class="match-date">${escapeHtml(match.buyDate || "-")}</strong>
-          <strong class="match-price">¥${number(buyPrice, 2)}</strong>
+          <strong class="match-price">${formatPrice(buyPrice)}</strong>
         </div>
         <div class="match-result-card">
           <span class="match-role">股数</span>
@@ -10732,10 +11888,14 @@ async function fetchExchangeHolidayCalendar(year = beijingNow().getFullYear()) {
   throw new Error(errors.join("；") || "未从交易所公告获得休市日期");
 }
 
-async function updateCurrentYearHolidayCalendarFromExchange() {
-  const year = beijingNow().getFullYear();
+async function updateHolidayCalendarFromExchange(year = beijingNow().getFullYear(), trigger = els.updateHolidayCalendar) {
+  year = Number(year);
+  if (!Number.isInteger(year) || year < 2000 || year > 2100) {
+    if (els.closeSnapshotStatus) els.closeSnapshotStatus.textContent = "请输入 2000 到 2100 之间的年份。";
+    return;
+  }
   if (!els.updateHolidayCalendar) return;
-  els.updateHolidayCalendar.disabled = true;
+  if (trigger) trigger.disabled = true;
   if (els.closeSnapshotStatus) els.closeSnapshotStatus.textContent = `正在从交易所公告获取 ${year} 年全年休市安排...`;
   try {
     const calendar = await fetchExchangeHolidayCalendar(year);
@@ -10752,8 +11912,16 @@ async function updateCurrentYearHolidayCalendarFromExchange() {
   } catch (error) {
     if (els.closeSnapshotStatus) els.closeSnapshotStatus.textContent = `未能从交易所公告更新 ${year} 年休市日历：${error.message || error}。不会使用非交易所来源推断。`;
   } finally {
-    els.updateHolidayCalendar.disabled = false;
+    if (trigger) trigger.disabled = false;
   }
+}
+
+function updateCurrentYearHolidayCalendarFromExchange() {
+  return updateHolidayCalendarFromExchange(beijingNow().getFullYear(), els.updateHolidayCalendar);
+}
+
+function updateSelectedYearHolidayCalendarFromExchange() {
+  return updateHolidayCalendarFromExchange(els.holidayCalendarYear?.value, els.updateHolidayCalendarYear);
 }
 
 function scheduleAnnualHolidayCalendarUpdate() {
@@ -10828,7 +11996,11 @@ function estimatedMissingCloseSnapshotCount() {
   return count;
 }
 
+let latestAutoCloseRunSummary = { added: 0, failed: 0 };
+
 function renderAutoCloseSummary(summary = {}) {
+  if (Object.prototype.hasOwnProperty.call(summary, "added")) latestAutoCloseRunSummary.added = summary.added || 0;
+  if (Object.prototype.hasOwnProperty.call(summary, "failed")) latestAutoCloseRunSummary.failed = summary.failed || 0;
   const estimatedMissing = estimatedMissingCloseSnapshotCount();
   const missingCount = summary.missing ?? estimatedMissing;
   const queryActive = hasDateQuery(els.closeSnapshotStartDate.value, els.closeSnapshotEndDate.value);
@@ -10841,8 +12013,8 @@ function renderAutoCloseSummary(summary = {}) {
     { label: "待补日期", value: `${missingCount} 天`, tone: missingCount ? "negative" : "" },
     { label: "休市日期", value: `${closedCount} 天`, tone: "" },
     { label: "公告未登记", value: `${unverifiedYears.length} 年`, tone: unverifiedYears.length ? "negative" : "" },
-    { label: "已自动补", value: `${summary.added || 0} 天`, tone: summary.added ? "positive" : "" },
-    { label: "未成功", value: `${summary.failed || 0} 天`, tone: summary.failed ? "negative" : "" },
+    { label: "已自动补", value: `${latestAutoCloseRunSummary.added} 天`, tone: latestAutoCloseRunSummary.added ? "positive" : "" },
+    { label: "未成功", value: `${latestAutoCloseRunSummary.failed} 天`, tone: latestAutoCloseRunSummary.failed ? "negative" : "" },
   ];
   els.autoCloseSummary.innerHTML = cards
     .map(
@@ -11304,7 +12476,7 @@ function renderManualCloseModal(request = null) {
           </div>
           <dl>
             <div><dt>数量</dt><dd>${number(position.quantity, 0)}</dd></div>
-            <div><dt>当前成本</dt><dd>${money(position.averageCost || 0)}</dd></div>
+            <div><dt>当前成本</dt><dd>${formatPrice(position.averageCost || 0)}</dd></div>
           </dl>
           <label class="mobile-price spacing-top">
             收盘价
@@ -11392,7 +12564,7 @@ function renderCloseSnapshotPositions(snapshot) {
           </div>
           <dl>
             <div><dt>数量</dt><dd>${number(position.quantity, 0)}</dd></div>
-            <div><dt>收盘价</dt><dd>${money(position.price)}</dd></div>
+            <div><dt>收盘价</dt><dd>${formatPrice(position.price)}</dd></div>
             <div><dt>市值</dt><dd>${money(position.marketValue)}</dd></div>
             <div><dt>当日盈亏</dt><dd class="${classByValue(position.dayPnl)}">${dayPnlMoney(position.dayPnl)}</dd></div>
             <div><dt>总盈亏</dt><dd class="${classByValue(position.totalPnl)}">${money(position.totalPnl)}</dd></div>
@@ -11424,7 +12596,7 @@ function renderCloseSnapshotPositions(snapshot) {
                 <tr>
                   <td><span class="stock-name-chip">${position.name}</span><small class="subtle-detail">${position.symbol}</small></td>
                   <td>${number(position.quantity, 0)}</td>
-                  <td>${money(position.price)}</td>
+                  <td>${formatPrice(position.price)}</td>
                   <td>${money(position.marketValue)}</td>
                   <td class="${classByValue(position.dayPnl)}">${dayPnlMoney(position.dayPnl)}</td>
                   <td class="${classByValue(position.totalPnl)}">${money(position.totalPnl)}</td>
@@ -11643,6 +12815,7 @@ function auditCloseSnapshotDayPnl() {
 function clearDayPnlAuditReport() {
   if (els.dayPnlAuditSummary) els.dayPnlAuditSummary.innerHTML = "";
   if (els.dayPnlAuditList) els.dayPnlAuditList.innerHTML = "";
+  setDayPnlAuditEmptyState(true);
   if (els.fixDayPnlAudit) els.fixDayPnlAudit.disabled = true;
   if (els.clearDayPnlAudit) els.clearDayPnlAudit.disabled = true;
   if (els.closeSnapshotStatus) els.closeSnapshotStatus.textContent = "已清除历史当日盈亏校验报告。";
@@ -11650,6 +12823,7 @@ function clearDayPnlAuditReport() {
 
 function renderDayPnlAuditReport() {
   if (!els.dayPnlAuditSummary || !els.dayPnlAuditList) return;
+  setDayPnlAuditEmptyState(false);
   const audit = auditCloseSnapshotDayPnl();
   const issueCount = audit.totalRows.length + audit.positionRows.length;
   els.dayPnlAuditSummary.innerHTML = [
@@ -11684,7 +12858,7 @@ function renderDayPnlAuditReport() {
         <dl>
           <div><dt>代码</dt><dd>${escapeHtml(row.symbol)}</dd></div>
           <div><dt>数量</dt><dd>${number(row.quantity, 0)}</dd></div>
-          <div><dt>收盘价</dt><dd>${money(row.price)}</dd></div>
+          <div><dt>收盘价</dt><dd>${formatPrice(row.price)}</dd></div>
           <div><dt>原记录</dt><dd class="${classByValue(row.stored)}">${money(row.stored)}</dd></div>
           <div><dt>重算值</dt><dd class="${classByValue(row.expected)}">${money(row.expected)}</dd></div>
           <div><dt>差异</dt><dd class="${classByValue(row.diff)}">${money(row.diff)}</dd></div>
@@ -11714,7 +12888,7 @@ function renderDayPnlAuditReport() {
     : "";
   els.dayPnlAuditList.innerHTML = issueCount
     ? `${totalHtml}${positionHtml}${missingHtml}`
-    : (audit.skippedRows.length ? missingHtml : `<div class="empty-state">未发现超过 ¥1 的历史当日盈亏差异。</div>`);
+    : (audit.skippedRows.length ? missingHtml : `<div class="empty-state">未发现超过 1 的历史当日盈亏差异。</div>`);
   if (els.fixDayPnlAudit) els.fixDayPnlAudit.disabled = issueCount === 0;
   if (els.clearDayPnlAudit) els.clearDayPnlAudit.disabled = false;
   els.closeSnapshotStatus.textContent = `校验完成：检查 ${audit.checked} 条，发现总体 ${audit.totalRows.length} 天、个股 ${audit.positionRows.length} 条差异，缺收盘价跳过 ${audit.skippedRows.length} 条；尚未修改历史记录。`;
@@ -11764,24 +12938,22 @@ function renderCloseSnapshots(pendingOverride = null) {
   if (!els.autoCloseSource.value) els.autoCloseSource.value = state.settings.autoCloseSource || "auto";
   if (!els.autoCloseBatchSize.value) els.autoCloseBatchSize.value = state.settings.autoCloseBatchSize || 5;
   els.autoCloseContinuous.checked = Boolean(state.settings.autoCloseContinuous);
+  syncCloseSnapshotRangeDisplay();
   renderAutoCloseSummary();
   const sorted = [...state.closeSnapshots].sort((a, b) => b.date.localeCompare(a.date));
   const latest = sorted[0];
   const pendingDate = els.closeSnapshotDate.value || today();
   const pending = pendingOverride && pendingOverride.date === pendingDate ? pendingOverride : buildCloseSnapshot(pendingDate);
-  const cards = latest
-    ? [
-        { label: "最新记录日期", value: latest.date, tone: "" },
-        { label: "最新总资产", value: money(latest.assets), tone: "" },
-        { label: "最新当日盈亏", value: dayPnlMoney(latest.dayPnl), tone: classByValue(latest.dayPnl) },
-        { label: "当前待记录资产", value: money(pending.assets), tone: "" },
-      ]
-    : [
-        { label: "最新记录日期", value: "暂无", tone: "" },
-        { label: "当前待记录资产", value: money(pending.assets), tone: "" },
-        { label: "当前当日盈亏", value: dayPnlMoney(pending.dayPnl), tone: classByValue(pending.dayPnl) },
-        { label: "当前持仓数", value: `${pending.positionCount} 只`, tone: "" },
-      ];
+  const estimatedMissing = estimatedMissingCloseSnapshotCount();
+  const bounds = closeSnapshotBoundsFromExisting();
+  const closedCount = bounds.startDate && bounds.endDate ? marketClosedDatesInRange(bounds.startDate, bounds.endDate).length : 0;
+  const cards = [
+    { label: "最新记录日期", value: latest ? latest.date : "暂无", tone: "" },
+    { label: "最新总资产", value: latest ? money(latest.assets) : money(pending.assets), tone: "asset-value" },
+    { label: "待补日期", value: `${estimatedMissing} 天`, tone: estimatedMissing ? "negative" : "" },
+    { label: "本次未成功", value: `${latestAutoCloseRunSummary.failed} 天`, tone: latestAutoCloseRunSummary.failed ? "negative" : "" },
+    { label: "休市日期", value: `${closedCount} 天`, tone: "" },
+  ];
 
   els.closeSnapshotSummary.innerHTML = cards
     .map(
@@ -12245,7 +13417,7 @@ function renderUnmatchedDetail(row) {
         data-unmatched-price="${Number(item.price) || 0}"
         role="button"
         tabindex="0"
-      >${number(item.quantity, 0)} × ¥${number(item.price, 3)}</span>
+      >${number(item.quantity, 0)} × ${formatPrice(item.price)}</span>
     `)
     .join("");
   return detail ? `<div class="unmatched-grid">${detail}</div>` : "";
@@ -12266,7 +13438,7 @@ function openUnmatchedLotPopover(chip) {
     <strong>${quantity < 0 ? "未匹配卖出" : "未匹配买入"}</strong>
     <dl>
       <div><dt>交易日期</dt><dd>${escapeHtml(date)}</dd></div>
-      <div><dt>成交价格</dt><dd>¥${number(price, 3)}</dd></div>
+      <div><dt>成交价格</dt><dd>${formatPrice(price)}</dd></div>
       <div><dt>成交股数</dt><dd>${number(Math.abs(quantity), 0)}</dd></div>
       <div><dt>方向</dt><dd class="${classByValue(quantity)}">${quantity < 0 ? "卖出" : "买入"}</dd></div>
     </dl>
@@ -12290,7 +13462,7 @@ function unmatchedAveragePrice(row) {
 
 function renderUnmatchedAverage(row) {
   const average = unmatchedAveragePrice(row);
-  return average > 0 ? `<span class="subtle-detail">均价 ¥${number(average, 3)}</span>` : "";
+  return average > 0 ? `<span class="subtle-detail">均价 ${formatPrice(average)}</span>` : "";
 }
 
 function emptyPairRow(symbol = "", name = "") {
@@ -12680,7 +13852,7 @@ function renderStockV2LotLine(lot) {
     <div class="stock-v2-match-line">
       <div>
         <strong>${isSell ? "待买回卖出" : "未匹配买入"} · ${escapeHtml(lot.date || "-")}</strong>
-        <div class="muted">${number(lot.remainingQuantity, 0)}股 @ ${number(lot.price, 2)}</div>
+        <div class="muted">${number(lot.remainingQuantity, 0)}股 @ ${formatPrice(lot.price)}</div>
       </div>
       <strong class="${isSell ? "warning" : "positive"}">${isSell ? "待买回" : "未卖出"}</strong>
     </div>
@@ -12712,7 +13884,7 @@ function renderStockV2LotDistribution(lots, data, isSell) {
       <div class="stock-v2-lot-distribution-chart">
         ${rows.map((row) => `
           <div class="stock-v2-lot-row ${barClass}">
-            <span class="lot-meta"><strong>¥${number(row.price, 3)}</strong><small>${escapeHtml(row.date || "-")}</small></span>
+            <span class="lot-meta"><strong>${formatPrice(row.price)}</strong><small>${escapeHtml(row.date || "-")}</small></span>
             <div class="stock-v2-lot-bar-track" title="${escapeHtml(row.date || "-")}">
               <div class="stock-v2-lot-bar ${barClass}" style="width:${Math.max(4, (row.quantity / maxQty) * 100)}%"></div>
             </div>
@@ -12720,7 +13892,7 @@ function renderStockV2LotDistribution(lots, data, isSell) {
           </div>
         `).join("")}
       </div>
-      <div class="stock-v2-lot-current">当前价：${data.currentPrice > 0 ? money(data.currentPrice) : "-"}；分布按最近 Lot 优先。</div>
+      <div class="stock-v2-lot-current">当前价：${data.currentPrice > 0 ? formatPrice(data.currentPrice) : "-"}；分布按最近 Lot 优先。</div>
     </div>
   `;
 }
@@ -12758,7 +13930,7 @@ function renderStockV2TradeGroup(group) {
         <div class="stock-v2-summary-grid">
           <div>
             <strong class="stock-v2-trigger ${triggerClass}">${escapeHtml(group.direction)}</strong>
-            <div class="muted">${escapeHtml(trade.date || "-")} · ${number(trade.quantity, 0)}股 @${number(trade.price, 2)}</div>
+            <div class="muted">${escapeHtml(trade.date || "-")} · ${number(trade.quantity, 0)}股 @${formatPrice(trade.price)}</div>
           </div>
           <div class="text-right">
             <div class="summary-value-row">
@@ -12850,7 +14022,7 @@ function renderStockV2Lots(data) {
     <div class="metric-grid four">
       <article class="metric"><span>${isSell ? "待买回总量" : "未匹配总量"}</span><strong>${number(totalQty, 0)} 股</strong></article>
       <article class="metric"><span>浮动合计</span><strong class="${classByValue(totalFloat)}">${money(totalFloat)}</strong></article>
-      <article class="metric"><span>${isSell ? "平均卖出价" : "平均成本"}</span><strong>${money(averagePrice)}</strong></article>
+      <article class="metric"><span>${isSell ? "平均卖出价" : "平均成本"}</span><strong>${formatPrice(averagePrice)}</strong></article>
       <article class="metric"><span>笔数</span><strong>${number(sourceLots.length, 0)}</strong></article>
     </div>
     <div class="stock-v2-lot-grid spacing-top">
@@ -12905,7 +14077,7 @@ function renderStockV2TrendTooltip(row, label = "当前选中") {
     </div>
     <dl>
       <div><dt>持仓数量</dt><dd class="positive">${number(quantity, 0)}</dd></div>
-      <div><dt>持仓成本</dt><dd class="warning">${number(cost, 2)}</dd></div>
+      <div><dt>持仓成本</dt><dd class="warning">${formatPrice(cost)}</dd></div>
       <div><dt>总盈亏</dt><dd class="${classByValue(pnl)}">${money(pnl)}</dd></div>
     </dl>
   `;
@@ -12990,7 +14162,7 @@ function renderStockV2TrendChart(data) {
     return `
       <line x1="${pad.left}" y1="${y}" x2="${width - pad.right}" y2="${y}" stroke="rgba(255,255,255,.13)" />
       <text x="8" y="${y + 4}" fill="#2f7dff" font-size="11">${number(qty, 0)}</text>
-      <text x="44" y="${y + 4}" fill="#ff8a1f" font-size="11">${number(costValue, 2)}</text>
+      <text x="44" y="${y + 4}" fill="#ff8a1f" font-size="11">${formatPrice(costValue)}</text>
       <text x="${width - 50}" y="${y + 4}" fill="#1fae4b" font-size="11">${number(pnlValue, 0)}</text>
     `;
   }).join("");
@@ -13050,7 +14222,7 @@ function renderStockV2TrendChart(data) {
     </div>
     <div class="stock-v2-trend-summary">
       <article><span>当前持仓</span><strong class="positive">${number(latest.quantity || 0, 0)}</strong></article>
-      <article><span>持仓成本</span><strong class="warning">${number(latest.averageCost || 0, 2)}</strong></article>
+      <article><span>持仓成本</span><strong class="warning">${formatPrice(latest.averageCost || 0)}</strong></article>
       <article><span>总盈亏</span><strong class="${classByValue(latest.totalPnl || 0)}">${money(latest.totalPnl || 0)}</strong></article>
     </div>
   `;
@@ -13085,9 +14257,9 @@ function renderStockV2Trades(data) {
         <div class="mobile-card-head"><strong>${escapeHtml(trade.date || "-")}</strong><span class="tag ${trade.side === "sell" ? "sell" : "buy"}">${trade.side === "sell" ? "卖出" : "买入"}</span></div>
         <dl>
           <div><dt>数量</dt><dd>${number(trade.quantity, 0)}</dd></div>
-          <div><dt>价格</dt><dd>${number(trade.price, 3)}</dd></div>
+          <div><dt>价格</dt><dd>${formatPrice(trade.price)}</dd></div>
           <div><dt>金额</dt><dd>${money(tradeAmount(trade))}</dd></div>
-          <div><dt>费用</dt><dd>${money(totalFee(trade))}</dd></div>
+          <div><dt>费用</dt><dd>${feeDisplay(trade)}</dd></div>
         </dl>
       </article>
     `).join("")}</div>`
@@ -13335,7 +14507,7 @@ function renderStockKlineRangeSummary(data) {
       </article>
       <article>
         <span>${priceLabel}</span>
-        <strong>${summary.averagePrice ? `¥${number(summary.averagePrice, 3)}` : "-"}</strong>
+        <strong>${summary.averagePrice ? formatPrice(summary.averagePrice) : "-"}</strong>
       </article>
     </div>
   `;
@@ -13521,22 +14693,22 @@ function renderStockKlineTooltip(point, label = "当前选中") {
       const tone = trade.side === "buy" ? "negative" : "positive";
       const labelText = trade.side === "buy" ? "买入" : "卖出";
       const items = trade.items?.length
-        ? trade.items.map((item) => `<span class="${tone}">${labelText} ${number(item.quantity, 0)}股 @${number(item.price, 3)}，${money(item.amount)}</span>`).join("")
-        : `<span class="${tone}">${labelText} ${number(trade.quantity, 0)}股 @${number(trade.averagePrice, 3)}，${money(trade.amount)}</span>`;
+        ? trade.items.map((item) => `<span class="${tone}">${labelText} ${number(item.quantity, 0)}股 @${formatPrice(item.price)}，${money(item.amount)}</span>`).join("")
+        : `<span class="${tone}">${labelText} ${number(trade.quantity, 0)}股 @${formatPrice(trade.averagePrice)}，${money(trade.amount)}</span>`;
       return items;
     }).join("")
     : "无";
   const matches = point?.matches?.count
-    ? `<span class="stock-kline-match-total">${number(point.matches.quantity, 0)}股，${money(point.matches.pnl)}</span>${point.matches.items?.length ? point.matches.items.map((item) => `<span class="${classByValue(item.pnl)}">${number(item.quantity, 0)}股 ${number(item.buyPrice, 3)}→${number(item.sellPrice, 3)} ${money(item.pnl)}</span>`).join("") : ""}`
+    ? `<span class="stock-kline-match-total">${number(point.matches.quantity, 0)}股，${money(point.matches.pnl)}</span>${point.matches.items?.length ? point.matches.items.map((item) => `<span class="${classByValue(item.pnl)}">${number(item.quantity, 0)}股 ${formatPrice(item.buyPrice)}→${formatPrice(item.sellPrice)} ${money(item.pnl)}</span>`).join("") : ""}`
     : "无";
   const unmatchedTone = point?.unmatched?.side === "sell" ? "warning" : point?.unmatched?.side === "buy" ? "positive" : "";
   const unmatched = point?.unmatched?.count
-    ? `<span class="${unmatchedTone}">${stockKlineUnmatchedText(point.unmatched.side)} ${number(point.unmatched.quantity, 0)}股${point.unmatched.averagePrice ? ` @${number(point.unmatched.averagePrice, 3)}` : ""}</span>`
+    ? `<span class="${unmatchedTone}">${stockKlineUnmatchedText(point.unmatched.side)} ${number(point.unmatched.quantity, 0)}股${point.unmatched.averagePrice ? ` @${formatPrice(point.unmatched.averagePrice)}` : ""}</span>`
     : "无";
   const cost = point?.costSummary || {};
   const costTone = cost.hasCost ? classByValue(-(Number(cost.delta) || 0)) : "";
   const costText = cost.hasCost
-    ? `${cost.before ? number(cost.before, 3) : "-"} → ${cost.after ? number(cost.after, 3) : "-"}${Math.abs(Number(cost.delta) || 0) > 0.0001 ? `（${cost.delta < 0 ? "下降" : "上升"} ${number(Math.abs(cost.delta), 3)}）` : "（基本不变）"}`
+    ? `${cost.before ? formatPrice(cost.before) : "-"} → ${cost.after ? formatPrice(cost.after) : "-"}${Math.abs(Number(cost.delta) || 0) > 0.0001 ? `（${cost.delta < 0 ? "下降" : "上升"} ${formatPrice(Math.abs(cost.delta))}）` : "（基本不变）"}`
     : "-";
   const holdingText = `${number(Number(point?.quantity) || 0, 0)} 股`;
   return `
@@ -13555,11 +14727,11 @@ function renderStockKlineTooltip(point, label = "当前选中") {
       <article><span>未匹配</span><strong>${unmatched}</strong></article>
     </div>
     <dl class="stock-kline-tooltip-market">
-      <div><dt>开 / 高</dt><dd>${number(point?.open || 0, 2)} / ${number(point?.high || 0, 2)}</dd></div>
-      <div><dt>低 / 收</dt><dd>${number(point?.low || 0, 2)} / ${number(point?.close || 0, 2)}</dd></div>
+      <div><dt>开 / 高</dt><dd>${formatPrice(point?.open || 0)} / ${formatPrice(point?.high || 0)}</dd></div>
+      <div><dt>低 / 收</dt><dd>${formatPrice(point?.low || 0)} / ${formatPrice(point?.close || 0)}</dd></div>
       <div><dt>涨跌幅</dt><dd class="${Number.isFinite(change) ? classByValue(change) : ""}">${Number.isFinite(change) ? `${number(change, 2)}%` : "-"}</dd></div>
       <div><dt>成交量</dt><dd>${point?.volume ? number(point.volume, 0) : "-"}</dd></div>
-      <div><dt>当日成本</dt><dd class="warning">${point?.costSummary?.after ? `¥${number(point.costSummary.after, 2)}` : "-"}</dd></div>
+      <div><dt>当日成本</dt><dd class="warning">${point?.costSummary?.after ? formatPrice(point.costSummary.after) : "-"}</dd></div>
       <div><dt>成交额</dt><dd>${point?.amount ? money(point.amount) : "-"}</dd></div>
     </dl>
   `;
@@ -13946,12 +15118,12 @@ function renderLocalStockReviewDetail(data) {
           <article class="mobile-card">
             <div class="mobile-card-head"><strong>${escapeHtml(row.date)}</strong><span>本地复盘</span></div>
             <dl>
-              <div><dt>参考价</dt><dd>¥${number(row.close, 3)}</dd></div>
+              <div><dt>参考价</dt><dd>${formatPrice(row.close)}</dd></div>
               <div><dt>买入</dt><dd>${trades.find((trade) => trade.side === "buy") ? `${number(trades.find((trade) => trade.side === "buy").quantity, 0)} 股` : "无"}</dd></div>
               <div><dt>卖出</dt><dd>${trades.find((trade) => trade.side === "sell") ? `${number(trades.find((trade) => trade.side === "sell").quantity, 0)} 股` : "无"}</dd></div>
               <div><dt>匹配盈亏</dt><dd class="${classByValue(matches.pnl)}">${matches.count ? money(matches.pnl) : "无"}</dd></div>
               <div><dt>未匹配</dt><dd>${unmatched.count ? `${stockKlineUnmatchedText(unmatched.side)} ${number(unmatched.quantity, 0)} 股` : "无"}</dd></div>
-              <div><dt>交易后成本</dt><dd>${cost.hasCost ? `¥${number(cost.after, 3)}` : "-"}</dd></div>
+              <div><dt>交易后成本</dt><dd>${cost.hasCost ? formatPrice(cost.after) : "-"}</dd></div>
             </dl>
           </article>
         `;
@@ -14042,7 +15214,7 @@ function renderStockKlinePointDetail(side, date, price) {
         <div class="mobile-card-head"><strong>未匹配${sideText}</strong><span>${date}</span></div>
         <dl>
           <div><dt>数量</dt><dd class="${classByValue(lot.signedQuantity)}">${number(lot.signedQuantity, 0)} 股</dd></div>
-          <div><dt>价格</dt><dd>¥${number(lot.price, 3)}</dd></div>
+          <div><dt>价格</dt><dd>${formatPrice(lot.price)}</dd></div>
           <div><dt>金额</dt><dd>${money(lot.quantity * lot.price)}</dd></div>
         </dl>
       </article>
@@ -14056,10 +15228,10 @@ function renderStockKlinePointDetail(side, date, price) {
       <article class="mobile-card">
         <div class="mobile-card-head"><strong>原始${sideText}成交</strong><span>${trade.date}</span></div>
         <dl>
-          <div><dt>价格</dt><dd>¥${number(trade.price, 3)}</dd></div>
+          <div><dt>价格</dt><dd>${formatPrice(trade.price)}</dd></div>
           <div><dt>数量</dt><dd>${number(trade.quantity, 0)}</dd></div>
           <div><dt>金额</dt><dd>${money(tradeAmount(trade))}</dd></div>
-          <div><dt>费用</dt><dd>${money(totalFee(trade))}</dd></div>
+          <div><dt>费用</dt><dd>${feeDisplay(trade)}</dd></div>
           <div><dt>备注</dt><dd>${escapeHtml(trade.note || "-")}</dd></div>
         </dl>
       </article>
@@ -14080,7 +15252,7 @@ function renderStockKlinePointDetail(side, date, price) {
     <section class="panel">
       <div class="panel-header">
         <div>
-          <h3>${escapeHtml(currentStockKlineData.stockName)} ${date} ${sideText} ¥${number(point.price, 3)}</h3>
+          <h3>${escapeHtml(currentStockKlineData.stockName)} ${date} ${sideText} ${formatPrice(point.price)}</h3>
           <span>高亮优先显示当前未匹配方向；反方向点显示对应匹配。</span>
         </div>
       </div>
@@ -14258,7 +15430,7 @@ function renderStockDetailV2() {
       <div class="stock-v2-title"><strong>${escapeHtml(data.stockName || data.stockCode || "-")}</strong><span class="tag">${escapeHtml(data.stockCode || "-")}</span></div>
       <p class="muted">当前只做展示适配；手动数据没有成交时间时按日期降级显示。</p>
     </div>
-    <div class="stock-v2-price"><span>当前价</span><strong>${currentPrice > 0 ? money(currentPrice) : "-"}</strong></div>
+    <div class="stock-v2-price"><span>当前价</span><strong>${currentPrice > 0 ? formatPrice(currentPrice) : "-"}</strong></div>
   `;
   els.stockV2Metrics.innerHTML = `
     <article class="metric"><span>当前持仓</span><strong>${number(data.currentHolding.quantity || 0, 0)} 股</strong></article>
@@ -14320,8 +15492,8 @@ function renderStockDetail() {
     <article class="metric"><span>状态</span><strong>${status}</strong></article>
     <article class="metric"><span>当前数量</span><strong>${number(position.quantity, 0)}</strong></article>
     <article class="metric"><span>当前市值</span><strong>${money(position.marketValue)}</strong></article>
-    <article class="metric"><span>原始成本</span><strong>${money(position.initialAverageCost)}</strong></article>
-    <article class="metric"><span>现在成本</span><strong>${money(position.averageCost)}</strong></article>
+    <article class="metric"><span>原始成本</span><strong>${formatPrice(position.initialAverageCost)}</strong></article>
+    <article class="metric"><span>现在成本</span><strong>${formatPrice(position.averageCost)}</strong></article>
     <article class="metric"><span>持有天数</span><strong>${days}</strong></article>
     <article class="metric"><span>低买高卖</span><strong class="${classByValue(matchedRealized)}">${money(matchedRealized)}</strong></article>
     <article class="metric"><span>手续费</span><strong>${money(position.totalFees || 0)}</strong></article>
@@ -14690,7 +15862,7 @@ function renderReportBarChart(title, rows, valueKey, emptyText, options = {}) {
         <line x1="${pad.left}" y1="${zeroY}" x2="${width - pad.right}" y2="${zeroY}" stroke="rgba(255,255,255,.28)" />
         <line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${height - pad.bottom}" stroke="rgba(255,255,255,.18)" />
         <text class="report-bar-label" x="8" y="${pad.top + 4}">${moneyInt(maxAbs)}</text>
-        <text class="report-bar-label" x="8" y="${height - pad.bottom + 4}">-${moneyInt(maxAbs).replace(/^¥/, "")}</text>
+        <text class="report-bar-label" x="8" y="${height - pad.bottom + 4}">-${moneyInt(maxAbs)}</text>
         ${bars}
         <text class="report-bar-label" x="${pad.left}" y="${height - 10}">${first}</text>
         <text class="report-bar-label" x="${width - pad.right - 34}" y="${height - 10}">${last}</text>
@@ -14724,7 +15896,7 @@ function renderStockReportUnmatched(symbol) {
         <span class="${classByValue(pair.unmatchedQuantity)}">${number(pair.unmatchedQuantity, 0)} 股</span>
       </div>
       <dl>
-        <div><dt>未匹配均价</dt><dd>¥${number(unmatchedAveragePrice(pair), 3)}</dd></div>
+        <div><dt>未匹配均价</dt><dd>${formatPrice(unmatchedAveragePrice(pair))}</dd></div>
         <div><dt>剩余批次</dt><dd>${lots.length} 笔</dd></div>
         <div class="unmatched-row"><dt>优先匹配顺序</dt><dd>${renderUnmatchedDetail(pair)}</dd></div>
       </dl>
@@ -15161,17 +16333,95 @@ function renderStockInsights(rows) {
   els.summaryStockInsights.innerHTML = insights.map((item) => `<li>${item}</li>`).join("");
 }
 
+function loadFeeProfileIntoForm(startDate) {
+  const profile = ensureFeeHistory().find((item) => item.startDate === startDate);
+  if (!profile) return;
+  els.feeEffectiveFrom.value = profile.startDate;
+  els.commissionRate.value = profile.commissionRate;
+  els.minCommission.value = profile.minCommission;
+  els.stampRate.value = profile.stampRate;
+  els.transferRate.value = profile.transferRate;
+  els.etfNoStampTax.checked = profile.etfNoStampTax !== false;
+}
+
+function renderFeeHistory() {
+  if (!els.feeHistoryList || !els.feeHistoryStatus) return;
+  const profiles = ensureFeeHistory();
+  const missing = missingFeeTrades();
+  const firstTrade = firstTradeDate();
+  const latest = profiles.at(-1);
+  els.feeHistoryStatus.innerHTML = missing.length
+    ? `<strong class="warning">有 ${missing.length} 笔交易缺费率：最早 ${escapeHtml(missing.map((trade) => trade.date).sort((a, b) => a.localeCompare(b))[0] || "未知日期")}。</strong> 这些交易的费用暂不计入盈亏。`
+    : `<strong class="positive">费率已覆盖${firstTrade ? `最早成交日 ${escapeHtml(firstTrade)}` : "当前全部交易"}。</strong> 当前最新档案自 ${escapeHtml(latest?.startDate || "-")} 生效。`;
+  els.feeHistoryList.innerHTML = profiles.map((profile) => `
+    <article class="mobile-card">
+      <div class="mobile-card-head"><strong>${escapeHtml(profile.startDate)} 起生效</strong><span>${profile.etfNoStampTax !== false ? "ETF免印花税" : "ETF收印花税"}</span></div>
+      <dl>
+        <div><dt>佣金率</dt><dd>${number(profile.commissionRate, 5)}</dd></div>
+        <div><dt>最低佣金</dt><dd>${money(profile.minCommission)}</dd></div>
+        <div><dt>印花税率</dt><dd>${number(profile.stampRate, 5)}</dd></div>
+        <div><dt>过户费率</dt><dd>${number(profile.transferRate, 5)}</dd></div>
+      </dl>
+      <div class="row-actions">
+        <button class="icon-action" type="button" data-load-fee-profile="${escapeHtml(profile.startDate)}">载入</button>
+        ${profiles.length > 1 ? `<button class="icon-action" type="button" data-delete-fee-profile="${escapeHtml(profile.startDate)}">删除</button>` : ""}
+      </div>
+    </article>
+  `).join("");
+}
+
+function saveFeeProfile() {
+  const startDate = els.feeEffectiveFrom.value;
+  if (!validDateString(startDate)) {
+    alert("请填写费率生效起始日期。");
+    return;
+  }
+  const profile = normalizeFeeProfile({
+    id: `fee-${startDate}`,
+    startDate,
+    commissionRate: els.commissionRate.value,
+    minCommission: els.minCommission.value,
+    stampRate: els.stampRate.value,
+    transferRate: els.transferRate.value,
+    etfNoStampTax: els.etfNoStampTax.checked,
+  });
+  const profiles = ensureFeeHistory().filter((item) => item.startDate !== startDate);
+  state.settings.feeHistory = [...profiles, profile].sort((a, b) => a.startDate.localeCompare(b.startDate));
+  ensureFeeHistory();
+  save();
+  updatePreview();
+  renderAll();
+}
+
+function deleteFeeProfile(startDate) {
+  const profiles = ensureFeeHistory();
+  if (profiles.length <= 1) {
+    alert("至少需要保留一套费率档案。");
+    return;
+  }
+  if (!confirm(`删除 ${startDate} 起生效的费率吗？覆盖不到的交易会显示缺费率。`)) return;
+  state.settings.feeHistory = profiles.filter((profile) => profile.startDate !== startDate);
+  ensureFeeHistory();
+  save();
+  updatePreview();
+  renderAll();
+}
+
 function renderSettings() {
   els.initialCash.value = state.settings.initialCash;
-  els.commissionRate.value = state.settings.commissionRate;
-  els.minCommission.value = state.settings.minCommission;
-  els.stampRate.value = state.settings.stampRate;
-  els.transferRate.value = state.settings.transferRate;
-  els.etfNoStampTax.checked = state.settings.etfNoStampTax !== false;
+  const profiles = ensureFeeHistory();
+  const selectedFeeDate = profiles.some((profile) => profile.startDate === els.feeEffectiveFrom?.value)
+    ? els.feeEffectiveFrom.value
+    : profiles.at(-1)?.startDate;
+  if (selectedFeeDate) loadFeeProfileIntoForm(selectedFeeDate);
+  renderFeeHistory();
   els.backupStatus.textContent = backupStatusText();
   renderImportGuardStatus();
   renderHolidayCalendarStatus();
   renderManualMarketHolidays();
+  if (els.holidayCalendarYear && !els.holidayCalendarYear.value) {
+    els.holidayCalendarYear.value = String(beijingNow().getFullYear());
+  }
   if (!els.cashTransferDate.value) els.cashTransferDate.value = today();
   renderCashTransfers();
   renderCorporateActions();
@@ -15192,8 +16442,8 @@ function renderSettings() {
           <td><span class="stock-name-chip">${item.name}</span></td>
           <td>${number(item.quantity, 0)}</td>
           <td>${money(item.cost)}</td>
-          <td>${money(item.quantity > 0 ? item.cost / item.quantity : 0)}</td>
-          <td>${state.prices[item.symbol] ? money(state.prices[item.symbol]) : "-"}</td>
+          <td>${formatPrice(item.quantity > 0 ? item.cost / item.quantity : 0)}</td>
+          <td>${state.prices[item.symbol] ? formatPrice(state.prices[item.symbol]) : "-"}</td>
           <td>
             <div class="row-actions">
               <button class="icon-action" data-edit-initial="${item.id}">编辑</button>
@@ -15217,8 +16467,8 @@ function renderSettings() {
             <div><dt>日期</dt><dd>${item.date || "-"}</dd></div>
             <div><dt>数量</dt><dd>${number(item.quantity, 0)}</dd></div>
             <div><dt>总成本</dt><dd>${money(item.cost)}</dd></div>
-            <div><dt>平均成本</dt><dd>${money(item.quantity > 0 ? item.cost / item.quantity : 0)}</dd></div>
-            <div><dt>当前价</dt><dd>${state.prices[item.symbol] ? money(state.prices[item.symbol]) : "-"}</dd></div>
+            <div><dt>平均成本</dt><dd>${formatPrice(item.quantity > 0 ? item.cost / item.quantity : 0)}</dd></div>
+            <div><dt>当前价</dt><dd>${state.prices[item.symbol] ? formatPrice(state.prices[item.symbol]) : "-"}</dd></div>
           </dl>
           <div class="row-actions">
             <button class="icon-action" data-edit-initial="${item.id}">编辑</button>
@@ -15670,6 +16920,41 @@ function saveAccountSettings() {
 
 function activeViewId() {
   return document.querySelector(".view.active")?.id || "dashboard";
+}
+
+function setCloseWorkflowTab(tabId = "record") {
+  const view = document.querySelector("#close-snapshots");
+  if (!view) return;
+  const activeTab = ["record", "history", "audit"].includes(tabId) ? tabId : "record";
+  view.querySelectorAll("[data-close-workflow-tab]").forEach((button) => {
+    const active = button.dataset.closeWorkflowTab === activeTab;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-selected", String(active));
+  });
+  view.querySelectorAll("[data-close-workflow-panel]").forEach((panel) => {
+    const active = panel.dataset.closeWorkflowPanel === activeTab;
+    panel.classList.toggle("active", active);
+    panel.hidden = !active;
+  });
+}
+
+function setDayPnlAuditEmptyState(empty) {
+  if (els.dayPnlAuditEmpty) els.dayPnlAuditEmpty.hidden = !empty;
+}
+
+function closeSnapshotRangeText() {
+  const startDate = els.closeSnapshotStartDate?.value || "";
+  const endDate = els.closeSnapshotEndDate?.value || "";
+  if (validDateString(startDate) && validDateString(endDate)) return `${startDate} 至 ${endDate}`;
+  if (validDateString(startDate)) return `${startDate} 起`;
+  if (validDateString(endDate)) return `截至 ${endDate}`;
+  return "未设置日期范围";
+}
+
+function syncCloseSnapshotRangeDisplay() {
+  document.querySelectorAll(".close-range-display").forEach((element) => {
+    element.textContent = closeSnapshotRangeText();
+  });
 }
 
 let renderRevision = 0;
@@ -16281,7 +17566,7 @@ function csvCell(value) {
 
 function exportCsv() {
   const rows = [
-    ["日期", "代码", "名称", "类型", "价格", "数量", "金额", "佣金", "印花税", "过户费", "总费用", "分红税", "净分红", "股息率", "备注"],
+    ["日期", "代码", "名称", "类型", "价格", "数量", "金额", "佣金", "印花税", "过户费", "总费用", "费用状态", "分红税", "净分红", "股息率", "备注"],
     ...state.trades.map((trade) => {
       const fees = tradeFees(trade);
       const fee = fees.commission + fees.stampTax + fees.transferFee;
@@ -16297,6 +17582,7 @@ function exportCsv() {
         fees.stampTax,
         fees.transferFee,
         fee,
+        fees.missingProfile ? "缺费率" : `按 ${fees.profile.startDate} 起费率估算`,
         "",
         "",
         "",
@@ -16711,7 +17997,7 @@ function renderBrokerDuplicatePreview(duplicates = []) {
       <dl>
         <div><dt>日期</dt><dd>${trade.date}</dd></div>
         <div><dt>方向</dt><dd class="${trade.side === "buy" ? "positive" : "negative"}">${trade.side === "buy" ? "买入" : "卖出"}</dd></div>
-        <div><dt>价格</dt><dd>${number(trade.price, 3)}</dd></div>
+        <div><dt>价格</dt><dd>${formatPrice(trade.price)}</dd></div>
         <div><dt>数量</dt><dd>${number(trade.quantity, 0)}</dd></div>
         <div><dt>来源行</dt><dd>${trade.sourceRow || "-"}</dd></div>
       </dl>
@@ -16766,7 +18052,7 @@ function brokerImportAnomalies(summary = {}) {
       anomalies.push({
         severity: "danger",
         title: "价格或数量异常",
-        text: `${trade.date || "-"} ${trade.name || trade.symbol} ${trade.symbol} 价格 ${number(trade.price, 3)}，数量 ${number(trade.quantity, 0)}。`,
+        text: `${trade.date || "-"} ${trade.name || trade.symbol} ${trade.symbol} 价格 ${formatPrice(trade.price)}，数量 ${number(trade.quantity, 0)}。`,
         trade,
       });
     }
@@ -16776,7 +18062,7 @@ function brokerImportAnomalies(summary = {}) {
     anomalies.push({
       severity: trade.duplicateReason?.includes("疑似") ? "warning" : "info",
       title: trade.duplicateReason || "重复成交",
-      text: `${trade.date} ${trade.name || trade.symbol} ${trade.symbol} ${trade.side === "buy" ? "买入" : "卖出"} ${number(trade.quantity, 0)} 股 @${number(trade.price, 3)}。`,
+      text: `${trade.date} ${trade.name || trade.symbol} ${trade.symbol} ${trade.side === "buy" ? "买入" : "卖出"} ${number(trade.quantity, 0)} 股 @${formatPrice(trade.price)}。`,
       trade,
     });
   });
@@ -16857,10 +18143,10 @@ function renderBrokerImportPreview(summary = {}) {
           <dl>
             <div><dt>日期</dt><dd>${trade.date}</dd></div>
             <div><dt>方向</dt><dd class="${trade.side === "buy" ? "positive" : "negative"}">${trade.side === "buy" ? "买入" : "卖出"}</dd></div>
-            <div><dt>价格</dt><dd>${number(trade.price, 3)}</dd></div>
+            <div><dt>价格</dt><dd>${formatPrice(trade.price)}</dd></div>
             <div><dt>数量</dt><dd>${number(trade.quantity, 0)}</dd></div>
             <div><dt>金额</dt><dd>${money(tradeAmount(trade))}</dd></div>
-            <div><dt>费用</dt><dd>${money(totalFee(trade))}</dd></div>
+            <div><dt>费用</dt><dd>${feeDisplay(trade)}</dd></div>
           </dl>
         </article>
       `,
@@ -17236,7 +18522,7 @@ function renderHistoricalRebuild() {
   if (document.activeElement !== els.rebuildCash) els.rebuildCash.value = state.historicalRebuild.cash || "";
   const holdings = rebuildSourceHoldings();
   els.historicalRebuildHoldings.innerHTML = holdings.length
-    ? holdings.map((item) => `<div class="mobile-card"><div class="card-head"><strong>${escapeHtml(item.symbol)} ${escapeHtml(item.name || "")}</strong><span>${number(item.quantity, 0)} 股</span></div><dl><div><dt>基准价</dt><dd>${money(item.price)}</dd></div><div><dt>基准市值</dt><dd>${money(item.quantity * item.price)}</dd></div></dl><div class="row-actions"><button class="danger-button small" type="button" data-delete-rebuild-holding="${escapeHtml(item.id)}">删除</button></div></div>`).join("")
+    ? holdings.map((item) => `<div class="mobile-card"><div class="card-head"><strong>${escapeHtml(item.symbol)} ${escapeHtml(item.name || "")}</strong><span>${number(item.quantity, 0)} 股</span></div><dl><div><dt>基准价</dt><dd>${formatPrice(item.price)}</dd></div><div><dt>基准市值</dt><dd>${money(item.quantity * item.price)}</dd></div></dl><div class="row-actions"><button class="danger-button small" type="button" data-delete-rebuild-holding="${escapeHtml(item.id)}">删除</button></div></div>`).join("")
     : `<div class="empty-state">还没有录入基准持仓。只看现金账户时也可以为空。</div>`;
 }
 
@@ -17384,7 +18670,7 @@ function renderHistoricalRebuildPreview(result = pendingHistoricalRebuild) {
   els.historicalRebuildSummary.innerHTML = [
     { label: "起点现金", value: money(result.initialCash) }, { label: "起点资产", value: money(result.startAssets) }, { label: "基准资产", value: money(result.currentAssets) }, { label: "期间净入金", value: money(result.netTransfer) }, { label: "净收益", value: money(result.adjustedProfit), tone: classByValue(result.adjustedProfit) }, { label: "净入金调整收益率", value: `${number(result.adjustedReturnRate, 2)}%`, tone: classByValue(result.adjustedReturnRate) },
   ].map((item) => `<div class="metric-card"><span>${item.label}</span><strong class="${item.tone || ""}">${item.value}</strong></div>`).join("");
-  els.historicalRebuildPreview.innerHTML = result.positions.length ? result.positions.map((item) => `<div class="mobile-card"><div class="card-head"><strong>${escapeHtml(item.symbol)} ${escapeHtml(item.name || "")}</strong><span class="${item.quantity < 0 ? "negative" : ""}">${number(item.quantity, 0)} 股</span></div><dl><div><dt>起点价</dt><dd>${item.price > 0 ? money(item.price) : "缺少"}</dd></div><div><dt>价格来源</dt><dd>${escapeHtml(item.priceSource || "需手动填写")}</dd></div><div><dt>起点市值</dt><dd>${money(Math.max(0, item.quantity) * Math.max(0, item.price))}</dd></div><div><dt>手动起点价</dt><dd><input type="number" min="0" step="0.001" data-rebuild-start-price="${escapeHtml(item.symbol)}" value="${item.price > 0 ? item.price : ""}" placeholder="填当天股价" /></dd></div></dl></div>`).join("") : `<div class="empty-state">倒推出起点没有股票持仓，只有现金。</div>`;
+  els.historicalRebuildPreview.innerHTML = result.positions.length ? result.positions.map((item) => `<div class="mobile-card"><div class="card-head"><strong>${escapeHtml(item.symbol)} ${escapeHtml(item.name || "")}</strong><span class="${item.quantity < 0 ? "negative" : ""}">${number(item.quantity, 0)} 股</span></div><dl><div><dt>起点价</dt><dd>${item.price > 0 ? formatPrice(item.price) : "缺少"}</dd></div><div><dt>价格来源</dt><dd>${escapeHtml(item.priceSource || "需手动填写")}</dd></div><div><dt>起点市值</dt><dd>${money(Math.max(0, item.quantity) * Math.max(0, item.price))}</dd></div><div><dt>手动起点价</dt><dd><input type="number" min="0" step="0.001" data-rebuild-start-price="${escapeHtml(item.symbol)}" value="${item.price > 0 ? item.price : ""}" placeholder="填当天股价" /></dd></div></dl></div>`).join("") : `<div class="empty-state">倒推出起点没有股票持仓，只有现金。</div>`;
 }
 
 async function previewHistoricalRebuild() {
@@ -17682,15 +18968,15 @@ document.querySelector("#export-csv").addEventListener("click", exportCsv);
 document.querySelector("#save-account").addEventListener("click", saveAccountSettings);
 els.initialCash.addEventListener("input", saveAccountSettings);
 els.initialCash.addEventListener("change", saveAccountSettings);
-document.querySelector("#save-fees").addEventListener("click", () => {
-  state.settings.commissionRate = Number(els.commissionRate.value) || 0;
-  state.settings.minCommission = Number(els.minCommission.value) || 0;
-  state.settings.stampRate = Number(els.stampRate.value) || 0;
-  state.settings.transferRate = Number(els.transferRate.value) || 0;
-  state.settings.etfNoStampTax = els.etfNoStampTax.checked;
-  save();
-  updatePreview();
-  renderAll();
+document.querySelector("#save-fees").addEventListener("click", saveFeeProfile);
+els.feeHistoryList?.addEventListener("click", (event) => {
+  const loadDate = event.target.closest("[data-load-fee-profile]")?.dataset.loadFeeProfile;
+  if (loadDate) {
+    loadFeeProfileIntoForm(loadDate);
+    return;
+  }
+  const deleteDate = event.target.closest("[data-delete-fee-profile]")?.dataset.deleteFeeProfile;
+  if (deleteDate) deleteFeeProfile(deleteDate);
 });
 document.querySelector("#add-initial-position").addEventListener("click", addInitialPosition);
 optionalElement("#reset-initial-position").addEventListener("click", resetInitialPositionForm);
@@ -17731,6 +19017,7 @@ els.clearCorporateActionImport.addEventListener("click", clearCorporateActionImp
 els.corporateActionImportSymbol.addEventListener("change", () => { els.corporateActionImportSymbol.value = normalizeSymbol(els.corporateActionImportSymbol.value); });
 els.corporateActionImportSymbol.addEventListener("blur", () => { els.corporateActionImportSymbol.value = normalizeSymbol(els.corporateActionImportSymbol.value); });
 els.updateHolidayCalendar?.addEventListener("click", updateCurrentYearHolidayCalendarFromExchange);
+els.updateHolidayCalendarYear?.addEventListener("click", updateSelectedYearHolidayCalendarFromExchange);
 els.addManualHoliday?.addEventListener("click", addManualMarketHoliday);
 els.manualHolidayList?.addEventListener("click", (event) => {
   const button = event.target.closest("[data-delete-manual-holiday]");
@@ -17848,11 +19135,31 @@ els.equityChart.addEventListener("keydown", (event) => {
   event.preventDefault();
   renderDailyMatchDetails(cell.dataset.matchDate);
 });
+els.closeWorkflowTabs?.addEventListener("click", (event) => {
+  const tab = event.target.closest("[data-close-workflow-tab]");
+  if (tab) setCloseWorkflowTab(tab.dataset.closeWorkflowTab);
+});
 els.closeSnapshotDate.addEventListener("change", renderCloseSnapshots);
-els.closeSnapshotStartDate.addEventListener("input", scheduleRenderCloseSnapshots);
-els.closeSnapshotEndDate.addEventListener("input", scheduleRenderCloseSnapshots);
-els.closeSnapshotStartDate.addEventListener("change", scheduleRenderCloseSnapshots);
-els.closeSnapshotEndDate.addEventListener("change", scheduleRenderCloseSnapshots);
+els.applyCloseSnapshotRange?.addEventListener("click", () => {
+  const startDate = els.closeSnapshotStartDate.value;
+  const endDate = els.closeSnapshotEndDate.value;
+  if (startDate && endDate && startDate > endDate) {
+    els.closeSnapshotStatus.textContent = "开始日期不能晚于结束日期。";
+    return;
+  }
+  renderCloseSnapshots();
+  closeModal(document.getElementById("close-snapshot-range-modal"));
+});
+els.clearCloseSnapshotRange?.addEventListener("click", () => {
+  els.closeSnapshotStartDate.value = "";
+  els.closeSnapshotEndDate.value = "";
+  renderCloseSnapshots();
+  closeModal(document.getElementById("close-snapshot-range-modal"));
+});
+els.closeSnapshotStartDate.addEventListener("input", syncCloseSnapshotRangeDisplay);
+els.closeSnapshotEndDate.addEventListener("input", syncCloseSnapshotRangeDisplay);
+els.closeSnapshotStartDate.addEventListener("change", syncCloseSnapshotRangeDisplay);
+els.closeSnapshotEndDate.addEventListener("change", syncCloseSnapshotRangeDisplay);
 els.saveCloseSnapshot.addEventListener("click", saveCloseSnapshot);
 els.deleteSelectedCloseSnapshot.addEventListener("click", deleteSelectedCloseSnapshot);
 els.openManualCloseModal.addEventListener("click", openManualCloseModal);
@@ -18356,6 +19663,15 @@ loadAppState()
     resetCorporateActionForm();
     renderAll();
     renderVersionSnapshots();
+    if (window.lucide?.createIcons) {
+      window.lucide.createIcons({
+        attrs: {
+          "aria-hidden": "true",
+          focusable: "false",
+          "stroke-width": "1.7",
+        },
+      });
+    }
     scheduleAnnualHolidayCalendarUpdate();
   });
 
