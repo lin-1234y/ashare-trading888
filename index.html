@@ -851,6 +851,111 @@ body.modal-open {
   display: grid;
   gap: 10px;
 }
+
+.closed-rank-search {
+  width: min(100%, 260px);
+}
+
+.closed-rank-content {
+  display: grid;
+  gap: 10px;
+}
+
+.closed-rank-content[hidden] {
+  display: none;
+}
+
+.closed-position-list {
+  grid-template-columns: repeat(auto-fill, minmax(126px, 1fr));
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.closed-position-row {
+  width: 100%;
+  min-height: 116px;
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  padding: 11px 10px;
+  border: 1px solid rgba(216, 180, 106, 0.28);
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(27, 24, 17, 0.98), rgba(10, 10, 9, 0.98));
+  color: var(--text);
+  text-align: left;
+}
+
+.closed-position-row:hover {
+  border-color: rgba(242, 212, 138, 0.72);
+  box-shadow: inset 0 1px 0 rgba(242, 212, 138, 0.11), 0 0 14px rgba(216, 180, 106, 0.1);
+}
+
+.closed-position-pnl {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.closed-position-pnl small {
+  color: #a9a394;
+  font-size: 12px;
+}
+
+.closed-position-row .stock-name-chip {
+  width: fit-content;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.closed-position-code,
+.closed-position-date {
+  color: #a9a394;
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.closed-position-pnl {
+  margin-top: 4px;
+  justify-items: start;
+}
+
+.closed-position-pnl strong {
+  font-size: 16px;
+}
+
+.position-compact-grid .position-quantity dd,
+.position-compact-grid .position-market-value dd {
+  color: #ff3dbd !important;
+  font-size: 19px !important;
+  font-weight: 950;
+  line-height: 1.05;
+  text-shadow: 0 0 12px rgba(255, 61, 189, 0.34);
+}
+
+@media (max-width: 620px) {
+  .closed-position-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .closed-position-row {
+    min-height: 108px;
+    padding: 9px 8px;
+  }
+
+  .closed-position-pnl strong {
+    font-size: 15px;
+  }
+
+  .position-compact-grid .position-quantity dd,
+  .position-compact-grid .position-market-value dd {
+    font-size: 18px !important;
+  }
+}
 .asset-chart-controls {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -5327,6 +5432,62 @@ body {
   }
 }
 
+/* Shared navigation-page header: twin golden dragons and a glowing pearl. */
+.topbar {
+  position: relative !important;
+  isolation: isolate;
+  overflow: hidden;
+  background: #0b0a08 !important;
+  box-shadow: inset 0 0 0 1px rgba(242, 212, 138, 0.16), 0 12px 28px rgba(0, 0, 0, 0.3) !important;
+}
+
+.topbar::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background: url("./topbar-double-dragon.png") center center / cover no-repeat;
+  opacity: 0.88;
+  filter: brightness(1.22) saturate(1.12) drop-shadow(0 0 12px rgba(255, 203, 77, 0.34));
+  animation: topbar-dragon-glow 6s ease-in-out infinite;
+}
+
+.topbar > * {
+  position: relative;
+  z-index: 1;
+}
+
+.topbar .eyebrow,
+.topbar h2 {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95), 0 0 14px rgba(0, 0, 0, 0.82);
+}
+
+@keyframes topbar-dragon-glow {
+  0%, 100% {
+    opacity: 0.78;
+    filter: brightness(1.02) saturate(1.02) drop-shadow(0 0 7px rgba(255, 203, 77, 0.2));
+  }
+  50% {
+    opacity: 0.98;
+    filter: brightness(1.48) saturate(1.34) drop-shadow(0 0 19px rgba(255, 215, 103, 0.58));
+  }
+}
+
+@media (max-width: 620px) {
+  .topbar::before {
+    background-position: center center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topbar::before {
+    animation: none;
+    opacity: 0.92;
+    filter: brightness(1.35) saturate(1.22) drop-shadow(0 0 15px rgba(255, 215, 103, 0.46));
+  }
+}
+
 </style>
   </head>
   <body>
@@ -5363,10 +5524,6 @@ body {
           <div>
             <p class="eyebrow">Trading Journal</p>
             <h2 id="page-title">总览</h2>
-          </div>
-          <div class="topbar-actions">
-            <button class="ghost-button" id="sample-data">填充示例</button>
-            <button class="primary-button" data-jump="trade-form">新增交易</button>
           </div>
         </header>
 
@@ -6173,11 +6330,6 @@ body {
               </label>
             </div>
 
-            <div class="quote-box">
-              <span>成交金额 <strong id="preview-amount">0.00</strong></span>
-              <span>总费用 <strong id="preview-fee">0.00</strong></span>
-              <span>现金变化 <strong id="preview-net">0.00</strong></span>
-            </div>
           </form>
 
           <section class="panel spacing-top">
@@ -6312,44 +6464,19 @@ body {
           <section class="panel spacing-top">
             <div class="panel-header">
               <div>
-                <h3>已清仓 / 历史持仓</h3>
-                <span>按需查询，未查询时不计算、不渲染历史持仓</span>
+                <h3>已清仓股票</h3>
+                <span id="closed-rank-status">按最终盈亏排序；点击股票查看个股明细</span>
               </div>
-              <button class="primary-button small" type="button" data-modal-open="closed-rank-modal">查询已清仓股票</button>
+              <button class="ghost-button small" type="button" id="toggle-closed-rank-list" aria-expanded="false" aria-controls="closed-rank-content">明细</button>
+            </div>
+            <div class="closed-rank-content" id="closed-rank-content" hidden>
+              <label class="search-box closed-rank-search">
+                <span>筛选</span>
+                <input type="search" id="closed-rank-search" placeholder="代码或名称" autocomplete="off" />
+              </label>
+              <div class="closed-rank-list closed-position-list" id="closed-rank-list"></div>
             </div>
           </section>
-        </section>
-
-
-        <section class="app-modal" id="closed-rank-modal" hidden>
-          <div class="modal-card">
-            <div class="modal-head">
-              <div>
-                <h3>已清仓股票查询</h3>
-                <span>按清仓日期查询，结果按最终盈亏从高到低排列</span>
-              </div>
-              <button class="icon-action" type="button" data-modal-close>关闭</button>
-            </div>
-            <div class="date-filter">
-              <label>
-                开始
-                <input type="date" id="closed-query-start-date" />
-              </label>
-              <label>
-                结束
-                <input type="date" id="closed-query-end-date" />
-              </label>
-            </div>
-            <label class="spacing-top">
-              股票搜索
-              <input type="search" id="closed-query-keyword" placeholder="输入股票代码或名称" autocomplete="off" />
-            </label>
-            <div class="form-actions spacing-top">
-              <button class="primary-button" type="button" id="query-closed-positions">查询</button>
-            </div>
-            <p class="status-text" id="closed-query-status">尚未查询，不会载入历史持仓。</p>
-            <div class="closed-rank-list" id="closed-rank-list"></div>
-          </div>
         </section>
         <section class="view" id="stock-detail">
           <section class="panel">
@@ -7280,9 +7407,6 @@ const els = {
   transferFee: document.querySelector("#transfer-fee"),
   note: document.querySelector("#note"),
   formHeading: document.querySelector("#form-heading"),
-  previewAmount: document.querySelector("#preview-amount"),
-  previewFee: document.querySelector("#preview-fee"),
-  previewNet: document.querySelector("#preview-net"),
   brokerImportMode: optionalElement("#broker-import-mode"),
   brokerImportFile: optionalElement("#broker-import-file"),
   brokerImportStatus: optionalElement("#broker-import-status"),
@@ -7321,11 +7445,10 @@ const els = {
   recordEndDate: optionalElement("#record-end-date"),
   positionsBody: document.querySelector("#positions-body"),
   positionsCards: optionalElement("#positions-cards"),
-  closedQueryStartDate: optionalElement("#closed-query-start-date"),
-  closedQueryEndDate: optionalElement("#closed-query-end-date"),
-  closedQueryKeyword: optionalElement("#closed-query-keyword"),
-  queryClosedPositions: optionalElement("#query-closed-positions"),
-  closedQueryStatus: optionalElement("#closed-query-status"),
+  toggleClosedRankList: optionalElement("#toggle-closed-rank-list"),
+  closedRankContent: optionalElement("#closed-rank-content"),
+  closedRankSearch: optionalElement("#closed-rank-search"),
+  closedRankStatus: optionalElement("#closed-rank-status"),
   closedRankList: optionalElement("#closed-rank-list"),
   quoteStatus: optionalElement("#quote-status"),
   recordOpenSymbol: optionalElement("#record-open-symbol"),
@@ -10369,16 +10492,10 @@ function updatePreview() {
     quantity: Number(els.quantity.value) || 0,
   };
   const fees = calcFees(trade);
-  const amount = tradeAmount(trade);
-  const fee = fees.commission + fees.stampTax + fees.transferFee;
-  const net = trade.side === "sell" ? amount - fee : -(amount + fee);
 
   els.commission.value = fees.missingProfile ? "" : fees.commission.toFixed(2);
   els.stampTax.value = fees.missingProfile ? "" : fees.stampTax.toFixed(2);
   els.transferFee.value = fees.missingProfile ? "" : fees.transferFee.toFixed(2);
-  els.previewAmount.textContent = money(amount);
-  els.previewFee.textContent = fees.missingProfile ? "缺费率" : money(fee);
-  els.previewNet.textContent = fees.missingProfile ? "缺费率" : money(net);
 }
 
 function buildFlowRecords() {
@@ -10900,62 +11017,41 @@ function closedPositionRows(positions = currentPortfolioSnapshot().positions) {
     .filter((row) => row.realized !== 0 || row.dividends !== 0 || state.trades.some((trade) => normalizeSymbol(trade.symbol) === row.symbol));
 }
 
-function renderClosedRank(rows = []) {
-  const sorted = [...rows].sort((a, b) => b.totalPnl - a.totalPnl || a.symbol.localeCompare(b.symbol));
-  els.closedRankList.innerHTML = sorted.length
-    ? sorted.map((row) => `
-        <article class="mobile-card">
-          <div class="mobile-card-head">
-            <strong class="stock-name-chip">${row.name}</strong>
-            <span>${row.symbol}</span>
-          </div>
-          <dl>
-            <div><dt>最终盈亏</dt><dd class="${classByValue(row.totalPnl)}">${money(row.totalPnl)}</dd></div>
-            <div><dt>实现盈亏</dt><dd class="${classByValue(row.realized)}">${money(row.realized)}</dd></div>
-            <div><dt>净分红</dt><dd>${money(row.dividends)}</dd></div>
-            <div><dt>总费用</dt><dd>${money(row.fees)}</dd></div>
-            <div><dt>持仓日期</dt><dd>${holdingPeriodText(row.holdingPeriods)}</dd></div>
-            <div><dt>实际持有天数</dt><dd>${row.days}</dd></div>
-          </dl>
-          <div class="row-actions"><button class="icon-action" data-detail-symbol="${row.symbol}">详情</button></div>
-        </article>
-      `).join("")
-    : `<div class="empty-state">暂无已清仓股票</div>`;
+let closedRankRowsCache = [];
+
+function setClosedRankListVisible(visible) {
+  if (!els.closedRankContent || !els.toggleClosedRankList) return;
+  const show = Boolean(visible);
+  els.closedRankContent.hidden = !show;
+  els.toggleClosedRankList.textContent = show ? "收起" : "明细";
+  els.toggleClosedRankList.setAttribute("aria-expanded", String(show));
 }
 
-function resetClosedPositionQuery() {
-  els.closedQueryStartDate.value = "";
-  els.closedQueryEndDate.value = "";
-  els.closedQueryKeyword.value = "";
-  els.closedQueryStatus.textContent = "尚未查询，不会载入历史持仓。";
-  els.closedRankList.innerHTML = "";
-}
+function renderClosedRank(rows = closedRankRowsCache) {
+  closedRankRowsCache = [...rows];
+  const keyword = String(els.closedRankSearch?.value || "").trim().toLowerCase();
+  const sorted = closedRankRowsCache
+    .filter((row) => !keyword || `${row.symbol} ${row.name}`.toLowerCase().includes(keyword))
+    .sort((a, b) => b.totalPnl - a.totalPnl || a.symbol.localeCompare(b.symbol));
 
-function queryClosedPositions() {
-  const start = els.closedQueryStartDate.value;
-  const end = els.closedQueryEndDate.value;
-  const keyword = String(els.closedQueryKeyword.value || "").trim().toLowerCase();
-  if (start && end && start > end) {
-    els.closedQueryStatus.textContent = "开始日期不能晚于结束日期。";
-    els.closedRankList.innerHTML = "";
-    return;
+  if (els.closedRankStatus) {
+    const filterText = keyword ? `，筛选“${els.closedRankSearch.value.trim()}”` : "";
+    els.closedRankStatus.textContent = `共 ${closedRankRowsCache.length} 只已清仓股票${filterText}；点击股票查看个股明细`;
   }
 
-  els.closedQueryStatus.textContent = "正在计算已清仓股票...";
-  els.closedRankList.innerHTML = "";
-  window.requestAnimationFrame(() => {
-    const { positions } = currentPortfolioSnapshot();
-    const rows = closedPositionRows(positions).filter((row) => {
-      if (start && (!row.closeDate || row.closeDate < start)) return false;
-      if (end && (!row.closeDate || row.closeDate > end)) return false;
-      if (keyword && !`${row.symbol} ${row.name}`.toLowerCase().includes(keyword)) return false;
-      return true;
-    });
-    renderClosedRank(rows);
-    const rangeText = start || end ? `${start || "最早"} 至 ${end || "最新"}` : "全部日期";
-    const keywordText = keyword ? `，搜索“${els.closedQueryKeyword.value.trim()}”` : "";
-    els.closedQueryStatus.textContent = `${rangeText}${keywordText}：找到 ${rows.length} 只已清仓股票。`;
-  });
+  els.closedRankList.innerHTML = sorted.length
+    ? sorted.map((row) => `
+        <button class="closed-position-row" type="button" data-detail-symbol="${escapeHtml(row.symbol)}">
+          <strong class="stock-name-chip">${escapeHtml(row.name)}</strong>
+          <small class="closed-position-code">${escapeHtml(row.symbol)}</small>
+          <span class="closed-position-pnl ${classByValue(row.totalPnl)}">
+            <small>最终盈亏</small>
+            <strong>${money(row.totalPnl)}</strong>
+          </span>
+          <small class="closed-position-date">${escapeHtml(row.closeDate || "未记录清仓日")} · ${number(row.days, 0)} 天</small>
+        </button>
+      `).join("")
+    : `<div class="empty-state">没有符合条件的已清仓股票</div>`;
 }
 
 function renderPositions() {
@@ -10994,8 +11090,8 @@ function renderPositions() {
         <article class="mobile-card position-card">
           <div class="position-card-head"><div><strong class="stock-name-chip">${position.name}</strong><span>${position.symbol}</span></div><div class="row-actions"><button class="icon-action" data-detail-symbol="${position.symbol}">详情</button><button class="icon-action" data-detail-v2-symbol="${position.symbol}">V2</button><button class="icon-action" data-open-kline-symbol="${position.symbol}">K线</button></div></div>
           <div class="position-compact-grid">
-            <div><dt>数量</dt><dd>${number(position.quantity, 0)}</dd></div>
-            <div><dt>市值</dt><dd>${money(position.marketValue)}</dd></div>
+            <div class="position-quantity"><dt>数量</dt><dd>${number(position.quantity, 0)}</dd></div>
+            <div class="position-market-value"><dt>市值</dt><dd>${money(position.marketValue)}</dd></div>
             <div><dt>现价</dt><dd><input class="current-price-input compact-price-input" type="number" min="0" step="0.001" value="${position.currentPrice}" data-price-symbol="${position.symbol}" /></dd></div>
             <div><dt>当日</dt><dd class="${classByValue(position.dayPnl)}">${dayPnlMoney(position.dayPnl)}</dd></div>
             <div><dt>总盈亏</dt><dd class="${classByValue(position.totalPnl)}">${money(position.totalPnl)}</dd></div>
@@ -11005,6 +11101,7 @@ function renderPositions() {
         </article>`;
     }).join("");
   }
+  renderClosedRank(closedPositionRows(positions));
 }
 function renderDashboard() {
   const portfolio = currentPortfolioSnapshot();
@@ -18834,7 +18931,6 @@ document.addEventListener("keydown", (event) => {
 function openModal(id) {
   const modal = document.getElementById(id);
   if (!modal) return;
-  if (id === "closed-rank-modal") resetClosedPositionQuery();
   modal.hidden = false;
   document.body.classList.add("modal-open");
   const lazyRenderers = {
@@ -18958,7 +19054,6 @@ els.historicalRebuildPreview.addEventListener("change", () => {
   collectHistoricalRebuildManualPrices();
   renderHistoricalRebuildPreview(pendingHistoricalRebuild);
 });
-document.querySelector("#sample-data").addEventListener("click", fillSampleData);
 document.querySelector("#export-data").addEventListener("click", exportData);
 els.showBackupText.addEventListener("click", showBackupText);
 els.copyBackupText.addEventListener("click", copyBackupText);
@@ -19522,19 +19617,15 @@ els.positionsCards.addEventListener("click", (event) => {
 });
 
 els.closedRankList.addEventListener("click", (event) => {
-  const symbol = event.target.dataset.detailSymbol;
+  const symbol = event.target.closest("[data-detail-symbol]")?.dataset.detailSymbol;
   if (symbol) {
-    closeModal(document.getElementById("closed-rank-modal"));
     openStockDetail(symbol);
   }
 });
-els.queryClosedPositions.addEventListener("click", queryClosedPositions);
-els.closedQueryKeyword.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    queryClosedPositions();
-  }
+els.toggleClosedRankList?.addEventListener("click", () => {
+  setClosedRankListVisible(els.closedRankContent.hidden);
 });
+els.closedRankSearch?.addEventListener("input", () => renderClosedRank());
 if (els.closedPairCards) {
   els.closedPairCards.addEventListener("click", (event) => {
     const symbol = event.target.dataset.detailSymbol;
