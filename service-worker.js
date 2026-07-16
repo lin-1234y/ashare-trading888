@@ -1,4 +1,4 @@
-const CACHE_NAME = "ashare-trading888-offline-v2";
+const CACHE_NAME = "ashare-trading888-offline-v4";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -6,6 +6,10 @@ const APP_SHELL = [
   "./apple-touch-icon.png",
   "./icon-512.png",
   "./icon.svg",
+  "./lucide.min.js",
+  "./stock-api.iife.min.js",
+  "./dashboard-dragon-gold.png",
+  "./topbar-double-dragon.png",
 ];
 
 self.addEventListener("install", (event) => {

@@ -5488,6 +5488,582 @@ body {
   }
 }
 
+/* Gem-tone bottom navigation selected from the iPhone demo. */
+.sidebar .nav {
+  border-top-color: rgba(86, 198, 255, 0.42) !important;
+  background:
+    linear-gradient(180deg, rgba(16, 45, 70, 0.97), rgba(4, 12, 25, 0.995)),
+    #061020 !important;
+  box-shadow:
+    0 -12px 32px rgba(0, 28, 64, 0.52),
+    inset 0 1px 0 rgba(118, 206, 255, 0.12) !important;
+}
+
+.sidebar .nav-button {
+  border-color: rgba(120, 190, 232, 0.16) !important;
+  background: rgba(255, 255, 255, 0.035) !important;
+}
+
+.sidebar .nav-button:nth-child(1) { color: #ffd35e !important; }
+.sidebar .nav-button:nth-child(2) { color: #58dcff !important; }
+.sidebar .nav-button:nth-child(3) { color: #ff6676 !important; }
+.sidebar .nav-button:nth-child(4) { color: #ff69d4 !important; }
+.sidebar .nav-button:nth-child(5) { color: #7ba9ff !important; }
+.sidebar .nav-button:nth-child(6) { color: #58e394 !important; }
+.sidebar .nav-button:nth-child(7) { color: #ba95ff !important; }
+.sidebar .nav-button:nth-child(8) { color: #ffac5f !important; }
+
+.sidebar .nav-button .nav-icon,
+.sidebar .nav-button .nav-label {
+  color: inherit !important;
+  text-shadow: 0 0 8px currentColor;
+}
+
+.sidebar .nav-button.active {
+  border-color: currentColor !important;
+  background: rgba(255, 255, 255, 0.11) !important;
+  box-shadow:
+    inset 0 0 18px rgba(255, 255, 255, 0.07),
+    0 0 13px currentColor !important;
+}
+
+/* Settings modal hub demo. The original controls are mounted into these shells at startup. */
+.settings-source-panel {
+  display: none !important;
+}
+
+.settings-hub-shell {
+  padding: 0;
+  overflow: hidden;
+  border-color: rgba(255, 208, 91, 0.36);
+  background:
+    linear-gradient(180deg, rgba(255, 210, 96, 0.035), transparent 34%),
+    rgba(9, 9, 8, 0.96);
+}
+
+.settings-hub-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 17px 16px 14px;
+  border-bottom: 1px solid rgba(255, 210, 96, 0.18);
+}
+
+.settings-hub-intro h3,
+.settings-hub-intro p {
+  margin: 0;
+}
+
+.settings-hub-intro h3 {
+  color: #ffe8a3;
+  font-size: 19px;
+}
+
+.settings-hub-intro p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.settings-hub-badge {
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  border: 1px solid rgba(255, 209, 102, 0.34);
+  border-radius: 6px;
+  color: #e8c764;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.settings-hub-list {
+  display: grid;
+}
+
+.settings-hub-row {
+  appearance: none;
+  width: 100%;
+  min-width: 0;
+  min-height: 70px;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 15px;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 0;
+  color: #f5ecd6;
+  background: transparent;
+  text-align: left;
+  box-shadow: none;
+}
+
+.settings-hub-row:last-child {
+  border-bottom: 0;
+}
+
+.settings-hub-row:active,
+.settings-hub-row:hover {
+  background: linear-gradient(90deg, rgba(255, 205, 82, 0.10), rgba(255, 255, 255, 0.025));
+  transform: none;
+}
+
+.settings-hub-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 210, 96, 0.34);
+  border-radius: 7px;
+  color: #ffd45e;
+  background: rgba(255, 208, 76, 0.07);
+  box-shadow: inset 0 0 16px rgba(255, 196, 47, 0.045);
+}
+
+.settings-hub-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.settings-hub-copy {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.settings-hub-copy strong {
+  overflow: hidden;
+  color: #fff3cf;
+  font-size: 15px;
+  font-weight: 950;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settings-hub-status {
+  overflow: hidden;
+  color: #9fabbc;
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settings-hub-chevron {
+  color: #d4aa42;
+}
+
+.settings-full-modal .modal-card {
+  display: flex;
+  flex-direction: column;
+  width: min(760px, 100%);
+  max-height: min(92dvh, 860px);
+  padding: 0;
+  overflow: hidden;
+  border-color: rgba(255, 208, 91, 0.38);
+  background: #090b0f;
+}
+
+.settings-full-modal .modal-head {
+  position: relative;
+  z-index: 3;
+  flex: 0 0 auto;
+  align-items: center;
+  margin: 0;
+  padding: 14px 14px 12px;
+  border-bottom: 1px solid rgba(255, 208, 91, 0.19);
+  background: rgba(10, 10, 9, 0.97);
+}
+
+.settings-full-modal .modal-head h3 {
+  color: #ffe8a3;
+  font-size: 18px;
+}
+
+.settings-modal-body {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 15px 15px calc(24px + env(safe-area-inset-bottom));
+}
+
+.settings-modal-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(var(--settings-tab-count, 2), minmax(0, 1fr));
+  gap: 4px;
+  margin: -15px -15px 14px;
+  padding: 9px 15px;
+  border-bottom: 1px solid rgba(255, 208, 91, 0.16);
+  background: rgba(9, 11, 15, 0.96);
+  backdrop-filter: blur(12px);
+}
+
+.settings-modal-tab {
+  min-width: 0;
+  min-height: 38px;
+  padding: 7px 6px;
+  border: 1px solid rgba(255, 209, 102, 0.20);
+  border-radius: 6px;
+  color: #aeb6c4;
+  background: rgba(255, 255, 255, 0.025);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.settings-modal-tab.active {
+  border-color: rgba(255, 209, 102, 0.74);
+  color: #1a1202;
+  background: linear-gradient(180deg, #ffe699, #c99424);
+  box-shadow: 0 0 15px rgba(255, 196, 54, 0.16);
+}
+
+.settings-modal-panel[hidden] {
+  display: none !important;
+}
+
+.settings-modal-content {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.settings-modal-content > .panel-header:first-child {
+  display: none;
+}
+
+.settings-modal-content .form-actions,
+.settings-modal-panel .form-actions {
+  gap: 8px;
+}
+
+.settings-modal-content [data-modal-open="initial-position-modal"] {
+  display: none;
+}
+
+.settings-modal-section-title {
+  margin: 0 0 12px;
+  color: #ffe7a0;
+  font-size: 15px;
+}
+
+@media (max-width: 680px) {
+  .settings-full-modal {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .settings-full-modal .modal-card {
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-width: 0;
+    border-radius: 0;
+  }
+
+  .settings-full-modal .modal-head {
+    padding-top: calc(12px + env(safe-area-inset-top));
+  }
+
+  .settings-modal-body {
+    padding-inline: 12px;
+  }
+
+  .settings-modal-tabs {
+    margin-inline: -12px;
+    padding-inline: 12px;
+  }
+
+  .settings-hub-row {
+    min-height: 67px;
+    padding-inline: 13px;
+  }
+}
+/* Dashboard calendar modal demo. */
+.dashboard-calendar-launcher {
+  padding: 0;
+  overflow: hidden;
+  border-color: rgba(255, 208, 91, 0.36);
+  background:
+    linear-gradient(110deg, rgba(255, 202, 55, 0.055), transparent 45%),
+    rgba(9, 9, 8, 0.97);
+}
+
+.dashboard-calendar-open {
+  appearance: none;
+  width: 100%;
+  display: grid;
+  gap: 13px;
+  padding: 15px;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  box-shadow: none;
+}
+
+.dashboard-calendar-open:hover,
+.dashboard-calendar-open:active {
+  background: linear-gradient(90deg, rgba(255, 206, 76, 0.075), rgba(255, 255, 255, 0.018));
+  transform: none;
+}
+
+.dashboard-calendar-entry-head {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto 18px;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-calendar-entry-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 210, 96, 0.38);
+  border-radius: 7px;
+  color: #ffd55f;
+  background: rgba(255, 206, 72, 0.07);
+}
+
+.dashboard-calendar-entry-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.dashboard-calendar-entry-title {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.dashboard-calendar-entry-title strong {
+  color: #fff0c2;
+  font-size: 17px;
+  font-weight: 950;
+}
+
+.dashboard-calendar-entry-title span,
+.dashboard-calendar-entry-month {
+  color: #aab3c0;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.dashboard-calendar-entry-month {
+  color: #e7c15d;
+  white-space: nowrap;
+}
+
+.dashboard-calendar-entry-chevron {
+  color: #d7aa35;
+}
+
+.dashboard-calendar-entry-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid rgba(255, 209, 102, 0.14);
+}
+
+.dashboard-calendar-entry-stat {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+  padding: 11px 9px 1px;
+  border-right: 1px solid rgba(255, 209, 102, 0.14);
+}
+
+.dashboard-calendar-entry-stat:first-child {
+  padding-left: 0;
+}
+
+.dashboard-calendar-entry-stat:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.dashboard-calendar-entry-stat span {
+  overflow: hidden;
+  color: #8f99a8;
+  font-size: 11px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-calendar-entry-stat strong {
+  overflow: hidden;
+  color: #f5ecd7;
+  font-size: 16px;
+  font-weight: 950;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-calendar-modal-content {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.dashboard-calendar-modal-content > .panel-header {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.dashboard-calendar-modal-content > .panel-header > h3 {
+  display: none;
+}
+
+@media (max-width: 380px) {
+  .dashboard-calendar-open {
+    padding: 13px 12px;
+  }
+
+  .dashboard-calendar-entry-head {
+    grid-template-columns: 38px minmax(0, 1fr) auto 15px;
+    gap: 8px;
+  }
+
+  .dashboard-calendar-entry-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .dashboard-calendar-entry-stat strong {
+    font-size: 14px;
+  }
+}
+/* Trade page tool modals. */
+.trade-tool-source {
+  display: none !important;
+}
+
+.trade-tools-hub {
+  padding: 0;
+  overflow: hidden;
+  border-color: rgba(255, 208, 91, 0.36);
+  background: rgba(9, 9, 8, 0.97);
+}
+
+.trade-tool-row {
+  appearance: none;
+  width: 100%;
+  min-width: 0;
+  min-height: 72px;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 209, 102, 0.14);
+  border-radius: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  box-shadow: none;
+}
+
+.trade-tool-row:last-child {
+  border-bottom: 0;
+}
+
+.trade-tool-row:hover,
+.trade-tool-row:active {
+  background: linear-gradient(90deg, rgba(255, 206, 76, 0.075), rgba(255, 255, 255, 0.018));
+  transform: none;
+}
+
+.trade-tool-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 210, 96, 0.36);
+  border-radius: 7px;
+  color: #ffd55f;
+  background: rgba(255, 206, 72, 0.07);
+}
+
+.trade-tool-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.trade-tool-copy {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.trade-tool-copy strong {
+  overflow: hidden;
+  color: #fff0c2;
+  font-size: 15px;
+  font-weight: 950;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trade-tool-copy span {
+  overflow: hidden;
+  color: #9da7b6;
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trade-tool-chevron {
+  color: #d7aa35;
+}
+
+.trade-tool-modal-content {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.trade-tool-modal-content > .panel-header:first-child {
+  display: none;
+}
+
+#broker-import-modal .form-grid.compact {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (max-width: 380px) {
+  .trade-tool-row {
+    min-height: 68px;
+    grid-template-columns: 39px minmax(0, 1fr) 16px;
+    gap: 9px;
+    padding-inline: 12px;
+  }
+
+  .trade-tool-icon {
+    width: 39px;
+    height: 39px;
+  }
+}
 </style>
   </head>
   <body>
@@ -5641,8 +6217,27 @@ body {
             </div>
           </section>
 
-          <div class="panel-grid">
-            <section class="panel">
+          <section class="panel dashboard-calendar-launcher">
+            <button class="dashboard-calendar-open" type="button" data-modal-open="dashboard-calendar-modal" aria-label="打开收盘盈亏日历">
+              <span class="dashboard-calendar-entry-head">
+                <span class="dashboard-calendar-entry-icon"><i data-lucide="calendar-range"></i></span>
+                <span class="dashboard-calendar-entry-title">
+                  <strong>收盘盈亏日历</strong>
+                  <span id="dashboard-calendar-entry-status">读取收盘记录...</span>
+                </span>
+                <span class="dashboard-calendar-entry-month" id="dashboard-calendar-entry-month">本月</span>
+                <i class="dashboard-calendar-entry-chevron" data-lucide="chevron-right"></i>
+              </span>
+              <span class="dashboard-calendar-entry-stats">
+                <span class="dashboard-calendar-entry-stat"><span>当月收益</span><strong id="dashboard-calendar-entry-pnl">0</strong></span>
+                <span class="dashboard-calendar-entry-stat"><span>收益率</span><strong id="dashboard-calendar-entry-return">-</strong></span>
+                <span class="dashboard-calendar-entry-stat"><span>本月匹配</span><strong id="dashboard-calendar-entry-matched">0</strong></span>
+              </span>
+            </button>
+          </section>
+
+          <div class="panel-grid" id="dashboard-calendar-source-grid">
+            <section class="panel" id="dashboard-calendar-source">
               <div class="panel-header">
                 <h3>收盘盈亏日历</h3>
                 <label class="search-box">
@@ -5653,7 +6248,7 @@ body {
                   <button class="ghost-button small" id="calendar-prev-month" type="button">上月</button>
                   <button class="ghost-button small" id="calendar-current-month" type="button">本月</button>
                   <button class="ghost-button small" id="calendar-next-month" type="button">下月</button>
-                  <button class="ghost-button small" type="button" data-modal-open="annual-calendar-modal">年度</button>
+                  <button class="ghost-button small" type="button" data-modal-open="annual-calendar-modal" data-close-parent-modal>年度</button>
                 </div>
               </div>
               <div class="equity-chart" id="equity-chart"></div>
@@ -5673,6 +6268,19 @@ body {
               </div>
             </section>
           </div>
+
+          <section class="app-modal settings-full-modal" id="dashboard-calendar-modal" hidden>
+            <div class="modal-card">
+              <div class="modal-head">
+                <div>
+                  <h3>收盘盈亏日历</h3>
+                  <span>按月查看收盘盈亏、收益率与匹配结果</span>
+                </div>
+                <button class="icon-action" type="button" data-modal-close>关闭</button>
+              </div>
+              <div class="settings-modal-body" id="dashboard-calendar-modal-mount"></div>
+            </div>
+          </section>
 
           <section class="app-modal" id="annual-calendar-modal" hidden>
             <div class="modal-card">
@@ -6332,7 +6940,26 @@ body {
 
           </form>
 
-          <section class="panel spacing-top">
+          <section class="panel spacing-top trade-tools-hub" aria-label="交易辅助工具">
+            <button class="trade-tool-row" type="button" data-modal-open="broker-import-modal">
+              <span class="trade-tool-icon"><i data-lucide="file-up"></i></span>
+              <span class="trade-tool-copy">
+                <strong>券商成交导入</strong>
+                <span id="broker-import-entry-summary">选择历史成交文件，预览后导入</span>
+              </span>
+              <i class="trade-tool-chevron" data-lucide="chevron-right"></i>
+            </button>
+            <button class="trade-tool-row" type="button" data-modal-open="historical-rebuild-modal">
+              <span class="trade-tool-icon"><i data-lucide="history"></i></span>
+              <span class="trade-tool-copy">
+                <strong>历史收益率重建</strong>
+                <span id="historical-rebuild-entry-summary">设置基准资产并预览历史起点</span>
+              </span>
+              <i class="trade-tool-chevron" data-lucide="chevron-right"></i>
+            </button>
+          </section>
+
+          <section class="panel spacing-top trade-tool-source" id="broker-import-source">
             <div class="panel-header">
               <div>
                 <h3>券商成交导入</h3>
@@ -6371,8 +6998,12 @@ body {
               <button class="primary-button" type="button" id="confirm-broker-import" disabled>确认导入预览成交</button>
               <button class="ghost-button" type="button" id="clear-broker-import">清空预览</button>
             </div>
+            <div class="form-actions spacing-top">
+              <button class="ghost-button" type="button" id="undo-last-broker-import" disabled>撤销上次券商导入</button>
+            </div>
+            <p class="panel-copy" id="broker-import-undo-status">暂无可撤销的券商导入批次。</p>
           </section>
-          <section class="panel spacing-top">
+          <section class="panel spacing-top trade-tool-source" id="historical-rebuild-source">
             <div class="panel-header">
               <div>
                 <h3>历史收益率重建</h3>
@@ -6408,7 +7039,7 @@ body {
                     <h3>基准资产</h3>
                     <span>手动输入基准日期的现金和持仓；倒推只从这份基准资产开始。</span>
                   </div>
-                  <button class="icon-action" type="button" data-modal-close>关闭</button>
+                  <button class="icon-action" type="button" data-modal-close data-modal-return="historical-rebuild-modal">关闭</button>
                 </div>
                 <div class="form-grid compact">
                   <label>基准日期<input type="date" id="current-snapshot-date" /></label>
@@ -6425,6 +7056,32 @@ body {
                 </div>
               </div>
             </section>
+          </section>
+
+          <section class="app-modal settings-full-modal" id="broker-import-modal" hidden>
+            <div class="modal-card">
+              <div class="modal-head">
+                <div>
+                  <h3>券商成交导入</h3>
+                  <span>选择模板和成交文件，核对预览后再导入</span>
+                </div>
+                <button class="icon-action" type="button" data-modal-close>关闭</button>
+              </div>
+              <div class="settings-modal-body" id="broker-import-modal-mount"></div>
+            </div>
+          </section>
+
+          <section class="app-modal settings-full-modal" id="historical-rebuild-modal" hidden>
+            <div class="modal-card">
+              <div class="modal-head">
+                <div>
+                  <h3>历史收益率重建</h3>
+                  <span>从真实基准资产倒推出历史起点</span>
+                </div>
+                <button class="icon-action" type="button" data-modal-close>关闭</button>
+              </div>
+              <div class="settings-modal-body" id="historical-rebuild-modal-mount"></div>
+            </div>
           </section>
         </section>
 
@@ -6786,6 +7443,7 @@ body {
                   <option value="tencent">腾讯</option>
                   <option value="eastmoney">东方财富</option>
                   <option value="sina">新浪财经</option>
+                  <option value="stockapi">stock-api备用</option>
                 </select>
               </label>
               <label>
@@ -6868,8 +7526,55 @@ body {
         </section>
 
         <section class="view" id="settings">
+          <section class="panel settings-hub-shell" aria-labelledby="settings-hub-title">
+            <div class="settings-hub-intro">
+              <div>
+                <h3 id="settings-hub-title">设置中心</h3>
+                <p>查看状态，点按项目进入管理</p>
+              </div>
+              <span class="settings-hub-badge">7 项</span>
+            </div>
+            <div class="settings-hub-list">
+              <button class="settings-hub-row" type="button" data-modal-open="settings-account-modal">
+                <span class="settings-hub-icon"><i data-lucide="wallet-cards"></i></span>
+                <span class="settings-hub-copy"><strong>账户初始值</strong><span class="settings-hub-status" id="settings-account-summary">读取中...</span></span>
+                <i class="settings-hub-chevron" data-lucide="chevron-right"></i>
+              </button>
+              <button class="settings-hub-row" type="button" data-modal-open="settings-fees-modal">
+                <span class="settings-hub-icon"><i data-lucide="receipt-text"></i></span>
+                <span class="settings-hub-copy"><strong>费率历史</strong><span class="settings-hub-status" id="settings-fees-summary">读取中...</span></span>
+                <i class="settings-hub-chevron" data-lucide="chevron-right"></i>
+              </button>
+              <button class="settings-hub-row" type="button" data-modal-open="settings-cash-modal">
+                <span class="settings-hub-icon"><i data-lucide="arrow-right-left"></i></span>
+                <span class="settings-hub-copy"><strong>现金转入/转出</strong><span class="settings-hub-status" id="settings-cash-summary">读取中...</span></span>
+                <i class="settings-hub-chevron" data-lucide="chevron-right"></i>
+              </button>
+              <button class="settings-hub-row" type="button" data-modal-open="settings-holiday-modal">
+                <span class="settings-hub-icon"><i data-lucide="calendar-days"></i></span>
+                <span class="settings-hub-copy"><strong>交易所休市日历</strong><span class="settings-hub-status" id="settings-holiday-summary">读取中...</span></span>
+                <i class="settings-hub-chevron" data-lucide="chevron-right"></i>
+              </button>
+              <button class="settings-hub-row" type="button" data-modal-open="initial-position-modal" data-settings-default-tab="entry">
+                <span class="settings-hub-icon"><i data-lucide="layers-3"></i></span>
+                <span class="settings-hub-copy"><strong>初始持仓</strong><span class="settings-hub-status" id="settings-positions-summary">读取中...</span></span>
+                <i class="settings-hub-chevron" data-lucide="chevron-right"></i>
+              </button>
+              <button class="settings-hub-row" type="button" data-modal-open="settings-corporate-modal" data-settings-default-tab="manual">
+                <span class="settings-hub-icon"><i data-lucide="gift"></i></span>
+                <span class="settings-hub-copy"><strong>分红与送股/转增</strong><span class="settings-hub-status" id="settings-corporate-summary">读取中...</span></span>
+                <i class="settings-hub-chevron" data-lucide="chevron-right"></i>
+              </button>
+              <button class="settings-hub-row" type="button" data-modal-open="settings-data-modal" data-settings-default-tab="backup">
+                <span class="settings-hub-icon"><i data-lucide="database-backup"></i></span>
+                <span class="settings-hub-copy"><strong>数据备份与恢复</strong><span class="settings-hub-status" id="settings-data-summary">读取中...</span></span>
+                <i class="settings-hub-chevron" data-lucide="chevron-right"></i>
+              </button>
+            </div>
+          </section>
+
           <div class="panel-grid">
-            <section class="panel">
+            <section class="panel settings-source-panel" id="settings-account-source">
               <div class="panel-header">
                 <h3>账户初始值</h3>
               </div>
@@ -6885,7 +7590,7 @@ body {
               </div>
             </section>
 
-            <section class="panel">
+            <section class="panel settings-source-panel" id="settings-fees-source">
               <div class="panel-header">
                 <h3>费率历史</h3>
                 <span>按成交日选取最近生效费率；旧交易没有对应档案时标记为缺费率。</span>
@@ -6924,7 +7629,7 @@ body {
             </section>
           </div>
 
-          <section class="panel spacing-top">
+          <section class="panel spacing-top settings-source-panel" id="settings-cash-source">
             <div class="panel-header">
               <div>
                 <h3>现金转入/转出</h3>
@@ -6960,7 +7665,7 @@ body {
             <div class="mobile-list spacing-top" id="cash-transfer-cards"></div>
           </section>
 
-          <section class="panel spacing-top">
+          <section class="panel spacing-top settings-source-panel" id="settings-holiday-source">
             <div class="panel-header">
               <div>
                 <h3>交易所休市公告源</h3>
@@ -6998,7 +7703,7 @@ body {
             <div class="mobile-list spacing-top" id="manual-holiday-list"></div>
           </section>
 
-          <section class="panel spacing-top">
+          <section class="panel spacing-top settings-source-panel" id="settings-positions-source">
             <div class="panel-header">
               <h3>初始持仓</h3>
               <span id="initial-position-mode">用于录入开始使用工具之前已经持有的股票</span>
@@ -7038,7 +7743,7 @@ body {
             </div>
           </section>
 
-          <section class="app-modal" id="initial-position-modal" hidden>
+          <section class="app-modal settings-full-modal" id="initial-position-modal" hidden>
             <div class="modal-card">
               <div class="modal-head">
                 <div>
@@ -7068,7 +7773,7 @@ body {
             </div>
           </section>
 
-          <section class="panel spacing-top">
+          <section class="panel spacing-top settings-source-panel" id="settings-corporate-source">
             <div class="panel-header">
               <h3>分红与送股/转增</h3>
               <span>现金分红按净分红增加现金；送股/转增增加数量且不增加成本</span>
@@ -7180,7 +7885,7 @@ body {
           </section>
 
           <div class="panel-grid spacing-top">
-            <section class="panel">
+            <section class="panel settings-source-panel" id="settings-backup-source">
               <div class="panel-header">
                 <h3>数据导出</h3>
               </div>
@@ -7208,7 +7913,7 @@ body {
               </div>
             </section>
 
-            <section class="panel">
+            <section class="panel settings-source-panel" id="settings-snapshots-source">
               <div class="panel-header">
                 <div>
                   <h3>版本快照</h3>
@@ -7222,7 +7927,7 @@ body {
               <div class="mobile-list spacing-top" id="version-snapshot-list"></div>
             </section>
 
-            <section class="panel danger-zone">
+            <section class="panel danger-zone settings-source-panel" id="settings-danger-source">
               <div class="panel-header">
                 <h3>清空数据</h3>
               </div>
@@ -7230,10 +7935,89 @@ body {
               <button class="danger-button" id="clear-data">清空全部</button>
             </section>
           </div>
+
+          <section class="app-modal settings-full-modal" id="settings-account-modal" hidden>
+            <div class="modal-card">
+              <div class="modal-head">
+                <div><h3>账户初始值</h3><span>管理账户开始记录时的现金基准</span></div>
+                <button class="icon-action" type="button" data-modal-close>关闭</button>
+              </div>
+              <div class="settings-modal-body" id="settings-account-mount"></div>
+            </div>
+          </section>
+
+          <section class="app-modal settings-full-modal" id="settings-fees-modal" hidden>
+            <div class="modal-card">
+              <div class="modal-head">
+                <div><h3>费率历史</h3><span>按成交日期选择对应费率档案</span></div>
+                <button class="icon-action" type="button" data-modal-close>关闭</button>
+              </div>
+              <div class="settings-modal-body" id="settings-fees-mount"></div>
+            </div>
+          </section>
+
+          <section class="app-modal settings-full-modal" id="settings-cash-modal" hidden>
+            <div class="modal-card">
+              <div class="modal-head">
+                <div><h3>现金转入/转出</h3><span>只调整账户现金，不参与股票匹配</span></div>
+                <button class="icon-action" type="button" data-modal-close>关闭</button>
+              </div>
+              <div class="settings-modal-body" id="settings-cash-mount"></div>
+            </div>
+          </section>
+
+          <section class="app-modal settings-full-modal" id="settings-holiday-modal" hidden>
+            <div class="modal-card">
+              <div class="modal-head">
+                <div><h3>交易所休市日历</h3><span>更新年度公告或登记临时休市日</span></div>
+                <button class="icon-action" type="button" data-modal-close>关闭</button>
+              </div>
+              <div class="settings-modal-body" id="settings-holiday-mount"></div>
+            </div>
+          </section>
+
+          <section class="app-modal settings-full-modal" id="settings-corporate-modal" hidden>
+            <div class="modal-card">
+              <div class="modal-head">
+                <div><h3>分红与送股/转增</h3><span>登记、自动补全并查询公司行为</span></div>
+                <button class="icon-action" type="button" data-modal-close>关闭</button>
+              </div>
+              <div class="settings-modal-body">
+                <div class="settings-modal-tabs" style="--settings-tab-count: 3" role="tablist" aria-label="公司行为管理">
+                  <button class="settings-modal-tab active" type="button" data-settings-tab="manual" role="tab">手动登记</button>
+                  <button class="settings-modal-tab" type="button" data-settings-tab="auto" role="tab">自动补全</button>
+                  <button class="settings-modal-tab" type="button" data-settings-tab="records" role="tab">送转记录</button>
+                </div>
+                <div class="settings-modal-panel" data-settings-panel="manual" id="settings-corporate-manual"></div>
+                <div class="settings-modal-panel" data-settings-panel="auto" id="settings-corporate-auto" hidden></div>
+                <div class="settings-modal-panel" data-settings-panel="records" id="settings-corporate-records" hidden></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="app-modal settings-full-modal" id="settings-data-modal" hidden>
+            <div class="modal-card">
+              <div class="modal-head">
+                <div><h3>数据备份与恢复</h3><span>导出、导入、恢复快照或清空数据</span></div>
+                <button class="icon-action" type="button" data-modal-close>关闭</button>
+              </div>
+              <div class="settings-modal-body">
+                <div class="settings-modal-tabs" style="--settings-tab-count: 3" role="tablist" aria-label="数据管理">
+                  <button class="settings-modal-tab active" type="button" data-settings-tab="backup" role="tab">备份</button>
+                  <button class="settings-modal-tab" type="button" data-settings-tab="snapshots" role="tab">版本快照</button>
+                  <button class="settings-modal-tab" type="button" data-settings-tab="danger" role="tab">危险操作</button>
+                </div>
+                <div class="settings-modal-panel" data-settings-panel="backup" id="settings-data-backup"></div>
+                <div class="settings-modal-panel" data-settings-panel="snapshots" id="settings-data-snapshots" hidden></div>
+                <div class="settings-modal-panel" data-settings-panel="danger" id="settings-data-danger" hidden></div>
+              </div>
+            </div>
+          </section>
         </section>
       </main>
     </div>
     <script src="./lucide.min.js"></script>
+    <script src="./stock-api.iife.min.js"></script>
     <script>
 const STORAGE_KEY = "ashare-trading-journal";
 const BACKUP_META_KEY = "ashare-trading-journal-backup-meta";
@@ -7336,6 +8120,7 @@ const EXCHANGE_HOLIDAY_CALENDARS = {
 
 const state = {
   trades: [],
+  brokerImportBatches: [],
   prices: {},
   previousCloses: {},
   initialPositions: [],
@@ -7388,6 +8173,137 @@ function uid() {
   return `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
+function setSettingsModalTab(modalId, tabId) {
+  const modal = document.getElementById(modalId);
+  if (!modal || !tabId) return;
+  modal.querySelectorAll("[data-settings-tab]").forEach((button) => {
+    const active = button.dataset.settingsTab === tabId;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-selected", String(active));
+  });
+  modal.querySelectorAll("[data-settings-panel]").forEach((panel) => {
+    panel.hidden = panel.dataset.settingsPanel !== tabId;
+  });
+  const body = modal.querySelector(".settings-modal-body");
+  if (body) body.scrollTop = 0;
+}
+
+function mountSettingsPanel(sourceId, mountId) {
+  const source = document.getElementById(sourceId);
+  const mount = document.getElementById(mountId);
+  if (!source || !mount) return;
+  source.classList.remove("settings-source-panel", "spacing-top", "danger-zone");
+  source.classList.add("settings-modal-content");
+  mount.appendChild(source);
+}
+
+function initializeSettingsModalHub() {
+  mountSettingsPanel("settings-account-source", "settings-account-mount");
+  mountSettingsPanel("settings-fees-source", "settings-fees-mount");
+  mountSettingsPanel("settings-cash-source", "settings-cash-mount");
+  mountSettingsPanel("settings-holiday-source", "settings-holiday-mount");
+  mountSettingsPanel("settings-backup-source", "settings-data-backup");
+  mountSettingsPanel("settings-snapshots-source", "settings-data-snapshots");
+  mountSettingsPanel("settings-danger-source", "settings-data-danger");
+
+  const initialModal = document.getElementById("initial-position-modal");
+  const initialCard = initialModal?.querySelector(".modal-card");
+  const initialHead = initialCard?.querySelector(".modal-head");
+  const initialSource = document.getElementById("settings-positions-source");
+  const initialTable = initialCard?.querySelector(":scope > .table-wrap");
+  const initialCards = initialCard?.querySelector(":scope > .mobile-list");
+  if (initialCard && initialHead && initialSource && initialTable && initialCards) {
+    initialHead.querySelector("h3").textContent = "初始持仓";
+    initialHead.querySelector("span").textContent = "录入或管理开始使用工具前的持仓";
+    const body = document.createElement("div");
+    body.className = "settings-modal-body";
+    body.innerHTML = `
+      <div class="settings-modal-tabs" style="--settings-tab-count: 2" role="tablist" aria-label="初始持仓管理">
+        <button class="settings-modal-tab active" type="button" data-settings-tab="entry" role="tab">录入</button>
+        <button class="settings-modal-tab" type="button" data-settings-tab="details" role="tab">明细</button>
+      </div>
+      <div class="settings-modal-panel" data-settings-panel="entry"></div>
+      <div class="settings-modal-panel" data-settings-panel="details" hidden></div>
+    `;
+    initialCard.appendChild(body);
+    initialSource.classList.remove("settings-source-panel", "spacing-top");
+    initialSource.classList.add("settings-modal-content");
+    body.querySelector('[data-settings-panel="entry"]').appendChild(initialSource);
+    const details = body.querySelector('[data-settings-panel="details"]');
+    details.append(initialTable, initialCards);
+  }
+
+  const corporateSource = document.getElementById("settings-corporate-source");
+  const corporateManual = document.getElementById("settings-corporate-manual");
+  const corporateAuto = document.getElementById("settings-corporate-auto");
+  const corporateRecords = document.getElementById("settings-corporate-records");
+  if (corporateSource && corporateManual && corporateAuto && corporateRecords) {
+    const directChildren = Array.from(corporateSource.children);
+    const editing = directChildren.find((node) => node.id === "editing-action-id");
+    const form = directChildren.find((node) => node.classList?.contains("form-grid"));
+    const actions = directChildren.find((node) => node.classList?.contains("form-actions"));
+    const auto = directChildren.find((node) => node.tagName === "SECTION");
+    const table = directChildren.find((node) => node.classList?.contains("table-wrap"));
+    const cards = directChildren.find((node) => node.id === "corporate-actions-cards");
+    if (editing) corporateManual.appendChild(editing);
+    if (form) corporateManual.appendChild(form);
+    if (actions) corporateManual.appendChild(actions);
+    if (auto) {
+      auto.classList.remove("spacing-top");
+      corporateAuto.appendChild(auto);
+    }
+    if (table) corporateRecords.appendChild(table);
+    if (cards) corporateRecords.appendChild(cards);
+    corporateSource.remove();
+  }
+
+  document.querySelectorAll("#settings > .panel-grid").forEach((grid) => {
+    if (!grid.children.length) grid.remove();
+  });
+
+  document.querySelectorAll("[data-settings-tab]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const modal = button.closest(".app-modal");
+      if (modal) setSettingsModalTab(modal.id, button.dataset.settingsTab);
+    });
+  });
+}
+
+initializeSettingsModalHub();
+
+function initializeDashboardCalendarModal() {
+  const source = document.getElementById("dashboard-calendar-source");
+  const mount = document.getElementById("dashboard-calendar-modal-mount");
+  const grid = document.getElementById("dashboard-calendar-source-grid");
+  if (!source || !mount) return;
+  source.classList.remove("panel");
+  source.classList.add("dashboard-calendar-modal-content");
+  mount.appendChild(source);
+  if (grid && !grid.children.length) grid.remove();
+}
+
+initializeDashboardCalendarModal();
+
+function initializeTradeToolModals() {
+  const tradeView = document.getElementById("trade-form");
+  const currentSnapshotModal = document.getElementById("current-snapshot-modal");
+  if (tradeView && currentSnapshotModal) tradeView.appendChild(currentSnapshotModal);
+
+  [
+    ["broker-import-source", "broker-import-modal-mount"],
+    ["historical-rebuild-source", "historical-rebuild-modal-mount"],
+  ].forEach(([sourceId, mountId]) => {
+    const source = document.getElementById(sourceId);
+    const mount = document.getElementById(mountId);
+    if (!source || !mount) return;
+    source.classList.remove("panel", "spacing-top", "trade-tool-source");
+    source.classList.add("trade-tool-modal-content");
+    mount.appendChild(source);
+  });
+}
+
+initializeTradeToolModals();
+
 const els = {
   navButtons: document.querySelectorAll(".nav-button"),
   views: document.querySelectorAll(".view"),
@@ -7417,6 +8333,8 @@ const els = {
   brokerImportAnomalies: optionalElement("#broker-import-anomalies"),
   confirmBrokerImport: optionalElement("#confirm-broker-import"),
   clearBrokerImport: optionalElement("#clear-broker-import"),
+  undoLastBrokerImport: optionalElement("#undo-last-broker-import"),
+  brokerImportUndoStatus: optionalElement("#broker-import-undo-status"),
   rebuildSnapshotDate: optionalElement("#rebuild-snapshot-date"),
   rebuildStartDate: optionalElement("#rebuild-start-date"),
   rebuildCash: optionalElement("#rebuild-cash"),
@@ -8001,6 +8919,7 @@ function inferHistoricalRebuildAppliedStartDate(saved) {
 
 function resetStateToDefault() {
   state.trades = [];
+  state.brokerImportBatches = [];
   state.prices = {};
   state.previousCloses = {};
   state.initialPositions = [];
@@ -8012,12 +8931,26 @@ function resetStateToDefault() {
   state.historicalRebuild = { snapshotDate: "", cash: 0, holdings: [] };
 }
 
+function normalizeBrokerImportBatches(value) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((batch) => ({
+      id: String(batch?.id || ""),
+      fileName: String(batch?.fileName || "券商成交文件"),
+      importedAt: String(batch?.importedAt || ""),
+      count: Math.max(0, Number(batch?.count) || 0),
+      tradeIds: Array.isArray(batch?.tradeIds) ? batch.tradeIds.map((id) => String(id || "")).filter(Boolean) : [],
+    }))
+    .filter((batch) => batch.id && batch.tradeIds.length);
+}
+
 function applyLoadedState(saved) {
   if (!saved || typeof saved !== "object") {
     resetStateToDefault();
     return false;
   }
   state.trades = Array.isArray(saved.trades) ? saved.trades : [];
+  state.brokerImportBatches = normalizeBrokerImportBatches(saved.brokerImportBatches);
   state.prices = saved.prices && typeof saved.prices === "object" ? saved.prices : {};
   state.previousCloses = saved.previousCloses && typeof saved.previousCloses === "object" ? saved.previousCloses : {};
   state.initialPositions = Array.isArray(saved.initialPositions) ? saved.initialPositions : [];
@@ -9570,6 +10503,38 @@ async function fetchSinaQuote(symbol) {
   };
 }
 
+function stockApiMarketSymbol(symbol) {
+  const code = normalizeSymbol(symbol);
+  return `${/^(5|6|9)/.test(code) ? "SH" : "SZ"}${code}`;
+}
+
+function stockApiClient(source = "auto") {
+  const clients = window.StockApi?.stocks;
+  const client = clients?.[source];
+  if (!client) throw new Error("stock-api本地库未加载");
+  return client;
+}
+
+function stockApiSourceLabel(source) {
+  if (source === "tencent") return "腾讯";
+  if (source === "eastmoney") return "东方财富";
+  if (source === "sina") return "新浪";
+  return source || "自动";
+}
+
+async function fetchStockApiQuote(symbol) {
+  const stock = await stockApiClient("auto").getStock(stockApiMarketSymbol(symbol));
+  const price = Number(stock?.now) || 0;
+  if (!(price > 0)) throw new Error("stock-api股价为空");
+  return {
+    symbol: normalizeSymbol(symbol),
+    name: stock?.name || "",
+    price,
+    previousClose: Number(stock?.yesterday) || 0,
+    source: `stock-api/${stockApiSourceLabel(stock?.source)}`,
+  };
+}
+
 async function fetchRealtimeQuote(symbol) {
   const errors = [];
   try {
@@ -9586,6 +10551,11 @@ async function fetchRealtimeQuote(symbol) {
     return await withRetry(() => fetchSinaQuote(symbol));
   } catch (error) {
     errors.push(`新浪:${error.message || error}`);
+  }
+  try {
+    return await withRetry(() => fetchStockApiQuote(symbol), 1, 300);
+  } catch (error) {
+    errors.push(`stock-api:${error.message || error}`);
   }
   throw new Error(errors.join("；") || "quote failed");
 }
@@ -9899,12 +10869,13 @@ function buildCompareSeries(baseRows, indexRows, valueGetter, targetDateGetter =
   }).filter(Boolean);
 }
 
-async function fetchEastmoneyKlineRange(symbol, startDate, endDate) {
+async function fetchEastmoneyKlineRange(symbol, startDate, endDate, adjust = "qfq") {
   const callbackName = `em_k_range_${normalizeSymbol(symbol)}_${Date.now()}_${Math.random().toString(16).slice(2)}`.replace(/\W/g, "_");
   const secid = marketSecid(symbol);
   const fields1 = "f1,f2,f3,f4,f5,f6";
   const fields2 = "f51,f52,f53,f54,f55,f56,f57,f58";
-  const url = `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${encodeURIComponent(secid)}&klt=101&fqt=0&beg=${compactDate(startDate)}&end=${compactDate(endDate)}&fields1=${fields1}&fields2=${fields2}&cb=${callbackName}`;
+  const adjustCode = adjust === "qfq" ? 1 : adjust === "hfq" ? 2 : 0;
+  const url = `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${encodeURIComponent(secid)}&klt=101&fqt=${adjustCode}&beg=${compactDate(startDate)}&end=${compactDate(endDate)}&fields1=${fields1}&fields2=${fields2}&cb=${callbackName}`;
   const result = await jsonp(url, callbackName);
   const klines = result?.data && Array.isArray(result.data.klines) ? result.data.klines : [];
   const rows = klines.map((line) => {
@@ -9923,13 +10894,19 @@ async function fetchEastmoneyKlineRange(symbol, startDate, endDate) {
   return normalized;
 }
 
-async function fetchTencentKlineChunk(symbol, startDate, endDate) {
+async function fetchTencentKlineChunk(symbol, startDate, endDate, adjust = "qfq") {
   const code = tencentMarketSymbol(symbol);
   const varName = `tencent_k_range_${normalizeSymbol(symbol)}_${Date.now()}_${Math.random().toString(16).slice(2)}`.replace(/\W/g, "_");
-  const url = `https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=${varName}&param=${code},day,${startDate},${endDate},320,bfq`;
+  const adjustParam = adjust === "qfq" ? "qfq" : adjust === "hfq" ? "hfq" : "bfq";
+  const url = `https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?_var=${varName}&param=${code},day,${startDate},${endDate},320,${adjustParam}`;
   const result = await jsonpVar(url, varName);
   const stock = result?.data?.[code];
-  const rows = (stock?.day || stock?.qfqday || stock?.hfqday || []).map((row) => ({
+  const sourceRows = adjust === "qfq"
+    ? stock?.qfqday
+    : adjust === "hfq"
+      ? stock?.hfqday
+      : stock?.day;
+  const rows = (sourceRows || []).map((row) => ({
     date: row[0],
     open: row[1],
     close: row[2],
@@ -9942,9 +10919,9 @@ async function fetchTencentKlineChunk(symbol, startDate, endDate) {
   return normalized;
 }
 
-async function fetchTencentKlineRange(symbol, startDate, endDate) {
+async function fetchTencentKlineRange(symbol, startDate, endDate, adjust = "qfq") {
   const daySpan = klineRequestedDaySpan(startDate, endDate);
-  if (daySpan <= 430) return fetchTencentKlineChunk(symbol, startDate, endDate);
+  if (daySpan <= 430) return fetchTencentKlineChunk(symbol, startDate, endDate, adjust);
 
   const chunks = [];
   let cursor = startDate;
@@ -9957,7 +10934,7 @@ async function fetchTencentKlineRange(symbol, startDate, endDate) {
 
   const byDate = new Map();
   for (const [chunkStart, chunkEnd] of chunks) {
-    const rows = await fetchTencentKlineChunk(symbol, chunkStart, chunkEnd);
+    const rows = await fetchTencentKlineChunk(symbol, chunkStart, chunkEnd, adjust);
     rows.forEach((row) => byDate.set(row.date, row));
   }
   const merged = Array.from(byDate.values())
@@ -9986,31 +10963,123 @@ async function fetchSinaKlineRange(symbol, startDate, endDate) {
   return normalized;
 }
 
+function stockApiKlineCount(startDate, endDate) {
+  const latestDate = endDate > today() ? endDate : today();
+  return Math.max(120, klineRequestedDaySpan(startDate, latestDate) + 10);
+}
+
+async function fetchStockApiKlineRange(symbol, startDate, endDate, adjust = "qfq", provider = "auto") {
+  const rows = await stockApiClient(provider).getKlines(stockApiMarketSymbol(symbol), {
+    period: "day",
+    count: stockApiKlineCount(startDate, endDate),
+    adjust,
+  });
+  const actualProvider = rows?.find((row) => row?.source)?.source || (provider === "auto" ? "" : provider);
+  const source = `stock-api/${stockApiSourceLabel(actualProvider)}`;
+  const normalized = normalizeKlineRows(Array.isArray(rows) ? rows : [], source)
+    .filter((row) => dateInRange(row.date, startDate, endDate));
+  if (!normalized.length) throw new Error("stock-api K线为空");
+  return { rows: normalized, provider: actualProvider, source };
+}
+
+function pairAdjustedKlineRows(adjustedRows, rawRows) {
+  const rawByDate = new Map((rawRows || []).map((row) => [row.date, row]));
+  return (adjustedRows || []).map((row) => {
+    const raw = rawByDate.get(row.date);
+    const rawClose = Number(raw?.close) || 0;
+    const adjustedClose = Number(row.close) || 0;
+    if (!(rawClose > 0 && adjustedClose > 0)) {
+      throw new Error(`前复权与不复权K线无法配对：${row.date}`);
+    }
+    return {
+      ...row,
+      adjustFactor: adjustedClose / rawClose,
+      rawOpen: Number(raw.open) || rawClose,
+      rawClose,
+      rawHigh: Number(raw.high) || rawClose,
+      rawLow: Number(raw.low) || rawClose,
+    };
+  });
+}
+
+async function fetchAdjustedKlinePair(source, adjustedLoader, rawLoader) {
+  const adjustedRows = await adjustedLoader();
+  const rawRows = await rawLoader();
+  const rows = pairAdjustedKlineRows(adjustedRows, rawRows);
+  if (!rows.length) throw new Error(`${source}前复权K线为空`);
+  return {
+    rows,
+    source,
+    adjustment: "qfq",
+    degraded: false,
+    message: "",
+  };
+}
+
+async function fetchStockApiAdjustedKlinePair(symbol, startDate, endDate) {
+  const adjusted = await fetchStockApiKlineRange(symbol, startDate, endDate, "qfq", "auto");
+  if (!adjusted.provider || adjusted.provider === "sina") {
+    throw new Error("stock-api未返回支持前复权的数据源");
+  }
+  const raw = await fetchStockApiKlineRange(symbol, startDate, endDate, "none", adjusted.provider);
+  return {
+    rows: pairAdjustedKlineRows(adjusted.rows, raw.rows),
+    source: adjusted.source,
+    adjustment: "qfq",
+    degraded: false,
+    message: "",
+  };
+}
+
 async function fetchStockKlineRange(symbol, startDate, endDate, source = "auto") {
-  const key = `${normalizeSymbol(symbol)}|${startDate}|${endDate}|${source}`;
+  const key = `${normalizeSymbol(symbol)}|${startDate}|${endDate}|${source}|qfq`;
   if (stockKlineCache.has(key)) return stockKlineCache.get(key);
   const loaders = source === "tencent"
-    ? [["腾讯", () => fetchTencentKlineRange(symbol, startDate, endDate)]]
+    ? [["腾讯", () => fetchAdjustedKlinePair(
+        "腾讯",
+        () => fetchTencentKlineRange(symbol, startDate, endDate, "qfq"),
+        () => fetchTencentKlineRange(symbol, startDate, endDate, "none"),
+      )]]
     : source === "eastmoney"
-      ? [["东方财富", () => fetchEastmoneyKlineRange(symbol, startDate, endDate)]]
+      ? [["东方财富", () => fetchAdjustedKlinePair(
+          "东方财富",
+          () => fetchEastmoneyKlineRange(symbol, startDate, endDate, "qfq"),
+          () => fetchEastmoneyKlineRange(symbol, startDate, endDate, "none"),
+        )]]
       : source === "sina"
-        ? [["新浪", () => fetchSinaKlineRange(symbol, startDate, endDate)]]
+        ? [["新浪", async () => ({
+            rows: (await fetchSinaKlineRange(symbol, startDate, endDate)).map((row) => ({ ...row, adjustFactor: 1 })),
+            source: "新浪",
+            adjustment: "none",
+            degraded: true,
+            message: "新浪不支持前复权，当前为不复权降级。",
+          })]]
+        : source === "stockapi"
+          ? [["stock-api", () => fetchStockApiAdjustedKlinePair(symbol, startDate, endDate)]]
         : [
-            ["东方财富", () => fetchEastmoneyKlineRange(symbol, startDate, endDate)],
-            ["腾讯", () => fetchTencentKlineRange(symbol, startDate, endDate)],
-            ["新浪", () => fetchSinaKlineRange(symbol, startDate, endDate)],
+            ["东方财富", () => fetchAdjustedKlinePair(
+              "东方财富",
+              () => fetchEastmoneyKlineRange(symbol, startDate, endDate, "qfq"),
+              () => fetchEastmoneyKlineRange(symbol, startDate, endDate, "none"),
+            )],
+            ["腾讯", () => fetchAdjustedKlinePair(
+              "腾讯",
+              () => fetchTencentKlineRange(symbol, startDate, endDate, "qfq"),
+              () => fetchTencentKlineRange(symbol, startDate, endDate, "none"),
+            )],
+            ["stock-api", () => fetchStockApiAdjustedKlinePair(symbol, startDate, endDate)],
+            ["新浪", async () => ({
+              rows: (await fetchSinaKlineRange(symbol, startDate, endDate)).map((row) => ({ ...row, adjustFactor: 1 })),
+              source: "新浪",
+              adjustment: "none",
+              degraded: true,
+              message: "新浪不支持前复权，当前为不复权降级。",
+            })],
           ];
   const errors = [];
   for (const [name, loader] of loaders) {
     try {
-      const rows = await withRetry(loader, 1, 300);
-      const tencentLimited = name === "腾讯" && klineRequestedDaySpan(startDate, endDate) > 500 && rows.length <= 320;
-      const result = {
-        rows,
-        source: name,
-        degraded: tencentLimited,
-        message: tencentLimited ? "腾讯源长区间单次返回约 320 条K线；交易记录仍完整，建议切换自动/东方财富加载近5年。" : ""
-      };
+      const result = await withRetry(loader, 1, 300);
       stockKlineCache.set(key, result);
       return result;
     } catch (error) {
@@ -10067,6 +11136,9 @@ function buildStockKlineDataFromRows(stockCode, startDate, endDate, klineRows, m
   const position = currentPortfolioSnapshot().positions.find((item) => normalizeSymbol(item.symbol) === symbol) || {};
   const plan = currentStockPlan(symbol);
   const pair = currentTradePairRows().find((row) => normalizeSymbol(row.symbol) === symbol) || emptyPairRow(symbol, position.name || names.get(symbol) || symbol);
+  const rows = (klineRows || []).filter((row) => dateInRange(row.date, startDate, endDate));
+  const adjustmentFactorByDate = new Map(rows.map((row) => [row.date, Number(row.adjustFactor) || 1]));
+  const chartPriceFor = (date, price) => (Number(price) || 0) * (adjustmentFactorByDate.get(date) || 1);
   const allSymbolTrades = state.trades.filter((trade) => normalizeSymbol(trade.symbol) === symbol);
   const trades = allSymbolTrades
     .filter((trade) => dateInRange(trade.date, startDate, endDate))
@@ -10074,6 +11146,7 @@ function buildStockKlineDataFromRows(stockCode, startDate, endDate, klineRows, m
       date: trade.date,
       side: trade.side,
       price: Number(trade.price) || 0,
+      chartPrice: chartPriceFor(trade.date, trade.price),
       quantity: Number(trade.quantity) || 0,
       amount: tradeAmount(trade),
     }));
@@ -10103,11 +11176,11 @@ function buildStockKlineDataFromRows(stockCode, startDate, endDate, klineRows, m
       amount: action.type === "dividend" ? dividendNet(action) : 0,
       note: action.note || "",
     }));
-  const rows = (klineRows || []).filter((row) => dateInRange(row.date, startDate, endDate));
   return {
     stockCode: symbol,
     stockName: position.name || names.get(symbol) || symbol,
     source: meta.source || "本地交易复盘",
+    adjustment: meta.adjustment || "none",
     degraded: Boolean(meta.degraded),
     localReviewOnly: Boolean(meta.localReviewOnly),
     requestedStartDate: startDate,
@@ -10132,6 +11205,7 @@ async function buildStockKlineData(stockCode, startDate, endDate, source = "auto
   const klineResult = await fetchStockKlineRange(symbol, startDate, endDate, source);
   return buildStockKlineDataFromRows(symbol, startDate, endDate, klineResult.rows, {
     source: klineResult.source,
+    adjustment: klineResult.adjustment,
     degraded: klineResult.degraded,
     message: klineResult.message,
   });
@@ -10187,23 +11261,49 @@ async function refreshQuotes() {
     return;
   }
 
-  els.quoteStatus.textContent = `正在更新 ${symbols.length} 只持仓股票...`;
-  let success = 0;
-  for (const symbol of symbols) {
-    try {
-      const quote = await fetchRealtimeQuote(symbol);
-      state.prices[symbol] = Number(quote.price.toFixed(3));
-      if (quote.previousClose > 0) state.previousCloses[symbol] = Number(quote.previousClose.toFixed(3));
-      success += 1;
-    } catch {
-      // Keep the existing manual price when an individual quote fails.
-    }
+  if (refreshQuotes.inProgress) {
+    els.quoteStatus.textContent = "股价正在更新，请稍候...";
+    return;
   }
 
-  save();
-  renderAfterQuoteUpdate();
-  const time = beijingNow().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" });
-  els.quoteStatus.textContent = success ? `已更新 ${success}/${symbols.length} 只持仓股票，${time}` : "持仓股价更新失败，可手动输入";
+  refreshQuotes.inProgress = true;
+  const refreshButton = document.querySelector("#refresh-quotes");
+  if (refreshButton) refreshButton.disabled = true;
+
+  try {
+    const queue = [...symbols];
+    const concurrency = Math.min(4, queue.length);
+    let completed = 0;
+    let success = 0;
+
+    els.quoteStatus.textContent = `正在更新 0/${symbols.length}，最多 ${concurrency} 只并发...`;
+
+    const worker = async () => {
+      while (queue.length) {
+        const symbol = queue.shift();
+        try {
+          const quote = await fetchRealtimeQuote(symbol);
+          state.prices[symbol] = Number(quote.price.toFixed(3));
+          if (quote.previousClose > 0) state.previousCloses[symbol] = Number(quote.previousClose.toFixed(3));
+          success += 1;
+        } catch {
+          // Keep the existing manual price when an individual quote fails.
+        }
+        completed += 1;
+        els.quoteStatus.textContent = `正在更新 ${completed}/${symbols.length}，成功 ${success} 只...`;
+      }
+    };
+
+    await Promise.all(Array.from({ length: concurrency }, worker));
+
+    save();
+    renderAfterQuoteUpdate();
+    const time = beijingNow().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" });
+    els.quoteStatus.textContent = success ? `已更新 ${success}/${symbols.length} 只持仓股票，${time}` : "持仓股价更新失败，可手动输入";
+  } finally {
+    refreshQuotes.inProgress = false;
+    if (refreshButton) refreshButton.disabled = false;
+  }
 }
 
 function initialPositionCost() {
@@ -11319,6 +12419,34 @@ function renderDashboardCalendar(includeMatched = Boolean(getCoreCalculationCach
   );
 }
 
+function syncDashboardCalendarEntry(missingCount = 0, hasRows = true) {
+  const monthKey = els.calendarMonth?.value || currentMonthKey();
+  const [year, month] = monthKey.split("-");
+  const monthLabel = year && month ? `${year}年${Number(month)}月` : "本月";
+  const mappings = [
+    ["dashboard-calendar-entry-pnl", els.calendarMonthTotal],
+    ["dashboard-calendar-entry-return", els.calendarMonthReturn],
+    ["dashboard-calendar-entry-matched", els.calendarMonthMatched],
+  ];
+  mappings.forEach(([id, source]) => {
+    const target = document.getElementById(id);
+    if (!target || !source) return;
+    target.textContent = source.textContent;
+    target.className = source.className;
+  });
+  const monthElement = document.getElementById("dashboard-calendar-entry-month");
+  const statusElement = document.getElementById("dashboard-calendar-entry-status");
+  if (monthElement) monthElement.textContent = monthLabel;
+  if (statusElement) {
+    statusElement.textContent = !hasRows
+      ? "暂无收盘记录"
+      : missingCount
+        ? `${missingCount} 个交易日待补收盘`
+        : "本月收盘记录完整";
+    statusElement.className = missingCount ? "negative" : "";
+  }
+}
+
 function renderEquityCurve() {
   const chronological = currentSnapshotCalendarRows();
   renderAssetLineChart(chronological);
@@ -11358,6 +12486,7 @@ function renderPnlCalendar(rows, matchedPnlByDate = null, matchDetailsByDate = n
     els.calendarMonthMatched.textContent = matchedPnlByDate ? moneyInt(0) : "…";
     els.calendarMonthMatched.className = "";
     els.equityChart.innerHTML = `<div class="empty-state">暂无收盘记录。总览日历只显示真实保存的每日收盘，不再用当前股价倒算历史。</div>`;
+    syncDashboardCalendarEntry(0, false);
     return;
   }
   const [year, month] = monthKey.split("-").map(Number);
@@ -11455,6 +12584,7 @@ function renderPnlCalendar(rows, matchedPnlByDate = null, matchDetailsByDate = n
     </div>
     ${renderDashboardPnlBars(monthRows, matchedPnlByDate, monthKey)}
   `;
+  syncDashboardCalendarEntry(missingTradingDates.length, true);
 }
 
 function renderDashboardPnlBars(monthRows, matchedPnlByDate, monthKey) {
@@ -14487,7 +15617,10 @@ function stockKlineStatusText(data, visibleData) {
   const sourceMessage = data.message ? `${data.message} ` : "";
   const visibleBuyCount = (visibleData.buyPoints || []).length;
   const visibleSellCount = (visibleData.sellPoints || []).length;
-  return `${sourceMessage}已加载 ${data.klineRows.length} 条K线，当前显示 ${visibleData.klineRows.length} 条；图上买点 ${visibleBuyCount}，卖点 ${visibleSellCount}。交易记录完整：本股共 ${number(data.fullTradeCount || 0, 0)} 笔，当前图仅显示可见K线区间内买卖点。`;
+  const firstDate = data.klineRows?.[0]?.date || "-";
+  const lastDate = data.klineRows?.at(-1)?.date || "-";
+  const adjustmentText = data.adjustment === "qfq" ? "前复权" : "不复权";
+  return `${sourceMessage}${data.source} · ${adjustmentText} · ${firstDate} 至 ${lastDate}；已加载 ${data.klineRows.length} 条K线，当前显示 ${visibleData.klineRows.length} 条；图上买点 ${visibleBuyCount}，卖点 ${visibleSellCount}。交易记录完整：本股共 ${number(data.fullTradeCount || 0, 0)} 笔，当前图仅显示可见K线区间内买卖点。`;
 }
 
 function buildStockKlineRangeSummary(data) {
@@ -14688,9 +15821,14 @@ function stockKlineCostSummary(data, date) {
   const afterPosition = stockKlinePositionAsOf(data.stockCode, date, true);
   const before = beforePosition.averageCost;
   const after = afterPosition.averageCost;
+  const row = (data.klineRows || []).find((item) => item.date === date);
+  const adjustFactor = data.adjustment === "qfq" ? (Number(row?.adjustFactor) || 1) : 1;
   return {
     before,
     after,
+    chartBefore: before * adjustFactor,
+    chartAfter: after * adjustFactor,
+    adjustFactor,
     quantity: afterPosition.quantity,
     delta: after - before,
     hasCost: before > 0 || after > 0,
@@ -14733,6 +15871,7 @@ function stockKlineTooltipPoint(data, row, index) {
     changePct,
     volume: Number(row.volume) || 0,
     amount: Number(row.amount) || 0,
+    adjustment: data.adjustment || "none",
     costLine: Number(data.costLine) || 0,
     quantity: costSummary.quantity,
     hasTrade,
@@ -14771,7 +15910,7 @@ function stockKlineCostSegments(points, xFor, yFor) {
   const segments = [];
   let current = [];
   points.forEach((point, index) => {
-    const cost = Number(point?.costSummary?.after) || 0;
+    const cost = Number(point?.costSummary?.chartAfter) || 0;
     if (cost > 0) {
       current.push(`${xFor(index)},${yFor(cost)}`);
       return;
@@ -14905,14 +16044,14 @@ function renderStockKlineChart(data) {
   const plotW = width - pad.left - pad.right;
   const plotH = height - pad.top - pad.bottom;
   const tooltipPoints = rows.map((row, index) => stockKlineTooltipPoint(data, row, index));
-  const costCurveValues = tooltipPoints.map((point) => Number(point?.costSummary?.after) || 0).filter((value) => value > 0);
+  const costCurveValues = tooltipPoints.map((point) => Number(point?.costSummary?.chartAfter) || 0).filter((value) => value > 0);
   const extraPrices = [
     data.costLine,
     data.takeProfitLine,
     data.stopLossLine,
     ...costCurveValues,
-    ...data.buyPoints.map((point) => point.price),
-    ...data.sellPoints.map((point) => point.price),
+    ...data.buyPoints.map((point) => point.chartPrice || point.price),
+    ...data.sellPoints.map((point) => point.chartPrice || point.price),
   ].filter((value) => Number(value) > 0);
   const prices = rows.flatMap((row) => [row.open, row.close, row.high, row.low]).concat(extraPrices).filter((value) => Number(value) > 0);
   const min = Math.min(...prices);
@@ -14969,9 +16108,10 @@ function renderStockKlineChart(data) {
   };
   const tradePoint = (point, side) => {
     const index = rowIndex.get(point.date);
-    if (index === undefined || !(point.price > 0)) return "";
+    const chartPrice = Number(point.chartPrice) || Number(point.price) || 0;
+    if (index === undefined || !(chartPrice > 0)) return "";
     const x = xFor(index);
-    const y = yFor(point.price);
+    const y = yFor(chartPrice);
     const meta = stockKlinePointMeta(data, point, side);
     const highlighted = meta.unmatched.length > 0 && data.unmatchedSide === side;
     const attrs = `data-kline-point-side="${side}" data-kline-point-date="${escapeHtml(point.date || "")}" data-kline-point-price="${Number(point.price) || 0}" role="button" tabindex="0"`;
@@ -15406,7 +16546,7 @@ async function renderStockKline() {
     currentLocalStockReviewData = buildLocalStockReviewData(symbol, startDate, endDate);
     const visibleData = stockKlineVisibleData(data);
     els.stockKlineTitle.textContent = `${data.stockName} ${data.stockCode} K线图`;
-    els.stockKlineSubtitle.textContent = `${startDate} 至 ${endDate} · ${data.source} · ${visibleData.klineRows.length}/${data.klineRows.length} 条`;
+    els.stockKlineSubtitle.textContent = `${startDate} 至 ${endDate} · ${data.source} · ${data.adjustment === "qfq" ? "前复权" : "不复权"} · ${visibleData.klineRows.length}/${data.klineRows.length} 条`;
     els.stockKlineStatus.textContent = stockKlineStatusText(data, visibleData);
     els.stockKlineChart.innerHTML = renderStockKlineChart(visibleData);
     if (els.stockKlineDetail) els.stockKlineDetail.innerHTML = "";
@@ -16504,6 +17644,27 @@ function deleteFeeProfile(startDate) {
   renderAll();
 }
 
+function renderSettingsHubSummaries(profiles = ensureFeeHistory()) {
+  const setText = (id, value) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
+  };
+  const currentYear = String(beijingNow().getFullYear());
+  const calendar = state.settings.exchangeHolidayCalendars?.[currentYear];
+  const manualHolidayCount = Object.keys(state.settings.manualMarketHolidays || {}).length;
+  const lastBackupAt = state.settings.lastBackupAt;
+  const backupLabel = lastBackupAt
+    ? `最近备份 ${String(lastBackupAt).slice(0, 10)}`
+    : "尚未导出备份";
+  setText("settings-account-summary", `初始现金 ${money(state.settings.initialCash)}`);
+  setText("settings-fees-summary", `${profiles.length} 套费率档案`);
+  setText("settings-cash-summary", state.cashTransfers.length ? `${state.cashTransfers.length} 条现金流水` : "暂无现金流水");
+  setText("settings-holiday-summary", calendar?.completeYear ? `${currentYear} 年日历已登记` : `${currentYear} 年日历待更新${manualHolidayCount ? ` · 手动 ${manualHolidayCount} 天` : ""}`);
+  setText("settings-positions-summary", state.initialPositions.length ? `${state.initialPositions.length} 只初始持仓` : "暂无初始持仓");
+  setText("settings-corporate-summary", state.corporateActions.length ? `${state.corporateActions.length} 条公司行为` : "暂无公司行为");
+  setText("settings-data-summary", backupLabel);
+}
+
 function renderSettings() {
   els.initialCash.value = state.settings.initialCash;
   const profiles = ensureFeeHistory();
@@ -16523,6 +17684,7 @@ function renderSettings() {
   renderCashTransfers();
   renderCorporateActions();
   ensureCorporateActionImportDefaults();
+  renderSettingsHubSummaries(profiles);
 
   if (!state.initialPositions.length) {
     els.initialPositionsBody.innerHTML = `<tr><td colspan="8" class="empty-state">暂无初始持仓</td></tr>`;
@@ -16958,6 +18120,8 @@ function editCorporateAction(id) {
   document.querySelector("#add-corporate-action").textContent = "保存公司行为";
   updateCorporateActionNet();
   setView("settings");
+  setSettingsModalTab("settings-corporate-modal", "manual");
+  openModal("settings-corporate-modal");
 }
 
 function addCorporateAction() {
@@ -17071,9 +18235,29 @@ function isViewFresh(viewId) {
   return renderedViewRevisions.get(viewId) === renderRevision;
 }
 
+function renderTradeToolSummaries() {
+  const brokerSummary = document.getElementById("broker-import-entry-summary");
+  const rebuildSummary = document.getElementById("historical-rebuild-entry-summary");
+  if (brokerSummary) {
+    const undoable = latestUndoableBrokerImportBatch();
+    brokerSummary.textContent = undoable
+      ? `最近批次可撤销 · ${Number(undoable.count) || undoable.tradeIds?.length || 0} 笔`
+      : "选择历史成交文件，预览后导入";
+  }
+  if (rebuildSummary) {
+    const rebuild = state.historicalRebuild || {};
+    const holdings = Array.isArray(rebuild.holdings) ? rebuild.holdings.length : 0;
+    rebuildSummary.textContent = validDateString(rebuild.snapshotDate)
+      ? `基准 ${rebuild.snapshotDate} · ${holdings} 只持仓`
+      : "设置基准资产并预览历史起点";
+  }
+}
+
 function renderTradeFormView() {
   updatePreview();
+  renderBrokerImportUndoStatus();
   renderHistoricalRebuild();
+  renderTradeToolSummaries();
 }
 
 function renderView(viewId = activeViewId(), options = {}) {
@@ -17218,6 +18402,8 @@ function editInitialPosition(id) {
   els.initialPositionMode.textContent = "正在编辑初始持仓，保存后会重新计算账户";
   document.querySelector("#add-initial-position").textContent = "保存初始持仓";
   setView("settings");
+  setSettingsModalTab("initial-position-modal", "entry");
+  openModal("initial-position-modal");
 }
 
 function addInitialPosition() {
@@ -17328,6 +18514,7 @@ function readStoredBackupJson() {
 function createBackupJson() {
   const backup = {
     trades: state.trades,
+    brokerImportBatches: state.brokerImportBatches,
     prices: state.prices,
     previousCloses: state.previousCloses,
     initialPositions: state.initialPositions,
@@ -17423,6 +18610,7 @@ function backupSummaryText(summary) {
 
 function applyBackupState(next) {
   state.trades = next.trades;
+  state.brokerImportBatches = next.brokerImportBatches;
   state.prices = next.prices;
   state.previousCloses = next.previousCloses;
   state.initialPositions = next.initialPositions;
@@ -17529,6 +18717,7 @@ async function deleteVersionSnapshot(id) {
 function normalizeImportedBackup(next) {
   return {
     trades: Array.isArray(next.trades) ? next.trades : [],
+    brokerImportBatches: normalizeBrokerImportBatches(next.brokerImportBatches),
     prices: next.prices && typeof next.prices === "object" ? next.prices : {},
     previousCloses: next.previousCloses && typeof next.previousCloses === "object" ? next.previousCloses : {},
     initialPositions: Array.isArray(next.initialPositions) ? next.initialPositions : [],
@@ -18262,6 +19451,33 @@ function clearBrokerImportPreview() {
   renderBrokerImportPreview();
 }
 
+function latestUndoableBrokerImportBatch() {
+  const existingTradeIds = new Set(state.trades.map((trade) => String(trade.id || "")));
+  for (let index = state.brokerImportBatches.length - 1; index >= 0; index -= 1) {
+    const batch = state.brokerImportBatches[index];
+    if (batch.tradeIds.some((id) => existingTradeIds.has(id))) return batch;
+  }
+  return null;
+}
+
+function brokerImportBatchLabel(batch) {
+  const importedAt = batch.importedAt ? new Date(batch.importedAt) : null;
+  const time = importedAt && !Number.isNaN(importedAt.getTime())
+    ? importedAt.toLocaleString("zh-CN", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" })
+    : "时间未知";
+  const remainingIds = new Set(batch.tradeIds);
+  const remaining = state.trades.filter((trade) => remainingIds.has(String(trade.id || ""))).length;
+  return `${batch.fileName} · ${time} · 原 ${batch.count || batch.tradeIds.length} 笔，现存 ${remaining} 笔`;
+}
+
+function renderBrokerImportUndoStatus(message = "") {
+  const batch = latestUndoableBrokerImportBatch();
+  els.undoLastBrokerImport.disabled = !batch;
+  const batchText = batch ? `可撤销：${brokerImportBatchLabel(batch)}` : "暂无可撤销的券商导入批次。";
+  els.brokerImportUndoStatus.textContent = message ? `${message} ${batchText}` : batchText;
+  renderTradeToolSummaries();
+}
+
 function handleBrokerImportFile(file) {
   if (!file) return;
   const reader = new FileReader();
@@ -18289,7 +19505,7 @@ function handleBrokerImportFile(file) {
       seenCoreKeys.add(coreKey);
       return true;
     });
-    pendingBrokerImportSummary = { ...parsed, duplicates, duplicateRows };
+    pendingBrokerImportSummary = { ...parsed, duplicates, duplicateRows, fileName: file.name };
     els.brokerImportStatus.textContent = parsed.reason
       ? `识别失败：${parsed.reason}`
       : `已读取 ${file.name}，识别为 ${brokerTemplateLabel(parsed.mode)}，费用将按当前设置重新计算。`;
@@ -18307,13 +19523,39 @@ function handleBrokerImportFile(file) {
 function confirmBrokerImport() {
   if (!pendingBrokerTrades.length) return;
   if (!confirm(`确认导入 ${pendingBrokerTrades.length} 笔买卖成交吗？费用会按当前设置自动计算。`)) return;
+  const batch = {
+    id: uid(),
+    fileName: pendingBrokerImportSummary?.fileName || "券商成交文件",
+    importedAt: new Date().toISOString(),
+    count: pendingBrokerTrades.length,
+    tradeIds: pendingBrokerTrades.map((trade) => String(trade.id)),
+  };
   state.trades.push(...pendingBrokerTrades);
+  state.brokerImportBatches.push(batch);
   save();
   clearBrokerImportPreview();
+  renderBrokerImportUndoStatus();
   renderAll();
   const missing = missingCloseSnapshotDates().length;
   if (missing) els.closeSnapshotStatus.textContent = `导入后发现 ${missing} 个交易日缺少收盘记录，可点“自动补历史收盘”。`;
   setView("records");
+}
+
+function undoLastBrokerImport() {
+  const batch = latestUndoableBrokerImportBatch();
+  if (!batch) {
+    renderBrokerImportUndoStatus();
+    alert("没有可撤销的券商导入批次。");
+    return;
+  }
+  const batchTradeIds = new Set(batch.tradeIds);
+  const removableCount = state.trades.filter((trade) => batchTradeIds.has(String(trade.id || ""))).length;
+  if (!confirm(`确认撤销这次券商导入吗？\n${brokerImportBatchLabel(batch)}\n\n只删除本批现存的 ${removableCount} 笔成交，其他交易不会改变。`)) return;
+  state.trades = state.trades.filter((trade) => !batchTradeIds.has(String(trade.id || "")));
+  state.brokerImportBatches = state.brokerImportBatches.filter((item) => item.id !== batch.id);
+  save();
+  renderAll();
+  renderBrokerImportUndoStatus(`已撤销 ${batch.fileName} 的 ${removableCount} 笔成交。`);
 }
 
 
@@ -18395,6 +19637,7 @@ function openCurrentAssetModal() {
   els.currentSnapshotCash.value = saved ? saved.cash : (hasAmountInput(els.rebuildCash) ? readAmountInput(els.rebuildCash) : "");
   els.currentSnapshotHoldings.value = formatCurrentAssetHoldings(holdings);
   els.currentSnapshotStatus.textContent = "改基准日期后会自动按该日开盘前状态重算。";
+  closeModal(document.getElementById("historical-rebuild-modal"));
   openModal("current-snapshot-modal");
 }
 
@@ -18621,6 +19864,7 @@ function renderHistoricalRebuild() {
   els.historicalRebuildHoldings.innerHTML = holdings.length
     ? holdings.map((item) => `<div class="mobile-card"><div class="card-head"><strong>${escapeHtml(item.symbol)} ${escapeHtml(item.name || "")}</strong><span>${number(item.quantity, 0)} 股</span></div><dl><div><dt>基准价</dt><dd>${formatPrice(item.price)}</dd></div><div><dt>基准市值</dt><dd>${money(item.quantity * item.price)}</dd></div></dl><div class="row-actions"><button class="danger-button small" type="button" data-delete-rebuild-holding="${escapeHtml(item.id)}">删除</button></div></div>`).join("")
     : `<div class="empty-state">还没有录入基准持仓。只看现金账户时也可以为空。</div>`;
+  renderTradeToolSummaries();
 }
 
 function addHistoricalRebuildHolding() {
@@ -18934,6 +20178,9 @@ function openModal(id) {
   modal.hidden = false;
   document.body.classList.add("modal-open");
   const lazyRenderers = {
+    "dashboard-calendar-modal": () => renderDashboardCalendar(Boolean(getCoreCalculationCache().pairRows)),
+    "broker-import-modal": () => renderBrokerImportUndoStatus(),
+    "historical-rebuild-modal": renderHistoricalRebuild,
     "asset-chart-modal": renderEquityCurve,
     "annual-calendar-modal": () => renderAnnualCalendar(currentSnapshotCalendarRows()),
     "history-assets-year-modal": renderHistoryAssetsYear,
@@ -18963,12 +20210,22 @@ document.querySelectorAll("[data-modal-open]").forEach((button) => {
       dividendModalSymbolFilter = "";
       dividendModalYearFilter = "";
     }
+    if (button.dataset.settingsDefaultTab) {
+      setSettingsModalTab(button.dataset.modalOpen, button.dataset.settingsDefaultTab);
+    }
+    if (button.hasAttribute("data-close-parent-modal")) {
+      closeModal(button.closest(".app-modal"));
+    }
     openModal(button.dataset.modalOpen);
   });
 });
 
 document.querySelectorAll("[data-modal-close]").forEach((button) => {
-  button.addEventListener("click", () => closeModal(button.closest(".app-modal")));
+  button.addEventListener("click", () => {
+    const returnModalId = button.dataset.modalReturn;
+    closeModal(button.closest(".app-modal"));
+    if (returnModalId) openModal(returnModalId);
+  });
 });
 
 document.querySelectorAll(".app-modal").forEach((modal) => {
@@ -19027,6 +20284,7 @@ els.brokerImportMode.addEventListener("change", () => {
 });
 els.confirmBrokerImport.addEventListener("click", confirmBrokerImport);
 els.clearBrokerImport.addEventListener("click", clearBrokerImportPreview);
+els.undoLastBrokerImport.addEventListener("click", undoLastBrokerImport);
 els.rebuildSymbol.addEventListener("change", () => fillStockInfo(els.rebuildSymbol, els.rebuildName));
 els.rebuildSymbol.addEventListener("blur", () => fillStockInfo(els.rebuildSymbol, els.rebuildName));
 els.rebuildSnapshotDate.addEventListener("change", saveHistoricalRebuildSettings);
@@ -19084,6 +20342,7 @@ if (els.openYearDividendDetail) {
     const date = validDateString(els.actionDate.value) ? els.actionDate.value : today();
     dividendModalSymbolFilter = "";
     dividendModalYearFilter = date.slice(0, 4);
+    closeModal(document.getElementById("settings-corporate-modal"));
     openModal("dividend-modal");
   });
 }
@@ -19135,6 +20394,7 @@ document.querySelector("#clear-data").addEventListener("click", () => {
   if (!confirm("确定清空全部数据吗？")) return;
   createVersionSnapshot("清空前快照").catch((error) => console.warn("Version snapshot before clear failed", error));
   state.trades = [];
+  state.brokerImportBatches = [];
   state.prices = {};
   state.previousCloses = {};
   state.initialPositions = [];
