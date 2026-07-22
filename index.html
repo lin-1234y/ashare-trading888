@@ -4459,7 +4459,7 @@ details[open] > summary .expand-hint::after {
   overflow-x: hidden !important;
   overflow-x: clip !important;
   overscroll-behavior: none;
-  touch-action: pan-y;
+  touch-action: pan-y pinch-zoom;
 }
 
 #stock-kline-modal .modal-card {
@@ -4469,7 +4469,7 @@ details[open] > summary .expand-hint::after {
   overflow-x: hidden !important;
   overflow-x: clip !important;
   overscroll-behavior-x: none;
-  touch-action: pan-y;
+  touch-action: pan-y pinch-zoom;
 }
 
 #stock-kline-modal .modal-card > *,
@@ -4496,6 +4496,7 @@ details[open] > summary .expand-hint::after {
 
 #stock-kline-modal .stock-kline-chart svg {
   max-width: 100%;
+  touch-action: pinch-zoom;
 }
 
 #stock-kline-modal .stock-kline-range {
@@ -20963,6 +20964,7 @@ els.stockKlineChart?.addEventListener("pointerdown", (event) => {
   updateStockKlineTooltipFromClientX(chart, event.clientX);
 });
 els.stockKlineChart?.addEventListener("touchmove", (event) => {
+  if (event.touches?.length !== 1) return;
   const touch = event.touches?.[0];
   const chart = event.target.closest("[data-stock-kline-tooltip-chart]");
   if (!touch || !chart) return;
@@ -20993,6 +20995,7 @@ els.localStockReviewChart?.addEventListener("pointerdown", (event) => {
   updateStockKlineTooltipFromClientX(chart, event.clientX);
 });
 els.localStockReviewChart?.addEventListener("touchmove", (event) => {
+  if (event.touches?.length !== 1) return;
   const touch = event.touches?.[0];
   const chart = event.target.closest("[data-stock-kline-tooltip-chart]");
   if (!touch || !chart) return;
