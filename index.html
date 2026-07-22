@@ -490,8 +490,19 @@ button {
   place-items: center;
 }
 
+html.modal-open,
 body.modal-open {
-  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+body.modal-open {
+  position: fixed;
+  left: 0;
+  right: 0;
 }
 
 .modal-card {
@@ -1463,6 +1474,17 @@ body.modal-open {
   color: var(--muted);
   font-size: 13px;
   margin: 8px 0 0;
+}
+
+.history-load-more {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  margin-top: 8px;
+}
+
+.history-load-more .history-note {
+  margin: 0;
 }
 
 .detail-hero {
@@ -4429,6 +4451,64 @@ details[open] > summary .expand-hint::after {
 
 .stock-kline-range {
   margin-top: 10px;
+}
+
+#stock-kline-modal {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+  overflow-x: clip !important;
+  overscroll-behavior: none;
+  touch-action: pan-y;
+}
+
+#stock-kline-modal .modal-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0;
+  overflow-x: hidden !important;
+  overflow-x: clip !important;
+  overscroll-behavior-x: none;
+  touch-action: pan-y;
+}
+
+#stock-kline-modal .modal-card > *,
+#stock-kline-modal .form-grid > *,
+#stock-kline-modal .stock-kline-summary > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+#stock-kline-modal .form-grid,
+#stock-kline-modal .form-actions,
+#stock-kline-modal .stock-kline-legend,
+#stock-kline-modal .stock-kline-chart,
+#stock-kline-modal .stock-kline-detail {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+#stock-kline-modal .stock-kline-chart {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+#stock-kline-modal .stock-kline-chart svg {
+  max-width: 100%;
+}
+
+#stock-kline-modal .stock-kline-range {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+#stock-kline-modal .stock-kline-range input[type="range"] {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
 }
 
 .report-bar-charts {
@@ -8032,6 +8112,8 @@ const INDEXED_DB_CURRENT_KEY = "current";
 const INDEXED_DB_SUMMARY_KEY = "ashare-trading-indexeddb-summary";
 const MAX_VERSION_SNAPSHOTS = 5;
 const RECORD_RENDER_LIMIT = 100;
+const STOCK_TIMELINE_RENDER_LIMIT = 50;
+let recordRenderLimit = RECORD_RENDER_LIMIT;
 let summaryAnalysisCache = null;
 let coreCalculationCache = null;
 let appDbPromise = null;
@@ -8142,6 +8224,7 @@ const shIndexCompareCache = new Map();
 let assetChartCompareRequestId = 0;
 let currentStockKlineData = null;
 let currentLocalStockReviewData = null;
+let stockKlineRequestId = 0;
 const stockKlineReviewFilters = {
   costDown: false,
   matchProfit: false,
@@ -11988,9 +12071,14 @@ function renderRecords() {
     if (selectedSymbol && normalizeSymbol(row.symbol) !== selectedSymbol) return false;
     return true;
   });
-  const visibleRecords = records.slice(0, RECORD_RENDER_LIMIT);
-  const limitNote = records.length > visibleRecords.length
-    ? `命中 ${records.length} 条，为保持流畅只显示最近 ${visibleRecords.length} 条。`
+  const visibleRecords = records.slice(0, recordRenderLimit);
+  const remainingRecords = Math.max(0, records.length - visibleRecords.length);
+  const nextRecordBatch = Math.min(RECORD_RENDER_LIMIT, remainingRecords);
+  const limitNote = remainingRecords
+    ? `命中 ${records.length} 条，已显示最近 ${visibleRecords.length} 条。`
+    : "";
+  const loadMoreRecordsButton = remainingRecords
+    ? `<button class="ghost-button small" type="button" data-load-more-records>再加载 ${nextRecordBatch} 条</button>`
     : "";
   const rangeText = start || end ? `${start || "最早"} 至 ${end || "最新"}` : "全部日期";
   const selectedName = selectedSymbol ? (stockNameMap().get(selectedSymbol) || selectedSymbol) : "";
@@ -12038,7 +12126,16 @@ function renderRecords() {
         </tr>
       `;
     })
-    .join("") + (limitNote ? `<tr><td colspan="12" class="history-note">${limitNote}</td></tr>` : "");
+    .join("") + (limitNote ? `
+      <tr>
+        <td colspan="12">
+          <div class="history-load-more">
+            <span class="history-note">${limitNote}</span>
+            ${loadMoreRecordsButton}
+          </div>
+        </td>
+      </tr>
+    ` : "");
 
   els.recordsCards.innerHTML = visibleRecords
     .map((row) => {
@@ -12076,14 +12173,30 @@ function renderRecords() {
         </article>
       `;
     })
-    .join("") + (limitNote ? `<p class="history-note">${limitNote}</p>` : "");
+    .join("") + (limitNote ? `
+      <div class="history-load-more">
+        <p class="history-note">${limitNote}</p>
+        ${loadMoreRecordsButton}
+      </div>
+    ` : "");
 }
 
 function resetRecordQuery() {
+  recordRenderLimit = RECORD_RENDER_LIMIT;
   els.recordStartDate.value = "";
   els.recordEndDate.value = "";
   if (els.recordOpenSymbol) els.recordOpenSymbol.value = "";
   if (els.recordClosedSymbol) els.recordClosedSymbol.value = "";
+  renderRecords();
+}
+
+function resetRecordRenderLimit() {
+  recordRenderLimit = RECORD_RENDER_LIMIT;
+  renderRecords();
+}
+
+function loadMoreRecords() {
+  recordRenderLimit += RECORD_RENDER_LIMIT;
   renderRecords();
 }
 
@@ -14843,6 +14956,42 @@ function renderSplitStockSelectors(config) {
   closedSelect.value = closedSymbols.includes(selected) ? selected : "";
 }
 
+function renderStockTimelineEvent(event) {
+  return `
+    <article class="timeline-item">
+      <strong>${event.date}</strong>
+      <span class="tag ${event.tone}">${event.type}</span>
+      <div>
+        <strong>${event.detail}</strong>
+        <p>${event.note || "无备注"}</p>
+      </div>
+    </article>
+  `;
+}
+
+function renderStockTimelineItems(disclosure, requestedLimit = STOCK_TIMELINE_RENDER_LIMIT) {
+  if (!disclosure) return;
+  const symbol = normalizeSymbol(disclosure.dataset.timelineSymbol || "");
+  const events = stockEvents(symbol);
+  const visibleLimit = Math.min(Math.max(STOCK_TIMELINE_RENDER_LIMIT, requestedLimit), events.length);
+  const visibleEvents = events.slice(0, visibleLimit);
+  const remaining = Math.max(0, events.length - visibleEvents.length);
+  const nextBatch = Math.min(STOCK_TIMELINE_RENDER_LIMIT, remaining);
+  const list = disclosure.querySelector("[data-stock-timeline-list]");
+  const footer = disclosure.querySelector("[data-stock-timeline-footer]");
+  if (list) list.innerHTML = visibleEvents.map(renderStockTimelineEvent).join("");
+  if (footer) {
+    footer.innerHTML = remaining
+      ? `
+        <p class="history-note">已显示最近 ${visibleEvents.length} 条，共 ${events.length} 条。</p>
+        <button class="ghost-button stock-v2-load-more" type="button" data-load-more-stock-timeline>再加载 ${nextBatch} 条</button>
+      `
+      : `<p class="history-note">已显示全部 ${events.length} 条。</p>`;
+  }
+  disclosure.dataset.visibleLimit = String(visibleEvents.length);
+  disclosure.dataset.timelineLoaded = "true";
+}
+
 function renderStockTimeline() {
   const { names, symbols, openSymbols, closedSymbols } = stockSelectionBuckets();
 
@@ -14867,25 +15016,23 @@ function renderStockTimeline() {
     hiddenSelect: els.timelineSymbol,
   });
   const events = stockEvents(selected);
-  const renderEventItem = (event) => `
-    <article class="timeline-item">
-      <strong>${event.date}</strong>
-      <span class="tag ${event.tone}">${event.type}</span>
-      <div>
-        <strong>${event.detail}</strong>
-        <p>${event.note || "无备注"}</p>
-      </div>
-    </article>
-  `;
 
   els.stockTimeline.innerHTML = events.length
     ? `
-      <details class="history-disclosure">
+      <details class="history-disclosure" data-timeline-symbol="${selected}">
         <summary>查看个股交易时间线（${events.length} 条）</summary>
-        <div class="timeline-list">${events.map(renderEventItem).join("")}</div>
+        <div class="timeline-list" data-stock-timeline-list></div>
+        <div data-stock-timeline-footer></div>
       </details>
     `
     : `<div class="empty-state">这只股票暂无记录</div>`;
+
+  const disclosure = els.stockTimeline.querySelector(".history-disclosure");
+  disclosure?.addEventListener("toggle", () => {
+    if (disclosure.open && disclosure.dataset.timelineLoaded !== "true") {
+      renderStockTimelineItems(disclosure);
+    }
+  });
 }
 
 function stockV2TradeKey(trade) {
@@ -16526,6 +16673,7 @@ function defaultKlineRange(symbol, years = 5) {
 }
 
 async function renderStockKline() {
+  const requestId = ++stockKlineRequestId;
   const symbol = normalizeSymbol(els.stockKlineSymbol.value || selectedDetailSymbol);
   if (!symbol) {
     els.stockKlineChart.innerHTML = `<div class="empty-state">请先选择股票。</div>`;
@@ -16542,6 +16690,7 @@ async function renderStockKline() {
   els.stockKlineChart.innerHTML = `<div class="empty-state">正在加载 ${symbol} K线...</div>`;
   try {
     const data = await buildStockKlineData(symbol, startDate, endDate, els.stockKlineSource.value || "auto");
+    if (requestId !== stockKlineRequestId) return;
     currentStockKlineData = data;
     currentLocalStockReviewData = buildLocalStockReviewData(symbol, startDate, endDate);
     const visibleData = stockKlineVisibleData(data);
@@ -16551,6 +16700,7 @@ async function renderStockKline() {
     els.stockKlineChart.innerHTML = renderStockKlineChart(visibleData);
     if (els.stockKlineDetail) els.stockKlineDetail.innerHTML = "";
   } catch (error) {
+    if (requestId !== stockKlineRequestId) return;
     currentStockKlineData = null;
     const message = error.message || String(error);
     currentLocalStockReviewData = buildLocalStockReviewData(symbol, startDate, endDate, message);
@@ -20172,11 +20322,30 @@ document.addEventListener("keydown", (event) => {
   openUnmatchedLotPopover(chip);
 });
 
+let modalPageScrollY = 0;
+
+function lockModalPageScroll() {
+  if (document.documentElement.classList.contains("modal-open")) return;
+  modalPageScrollY = Math.max(0, window.scrollY || document.documentElement.scrollTop || 0);
+  document.documentElement.classList.add("modal-open");
+  document.body.classList.add("modal-open");
+  document.body.style.top = `-${modalPageScrollY}px`;
+}
+
+function unlockModalPageScroll() {
+  const scrollY = modalPageScrollY;
+  document.documentElement.classList.remove("modal-open");
+  document.body.classList.remove("modal-open");
+  document.body.style.top = "";
+  modalPageScrollY = 0;
+  window.scrollTo(0, scrollY);
+}
+
 function openModal(id) {
   const modal = document.getElementById(id);
   if (!modal) return;
   modal.hidden = false;
-  document.body.classList.add("modal-open");
+  lockModalPageScroll();
   const lazyRenderers = {
     "dashboard-calendar-modal": () => renderDashboardCalendar(Boolean(getCoreCalculationCache().pairRows)),
     "broker-import-modal": () => renderBrokerImportUndoStatus(),
@@ -20201,7 +20370,7 @@ function closeModal(modal) {
   if (!modal) return;
   if (modal.id === "manual-close-modal") pendingAutoCloseManualRequest = null;
   modal.hidden = true;
-  if (!document.querySelector(".app-modal:not([hidden])")) document.body.classList.remove("modal-open");
+  if (!document.querySelector(".app-modal:not([hidden])")) unlockModalPageScroll();
 }
 
 document.querySelectorAll("[data-modal-open]").forEach((button) => {
@@ -20438,15 +20607,15 @@ document.querySelector("#import-data").addEventListener("change", (event) => {
 });
 els.undoLastImport.addEventListener("click", undoLastImport);
 
-els.queryRecords.addEventListener("click", renderRecords);
+els.queryRecords.addEventListener("click", resetRecordRenderLimit);
 els.resetRecordQuery.addEventListener("click", resetRecordQuery);
 els.recordOpenSymbol.addEventListener("change", () => {
   if (els.recordOpenSymbol.value && els.recordClosedSymbol) els.recordClosedSymbol.value = "";
-  renderRecords();
+  resetRecordRenderLimit();
 });
 els.recordClosedSymbol.addEventListener("change", () => {
   if (els.recordClosedSymbol.value && els.recordOpenSymbol) els.recordOpenSymbol.value = "";
-  renderRecords();
+  resetRecordRenderLimit();
 });
 els.assetChartStart.addEventListener("change", renderEquityCurve);
 els.assetChartEnd.addEventListener("change", renderEquityCurve);
@@ -20667,6 +20836,13 @@ els.timelineClosedSymbol.addEventListener("change", () => {
   els.timelineOpenSymbol.value = "";
   renderStockTimeline();
 });
+els.stockTimeline.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-load-more-stock-timeline]");
+  if (!button) return;
+  const disclosure = button.closest(".history-disclosure");
+  const visibleLimit = Number(disclosure?.dataset.visibleLimit) || STOCK_TIMELINE_RENDER_LIMIT;
+  renderStockTimelineItems(disclosure, visibleLimit + STOCK_TIMELINE_RENDER_LIMIT);
+});
 els.openTimelineDetail.addEventListener("click", () => openStockDetail(els.timelineSymbol.value || selectedDetailSymbol));
 els.detailMatchStartDate.addEventListener("change", renderStockDetail);
 els.detailMatchEndDate.addEventListener("change", renderStockDetail);
@@ -20829,6 +21005,10 @@ document.addEventListener("click", (event) => {
   openStockKlineModal(button.dataset.openKlineSymbol || selectedDetailSymbol);
 });
 els.recordsBody.addEventListener("click", (event) => {
+  if (event.target.closest("[data-load-more-records]")) {
+    loadMoreRecords();
+    return;
+  }
   const editId = event.target.dataset.edit;
   const deleteId = event.target.dataset.delete;
   const deleteActionId = event.target.dataset.deleteAction;
@@ -20846,6 +21026,10 @@ els.recordsBody.addEventListener("click", (event) => {
 });
 
 els.recordsCards.addEventListener("click", (event) => {
+  if (event.target.closest("[data-load-more-records]")) {
+    loadMoreRecords();
+    return;
+  }
   const editId = event.target.dataset.edit;
   const deleteId = event.target.dataset.delete;
   const deleteActionId = event.target.dataset.deleteAction;
